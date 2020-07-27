@@ -1,0 +1,54 @@
+
+.App__content{
+  width:1200px;
+  margin:0 auto
+}
+.App__content-banner{
+  margin:180px 0;
+  border-radius: 50px;
+}
+.card-inline{
+display:flex;
+flex-direction: column;
+border-radius: 50px;
+
+width: 280px;
+height:450px;
+margin-bottom: 65px;
+box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+
+
+
+}
+.App__content-main{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+ 
+}
+.card-inline-name{
+  text-align: center;
+  font-size:25px;
+}
+.card-img-top{
+  width: 230px;
+  margin:20px 35px;
+  align-self:flex-start;
+}
+.card-inline-content{
+  text-align: center;
+}
+.card-inline-time{
+  text-align: center;
+  align-self:center;
+  margin-top: 5px;
+  font-size: 15px;
+  width:130px;
+  border-radius: 50px;
+  background-color:#fff;
+  border: 1px solid grey;
+}
+.App__content-main-card-info{
+  display:flex;
+  flex-direction: column;
+}
