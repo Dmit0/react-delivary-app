@@ -1,15 +1,32 @@
 import React from 'react';
 import '../../css/content.css';
 
-export const Restaurant=()=>{
+interface restaurant{
+    picture:string,
+    name:string,
+    description:string,
+    working_time:string,
+    _id:number
+}
+
+interface RestaurantProps{
+    restaurants:restaurant[]
+}
+
+
+export const Restaurant:React.FC<RestaurantProps>=({restaurants})=>{
    return (
-    <div className="card-inline">
-        <img src="./assets/pizza.jpeg"  className="card-img-top" alt="..."/>
-        <div className="App__content-main-card-info">
-            <span className="card-inline-name">name</span>
-            <span className="card-inline-content">content</span>
-            <span className="card-inline-time">8:00 - 22:00</span>
-        </div>
-    </div>  
+    <>
+    {restaurants.map(item=>(
+        <div key={item._id} className="card-inline">
+            <img src={item.picture}  className="card-img-top" alt="..."/>
+            <div className="App__content-main-card-info">
+                <span className="card-inline-name">{item.name}</span>
+                <span className="card-inline-content">{item.description}</span>
+                <span className="card-inline-time">{item.working_time}</span>
+            </div>
+        </div> 
+    ))}
+    </> 
    )
 }

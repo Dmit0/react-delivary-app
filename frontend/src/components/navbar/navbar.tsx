@@ -15,6 +15,9 @@ export const NavBar=()=>{
               </div>
               </nav>
             </div>
+            <form className="">
+                    <input className="form-control mr-2 App_header__secondary-input" type="search" placeholder="Search" aria-label="Search"/>
+                  </form>
         <div className="App_header__secondary-wrapper">
           <div className="App_header__secondary">
               <nav className="navbar">
@@ -23,10 +26,8 @@ export const NavBar=()=>{
                     <span className="navbar-brand">All</span>
                     <span className="navbar-brand">Loved</span>
                   </div>
-                  <form className="d-flex">
-                    <input className="form-control mr-2 App_header__secondary-input" type="search" placeholder="Search" aria-label="Search"/>
-                  </form>
-                  <button type="button" className="btn btn-outline-warning App_header__secondary-button">Cart</button>
+                  
+                  <button type="button" className="btn btn-warning App_header__secondary-button">Cart<span className="App_header__secondary-cart">0</span></button>
                 </div>
               </nav>   
           </div>

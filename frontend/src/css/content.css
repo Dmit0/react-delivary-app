@@ -4,14 +4,13 @@
   margin:0 auto
 }
 .App__content-banner{
-  margin:180px 0;
+  margin:200px 0 70px 0;
   border-radius: 50px;
 }
 .card-inline{
 display:flex;
 flex-direction: column;
 border-radius: 50px;
-
 width: 280px;
 height:450px;
 margin-bottom: 65px;
