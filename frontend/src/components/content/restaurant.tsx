@@ -1,13 +1,7 @@
 import React from 'react';
 import '../../css/content.css';
+import {restaurant} from '../../interfaces/restaurant'
 
-interface restaurant{
-    picture:string,
-    name:string,
-    description:string,
-    working_time:string,
-    _id:number
-}
 
 interface RestaurantProps{
     restaurants:restaurant[]
@@ -17,6 +11,7 @@ interface RestaurantProps{
 export const Restaurant:React.FC<RestaurantProps>=({restaurants})=>{
    return (
     <>
+    
     {restaurants.map(item=>(
         <div key={item._id} className="card-inline">
             <img src={item.picture}  className="card-img-top" alt="..."/>
