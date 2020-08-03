@@ -3,5 +3,5 @@ export interface restaurant{
     name:string,
     description:string,
     working_time:string,
-    _id:number
+    _id:string
 }
