@@ -15,9 +15,13 @@ width: 280px;
 height:450px;
 margin-bottom: 65px;
 box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+cursor: pointer;
+transition: all 0.5s ease-out;
+}
 
-
-
+.card-inline:hover{
+  
+  transform: scale(1.1);
 }
 .App__content-main{
   display:flex;
@@ -25,13 +29,18 @@ box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
   justify-content:space-between;
  
 }
+.App__content-main a{
+  color:#6d6a6a;
+  text-decoration: none;
+}
 .card-inline-name{
   text-align: center;
   font-size:25px;
+  margin-bottom: 20px;
 }
 .card-img-top{
   width: 230px;
-  margin:20px 35px;
+  margin:40px 27px 60px 27px;
   align-self:flex-start;
 }
 .card-inline-content{
@@ -40,14 +49,16 @@ box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
 .card-inline-time{
   text-align: center;
   align-self:center;
-  margin-top: 5px;
+  margin: 30px;
   font-size: 15px;
   width:130px;
   border-radius: 50px;
   background-color:#fff;
   border: 1px solid grey;
+  
 }
 .App__content-main-card-info{
   display:flex;
   flex-direction: column;
+ 
 }

@@ -1,0 +1,9 @@
+.App__meals-container{
+    padding-top: 300px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-around;
+}
+.meal-card{
+    margin-left:100px;
+}
