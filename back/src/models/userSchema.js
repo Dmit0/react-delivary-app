@@ -1,10 +1,4 @@
-
-
-
-let Role = mongoose.Schema.Types.Mixed;
-let Discaunt = mongoose.Schema.Types.Mixed;
-
-
+const {Schema,model,Types}=require('mongoose')
 const UserSchema  = new Schema({
     name:{
         type:String,
@@ -23,12 +17,9 @@ const UserSchema  = new Schema({
         type:String,
         default:'bronze'
     },
-    role:{
-        type:String,
-        default:"user"
-    },
+    role:{type:Types.ObjectId,ref:"Role"},
     ownership:[{type:Types.ObjectId,ref:"Restaurant"}],
-    savedReastaurant:[{type:Types.ObjectId,ref:"Restaurant"}]
+    lovedReastaurant:[{type:Types.ObjectId,ref:"Restaurant"}]
 
 })
 module.exports=model("User",MealSchema)
