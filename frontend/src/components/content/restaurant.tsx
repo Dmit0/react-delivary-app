@@ -15,6 +15,7 @@ export const Restaurant:React.FC<RestaurantProps>=({restaurant,onRestaurantClick
     <>
         <div className="card-inline" onClick={()=>onRestaurantClick(restaurant)}>           
             <img src={restaurant.picture}  className="card-img-top" alt="..."/>
+            <input type ="checkbox"/>
             <div className="App__content-main-card-info">
                 <span className="card-inline-name">{restaurant.name}</span>
                 <span className="card-inline-content">{restaurant.description}</span>
