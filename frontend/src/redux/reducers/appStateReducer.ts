@@ -1,19 +1,19 @@
-import {APP_STATES,AppActionTypes,AppState} from '../types/appTypes'
+import {SHOW_LOADING,HIDE_LOADING,GET_BUNNERS,AppActionTypes,AppState} from '../types/appTypes'
 
-const initialState={
+const initialState:AppState={
     loading:false,
-    //bunners:[]
+    bunners:[]
 }
 
 export const appStateReducer=(state=initialState,action:AppActionTypes):AppState=>{
     
     switch (action.type){
-        case (APP_STATES.SHOW_LOADING):
+        case SHOW_LOADING:
             return {...state,loading:true}
-        case (APP_STATES.HIDE_LOADING):
+        case HIDE_LOADING:
             return {...state,loading:false}
-        // case (APP_STATES.GET_BUNNERS):
-        //     return {...state,bunners:action.bunners}
+        case GET_BUNNERS:
+            return {...state,bunners:action.bunners}
         default:return state
     }
 }
