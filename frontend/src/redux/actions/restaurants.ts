@@ -42,7 +42,6 @@ return async dispatch=>{
     })
 
     let meals = await MealAPI.get(current_restaurant._id)
-    console.log(meals)
     dispatch(set_meals(meals))
     }
 }
