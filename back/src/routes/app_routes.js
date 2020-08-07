@@ -1,6 +1,7 @@
 const {Router}=require('express')
 const Restaurant=require('../models/restaurantSchema')
 const Meal = require('../models/mealSchema')
+const Bunner = require('../models/BannersSchema')
 const router=Router()
 
 
@@ -59,7 +60,7 @@ router.post('/meal/add',async(req,res)=>{
 router.post('/getMeal', async(req,res)=>{
     try{
         RestaurantId=req.body._id
-        console.log(req.body)
+        //console.log(req.body)
         const meals = await Meal.find({restaurant:RestaurantId})
         if(!meals){
             throw Error('no such restaurant')
@@ -68,6 +69,26 @@ router.post('/getMeal', async(req,res)=>{
         res.json(meals)
     }catch(e){
         res.status(500).json({message:"server error with fetching data"})
+    }
+})
+
+router.post('/addBanner',async(req,res)=>{
+    try{
+        banner_img=req.body.banner
+        const banner = new Bunner({picture:banner_img})
+        await banner.save()
+        res.status(201).json({message:"bunner was saved"})
+    }catch(e){
+        res.status(500).json({message:"server error with adding banner"})
+    }
+})
+
+router.get('/getBunners',async(req,res)=>{
+    try{
+        const bunners= await Bunner.find()
+        res.json(bunners)
+    }catch(e){
+        res.status(500).json({message:"server error with fetching bunners"})
     }
 })
 
