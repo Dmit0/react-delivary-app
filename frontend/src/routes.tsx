@@ -1,8 +1,9 @@
 import React from 'react';
 import {Switch,Route,Redirect} from 'react-router-dom';
 import {HomePage} from './pages/HomePage';
-import {MealsPage} from './pages/MealsPage'
-
+import {MealsPage} from './pages/MealsPage';
+import {Cart} from './pages/CartPage'
+ 
 
 //type management = 'admin' | 'subadmin' | 'customer' // сделать запрос в индексе на роли (можно санком) положить их в редакс потом здесь получить селектором распарсить и записать в типы 
 
@@ -20,7 +21,7 @@ export const useRoutes=(status:Access='guest')=>{
                         <HomePage/>
                     </Route>
                     <Route path ='/cart' exact>
-
+                        <Cart/>
                      </Route>
                     <Route path='/Authentication'>
 
