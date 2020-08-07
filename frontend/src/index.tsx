@@ -4,10 +4,11 @@ import {Provider} from 'react-redux';
 import {createStore,applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
+import {BrowserRouter as Router}from 'react-router-dom'
 import './css/content.css';
-import {HomePage} from './pages/HomePage';
 import * as serviceWorker from './serviceWorker';
 import {rootReducer} from './redux/reducers/rootReducer';
+import {useRoutes} from './routes'
 
 const store = createStore(
   rootReducer,
@@ -16,12 +17,15 @@ const store = createStore(
   )
 );
 
+const routes=useRoutes()//передавать гость юзер либо если это какой либо из админов передавать мэнеджмент
 
 ReactDOM.render(
   
   <React.StrictMode>
      <Provider store={store}>
-    <HomePage />
+      <Router>
+          {routes}
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
