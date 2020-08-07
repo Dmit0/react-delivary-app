@@ -1,0 +1,35 @@
+.cart{
+    padding-top: 300px;
+}
+.cart-img{
+    border-radius: 50px;
+    height:120px;
+    width:120px;
+}
+.cart-item{
+    display:flex;
+    margin:35px;
+    
+}
+
+.item-description{
+    display:flex;
+}
+.detalic-item-description{
+    display:flex;
+    flex-direction: column;
+}
+
+.item-description-name{
+    font-size: 20px;
+    font-weight: 500;
+    align-self: flex-start;
+    padding-top: 10px;
+    margin-left: 20px;
+}
+.item-description-price{
+    font-size: 20px;
+    font-weight: 500;
+    padding-top: 10px;
+    margin-left: 20px;
+}

@@ -7,3 +7,15 @@
 .meal-card{
     margin-left:100px;
 }
+.App__content-main-card-info{
+    display: flex;
+}
+.card-inline-price{
+   text-align: center; 
+   font-size: 20px;
+   
+}
+.meal-cart{
+    align-self: flex-end;
+    margin-right: 25px;
+}
