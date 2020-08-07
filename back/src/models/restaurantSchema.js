@@ -19,7 +19,8 @@ const RestaurantSchema  = new Schema({
     },
     meals:[{type:Types.ObjectId,ref:"Meal"}],
     owner:{type:Types.ObjectId,ref:"User"},
-    saved:[{type:Types.ObjectId,ref:"User"}]
+    saved:[{type:Types.ObjectId,ref:"User"}],
+    selItems:[{type:Types.ObjectId,ref:"SelItems"}]
     
 })
 module.exports=model("Restaurant",RestaurantSchema)

@@ -19,7 +19,7 @@ const UserSchema  = new Schema({
     },
     role:{type:Types.ObjectId,ref:"Role"},
     ownership:[{type:Types.ObjectId,ref:"Restaurant"}],
-    lovedReastaurant:[{type:Types.ObjectId,ref:"Restaurant"}]
+    lovedReastaurant:[{type:Types.ObjectId,ref:"Restaurant"}],
 
 })
 module.exports=model("User",MealSchema)
