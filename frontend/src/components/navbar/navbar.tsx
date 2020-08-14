@@ -1,12 +1,22 @@
 import React from 'react';
 import '../../css/header.css';
 import {Link} from 'react-router-dom'
+import {meals} from '../../interfaces/meals'
+
 
 interface NavBarProps{
-  cart_length?:number
+  cart_length:meals[]
 }
 
+
 export const NavBar:React.FC<NavBarProps>=({cart_length})=>{
+  const count=():Number=>{
+    let num=cart_length.reduce((sum,current)=>(
+      sum+current.count
+    ),0)
+
+    return num
+  }
     return(
         <div className="App__header ">
         <div className="App_header__main">
@@ -21,7 +31,13 @@ export const NavBar:React.FC<NavBarProps>=({cart_length})=>{
                 <input className="form-control mr-2 App_header__secondary-input" type="search" placeholder="Search" aria-label="Search"/>
                 <div className="button-controller">
                   <button type="button" className="btn btn-outline-info App_header__main-button">LogIn</button>
-    <Link to={'/cart'}><button type="button" className="btn btn-warning App_header__secondary-button">Cart<span className="App_header__secondary-cart">{cart_length}</span></button></Link>
+    <Link to={'/cart'}>
+      <button type="button" className="btn btn-warning App_header__secondary-button">Cart
+        <span className="App_header__secondary-cart">
+         {count()}
+        </span>
+    </button>
+    </Link>
                 </div>
               </div>
               </nav>
