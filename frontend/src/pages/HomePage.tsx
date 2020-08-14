@@ -89,7 +89,7 @@ export const HomePage:React.FC = () => {
 
   return (
     <div className="App">
-      <NavBar cart_length={cart.length}/>
+      <NavBar cart_length={cart}/>
       <div className="App__content">
         <Banners bunners={bunners}/>
           <div className="App__content-main">
