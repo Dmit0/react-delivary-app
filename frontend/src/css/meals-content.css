@@ -3,9 +3,11 @@
     display:flex;
     flex-wrap:wrap;
     justify-content:space-around;
+    user-select: none;
 }
 .meal-card{
     margin-left:100px;
+    user-select: none;
 }
 .App__content-main-card-info{
     display: flex;

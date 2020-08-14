@@ -88,3 +88,7 @@ transition: all 0.5s ease-out;
   padding:20px 0 0 20px;
   cursor: pointer;
 }
+
+.swiper-slide{
+  width:100%;
+}
