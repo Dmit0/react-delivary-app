@@ -18,7 +18,6 @@ export const set_restaurants=():ThunkType=>{
         dispatch(show_loading())
         let restaurants=await restaurantAPI.get()
         dispatch(hide_loading())
-        //dispatch(set_intoStore_restaurants(restaurants))
         dispatch({
            type:SET_REASTAURANTS,
            restaurants
@@ -50,5 +49,13 @@ export const set_meals=(meals:any):restaurantActionTypes=>{
     return{
         type:SET_MEALS,
         meals:meals
+    }
+}
+
+export const get_meals_by_restaurant_id=(id:string):ThunkAction<Promise<void>, RootState, unknown, restaurantActionTypes>=>{
+    return async dispatch=>{
+       
+        let meals = await MealAPI.get(id,true)
+        dispatch(set_meals(meals))
     }
 }
