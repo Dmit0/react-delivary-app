@@ -2,6 +2,7 @@ import {restaurant} from '../interfaces/restaurant'
 import {meals} from '../interfaces/meals'
 import {http} from './api'
 
+
 type RestaurantResponseType={
     data:restaurant[],
     resultCode:number,
@@ -20,15 +21,11 @@ type MealsResponseType={
 }
 
 export const MealAPI={
-    async get(_id:string){
-        
-        let method='POST'
-        let body=JSON.stringify({_id})
-        let headers={
+    
+    async get(_id:string,isRequestFromMealsPage=false){
+        const response = await http<MealsResponseType>(isRequestFromMealsPage ? '/api/restaurant/getMeal' : 'api/restaurant/getMeal','POST',JSON.stringify({_id}),{
             'Content-Type': 'application/json;charset=utf-8'
-        }
-
-        const response = await http<MealsResponseType>('api/restaurant/getMeal',method,body,headers)
+        })
         return response
-    }
+    },
 }
