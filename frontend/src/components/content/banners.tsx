@@ -2,22 +2,25 @@ import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/swiper.scss';
 import '../../css/content.css';
+import {bunner} from '../../interfaces/bunner'
+
+
 
 interface BunnersProps{
-    bunners:string[]
+    bunners:bunner[]
 }
 
 export const Banners:React.FC<BunnersProps>=({bunners})=>{
-   return (
+  
+  return (
         
         <div className="App__content-Banners">
-            <img src="./assets/g_1594744964_de932668ca704cecb07c38741a49887f.jpeg "  width="100%"  className="App__content-banner" alt=""/>
-            {/* <Swiper
+            <Swiper
                 spaceBetween={50}
                 slidesPerView={3}
             >
-                {bunners.map(item=>(<SwiperSlide><img src={item} width="100%"  className="App__content-banner" alt=""/></SwiperSlide>))}
-            </Swiper> */}
+                {bunners.map(item=>(<SwiperSlide key ={item._id}><img src={item.picture} width="1200px"  className="App__content-banner" alt=""/></SwiperSlide>))}
+            </Swiper>
         </div>
     )
 }

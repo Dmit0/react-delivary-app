@@ -26,7 +26,7 @@ export const Restaurant:React.FC<RestaurantProps>=({restaurant,onRestaurantClick
                 <input checked={checked} type ="checkbox"  className="myCheckbox__input" onChange={onToggle}/> 
                 <span className="check__box"  ></span>
             </label>
-            <Link to={`/MealsPage/${restaurant.name}`}><div onClick={()=>onRestaurantClick(restaurant)}>     
+            <Link to={`/MealsPage/${restaurant._id}`}><div onClick={()=>onRestaurantClick(restaurant)}>     
                 <img src={restaurant.picture}  className="card-img-top" alt="..."/>
                 
                 <div className="App__content-main-card-info">
