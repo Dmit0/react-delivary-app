@@ -1,3 +1,4 @@
+    import {bunner} from '../../interfaces/bunner'
 
    export const SHOW_LOADING='SHOW_LOADING'
    export const HIDE_LOADING='HIDE_LOADING'
@@ -16,13 +17,13 @@ interface HIDE_LOADING{
 
 interface GET_BANNERS{
     type :typeof GET_BUNNERS
-    bunners:string[]
+    bunners:bunner[]
 }
 
 
 export interface AppState{
     loading:boolean
-    bunners:string[]
+    bunners:bunner[]
 }
 
 export type AppActionTypes=SHOW_LOADING | HIDE_LOADING | GET_BANNERS
