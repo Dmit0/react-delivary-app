@@ -5,7 +5,7 @@ import '../css/meals-content.css'
 import{set_meal_to_cart,set_meal_from_localestorage_to_cart} from '../redux/actions/cartActions'
 import {get_meals_by_restaurant_id} from '../redux/actions/restaurants'
 import {RootState} from '../redux/reducers/rootReducer'
-import {NavBar} from '../components/navbar/navbar'
+//import {NavBar} from '../components/navbar/navbar'
 import {Meal} from '../components/content/meal'
 import {meals as Mealtype} from '../interfaces/meals'
 
@@ -46,7 +46,7 @@ export const MealsPage:React.FC = () => {
     return (
         <>
          <div className="App">
-            <NavBar cart_length={cart}/>
+            {/* <NavBar cart_length={cart}/> */}
          <div className="App__meals-container">
             <div className="App__content-main">
                 {meals.map(meal=>(
