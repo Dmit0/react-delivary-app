@@ -38,7 +38,7 @@
     padding:10px 0 10px 0;
 }
 .App_header__secondary-button{
-    min-width: 120px;
+    padding:10px 30px;
     font-size: 14px;
     font-weight: 500;
     margin-right: 22%;
@@ -60,16 +60,36 @@
 .App_header__secondary-action{
     margin-top: 20px;
     margin-left: 20px;
+    display:flex;
+   
+    width:100%;
+    user-select: none;
+
 }
 .navbar-brand-menu{
-    background-color: #a9a9a9;
+    background-color:#b3b3b3;
     margin:0 10px;
-    padding:5px 30px 7px 30px;
+    padding:7px 30px 7px 30px;
     border-radius: 20px;
     color:#fff;
     text-align: center;
-    cursor: po;
+    cursor: pointer;
 }
+.navbar-brand-menu-active{
+    border:2px solid #909090;
+}
+.navbar-brand-menu-switcher-button{
+    border-radius: 20px;
+}
+.navbar-brand-menu-switcher{
+    margin-left: 10px;
+}
+.dropdown-menu-items{
+    margin:10px 0 0 0;
+    border-radius: 20px;
+    padding:20px 5px;
+}
+
 
     /* @media (max-width: 1400px) { 
         .App_header__secondary-input{
