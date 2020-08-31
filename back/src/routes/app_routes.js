@@ -2,6 +2,7 @@ const {Router}=require('express')
 const Restaurant=require('../models/restaurantSchema')
 const Meal = require('../models/mealSchema')
 const Bunner = require('../models/BannersSchema')
+const Cuisen=require('../models/selItemsSchema')
 const router=Router()
 
 
@@ -11,7 +12,7 @@ router.get('/', async(req,res)=>{
     try{
        
         const restaurants = await Restaurant.find()
-        res.json(restaurants)
+        res.status(201).json(restaurants)
     }catch(e){
         res.status(500).json({message:"server error with fetching data"})
     }
@@ -59,18 +60,19 @@ router.post('/meal/add',async(req,res)=>{
 
 router.post('/getMeal', async(req,res)=>{
     try{
+       
         RestaurantId=req.body._id
-        //console.log(req.body)
+        
         const meals = await Meal.find({restaurant:RestaurantId})
         if(!meals){
             throw Error('no such restaurant')
         }
-        //console.log(meals)
-        res.json(meals)
+        res.status(201).json(meals)
     }catch(e){
         res.status(500).json({message:"server error with fetching data"})
     }
 })
+
 
 router.post('/addBanner',async(req,res)=>{
     try{
@@ -86,9 +88,47 @@ router.post('/addBanner',async(req,res)=>{
 router.get('/getBunners',async(req,res)=>{
     try{
         const bunners= await Bunner.find()
-        res.json(bunners)
+        res.status(201).json(bunners)
     }catch(e){
         res.status(500).json({message:"server error with fetching bunners"})
+    }
+})
+
+router.post('/setCuisen',async(req,res)=>{
+    try{
+        cuisen_name=req.body.name
+       
+        const cuisen=await Cuisen({name:cuisen_name})
+        await cuisen.save()
+        res.status(201).json({message:'cuisen was saved'})
+
+    }catch(e){
+        res.status(500).json({message:"server error with setting cuisen"})
+    }
+})
+
+router.get('/getCuisenTypes',async(_,res)=>{
+    try{    
+        const cuisens= await Cuisen.find()
+        res.json(cuisens)
+    }catch(e){
+        res.status(500).json({message:"server error with getting cuisen"})
+    }
+})
+router.post('/setCuisenTypes',async(req,res)=>{
+    try{
+        const restaurant=req.body.restaurant
+        const cuisens=req.body.cuisentoAdd
+        console.log(restaurant,cuisens)
+
+        const modify_restaurant = await Restaurant.findOneAndUpdate({_id:restaurant},{$set:{selItems:cuisens}},()=>{})
+        if(!modify_restaurant){
+            throw Error
+        }
+        await modify_restaurant.save()
+        res.status(201).json({message:'cuisen was saved'})
+    }catch(e){
+        res.status(500).json({message:"server error with setting cuisen to restaurant"})
     }
 })
 
