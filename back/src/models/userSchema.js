@@ -13,6 +13,14 @@ const UserSchema  = new Schema({
         type:String,
         required:true
     },
+    telephone:{
+        type:String,
+        required:true
+    },
+    isConferm:{
+        type:Boolean,
+        default:false
+    },
     discount:{
         type:String,
         default:'bronze'
@@ -22,4 +30,4 @@ const UserSchema  = new Schema({
     lovedReastaurant:[{type:Types.ObjectId,ref:"Restaurant"}],
 
 })
-module.exports=model("User",MealSchema)
+module.exports=model("User",UserSchema)

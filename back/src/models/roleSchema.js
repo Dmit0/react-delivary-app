@@ -1,9 +1,9 @@
 const {Schema,model,Types}=require('mongoose')
-const UserSchema  = new Schema({
+const RoleSchema  = new Schema({
     role:{
         type:String,
         required:true,
-        default:"guest"
+        default:"user"
     },
     opportunities:[{type:Types.ObjectId,ref:"Opportunities"}]
 })

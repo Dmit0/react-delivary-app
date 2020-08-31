@@ -13,6 +13,10 @@ const MealSchema  = new Schema({
         type:Number,
         required:true
     },
+    count:{
+        type:Number,
+        default:1
+    },
     restaurant:{type:Types.ObjectId,ref:"Restaurant"}
     
 })
