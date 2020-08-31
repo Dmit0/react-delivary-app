@@ -30,5 +30,14 @@ export const Sorts={
      //setCurrentFilterRestaurants([...sorted])
      
      return sorted
+    },
+    ByInputStr(restaurants:restaurant[],filerStr:string){
+      if(filerStr===''){
+        return []
+      }
+      let new_restaurants = restaurants.filter(restaurant=>{
+        return restaurant.name.toLowerCase().search(filerStr.toLowerCase())!==-1
+      });
+      return new_restaurants
     }
 }
