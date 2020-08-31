@@ -2,7 +2,7 @@ import React,{useEffect} from 'react';
 import {useSelector,useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {RootState} from '../redux/reducers/rootReducer'
-//import {NavBar} from '../components/navbar/navbar'
+import {NavBar} from '../components/navbar/navbar'
 import {Cart_item} from '../components/content/cart_item'
 import{set_meal_from_localestorage_to_cart,remove_one_meal_from_cart,remove_item_from_cart,set_meal_to_cart,clean_cart} from '../redux/actions/cartActions'
 import {meals as Mealtype} from '../interfaces/meals'
@@ -64,7 +64,7 @@ export const Cart =()=>{
     return (
         <>
          <div className="App">
-           {/* <NavBar cart_length={cart}/> */}
+           <NavBar cart_length={cart}/>
             <div className="App__content">
                 <div className="cart">
                     <div className='cart-header'>
