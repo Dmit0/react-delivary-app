@@ -1,11 +1,13 @@
 
 .App__content{
-  width:1200px;
-  margin:0 auto
+  width:1600px;
+  margin:0 auto;
+  
 }
 .App__content-banner{
-  margin:200px 0 70px 0;
-  border-radius: 50px;
+  margin:120px 0 0 0;
+  border-radius: 20px 20px 0  0;
+  cursor: pointer;
 }
 .card-inline{
 display:flex;
@@ -13,11 +15,12 @@ flex-direction: column;
 border-radius: 50px;
 width: 280px;
 height:450px;
-margin-bottom: 65px;
+margin:10px 20px 65px 20px;
 box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
 cursor: pointer;
 transition: all 0.5s ease-out;
 }
+
 
 .card-inline:hover{
   
@@ -27,6 +30,7 @@ transition: all 0.5s ease-out;
   display:flex;
   flex-wrap:wrap;
   justify-content:space-between;
+
  
 }
 .App__content-main a{
@@ -63,12 +67,32 @@ transition: all 0.5s ease-out;
  
 }
 
+.App_content_part{
+  margin:0 auto;
+  border:solid 1px #e0dede;
+}
+.App_content_part_main{
+  width:1400px;
+  margin:0 auto;
+}
+
 
 .myCheckbox__input{
     appearance: none;
     -webkit-appearance: none;
     position:absolute;
 }
+
+.loading{
+  z-index:1100;
+}
+
+.swiper-pagination{
+ position: absolute;
+ top:300px;
+ color:black;
+}
+
 .check__box{
   position:absolute;
   height:2em;
