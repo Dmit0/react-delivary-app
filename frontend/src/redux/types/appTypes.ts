@@ -6,14 +6,14 @@
 
 
 
-interface SHOW_LOADING{
-    type:typeof SHOW_LOADING
-}
+// interface SHOW_LOADING{
+//     type:typeof SHOW_LOADING
+// }
 
-interface HIDE_LOADING{
-    type:typeof HIDE_LOADING
+// interface HIDE_LOADING{
+//     type:typeof HIDE_LOADING
 
-} 
+// } 
 
 interface GET_BANNERS{
     type :typeof GET_BUNNERS
@@ -22,8 +22,8 @@ interface GET_BANNERS{
 
 
 export interface AppState{
-    loading:boolean
+   // loading:boolean
     bunners:bunner[]
 }
 
-export type AppActionTypes=SHOW_LOADING | HIDE_LOADING | GET_BANNERS
+export type AppActionTypes=GET_BANNERS //SHOW_LOADING | HIDE_LOADING | 

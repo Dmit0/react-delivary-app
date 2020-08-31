@@ -1,4 +1,4 @@
-import {SET_REASTAURANTS,SET_CURRENT_RESTAURANT,restaurantActionTypes,RestaurantState,SET_MEALS,SET_CUISENS,SET_FILTER_RESTAURANTS} from '../types/restaurantsTypes'
+import {SET_REASTAURANTS,SET_CURRENT_RESTAURANT,restaurantActionTypes,RestaurantState,SET_MEALS,SET_CUISENS,SET_FILTER_RESTAURANTS,SET_INPUT_FILTER,DELETE_CURRENT_RESTAURANT_AND_MEALS} from '../types/restaurantsTypes'
 
 
 const initialState:RestaurantState={
@@ -6,7 +6,8 @@ const initialState:RestaurantState={
     current_restaurant:null,
     current_meals:[],
     cuisen:[],
-    filter_restaurants:[]
+    filter_restaurants:[],
+    inputFilter:[]
 }
 
 export const restaurantReducer=(state=initialState,action:restaurantActionTypes):RestaurantState=>{
@@ -22,6 +23,10 @@ export const restaurantReducer=(state=initialState,action:restaurantActionTypes)
             return{...state,cuisen:action.cuisenTypes}
         case SET_FILTER_RESTAURANTS:
             return{...state,filter_restaurants:action.filter}
+        case SET_INPUT_FILTER:
+            return{...state,inputFilter:action.filteredRestaurants}
+        case DELETE_CURRENT_RESTAURANT_AND_MEALS:
+            return{...state,current_restaurant:null,current_meals:[]}
         default:return state
     }
 }

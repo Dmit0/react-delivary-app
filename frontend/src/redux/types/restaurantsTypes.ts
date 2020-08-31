@@ -8,6 +8,8 @@ import {meals} from '../../interfaces/meals'
   export const SET_MEALS='SET_MEALS'
   export const SET_CUISENS='SET_CUISENS'
   export const SET_FILTER_RESTAURANTS='SET_FILTER_RESTAURANTS'
+  export const SET_INPUT_FILTER='SET_INPUT_FILTER'
+  export const DELETE_CURRENT_RESTAURANT_AND_MEALS='DELETE_CURRENT_RESTAURANT_AND_MEALS'
 //}
 
 interface SET_REASTAURANTS{
@@ -32,12 +34,19 @@ interface SET_FILTER_RESTAURANTS{
     type:typeof SET_FILTER_RESTAURANTS
     filter:restaurant[]
 }
+interface SET_INPUT_FILTER{
+    type:typeof SET_INPUT_FILTER
+    filteredRestaurants:restaurant[]
+}
 
 
 // interface SET_INTOSTORE_RESTAURANTS{
 //     type:typeof SET_INTOSTORE_RESTAURANTS
 //     payload_restaurants:[]
 // }
+interface DELETE_CURRENT_RESTAURANT_AND_MEALS{
+    type:typeof DELETE_CURRENT_RESTAURANT_AND_MEALS
+}
 
 
 export interface RestaurantState{
@@ -46,8 +55,9 @@ export interface RestaurantState{
     current_meals:meals[]
     cuisen:cuisen[]
     filter_restaurants:restaurant[]
+    inputFilter:restaurant[]
 }
 
-export type restaurantActionTypes = SET_CURRENT_RESTAURANT | SET_REASTAURANTS | SET_MEALS | SET_CUISENS | SET_FILTER_RESTAURANTS
+export type restaurantActionTypes = SET_CURRENT_RESTAURANT | SET_REASTAURANTS | SET_MEALS | SET_CUISENS | SET_FILTER_RESTAURANTS | SET_INPUT_FILTER | DELETE_CURRENT_RESTAURANT_AND_MEALS
 
 
