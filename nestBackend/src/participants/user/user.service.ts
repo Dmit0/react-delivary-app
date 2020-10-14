@@ -16,4 +16,7 @@ export class UserService {
   createUser(){
     return
   }
+  updateUser(){
+    return
+  }
 }
