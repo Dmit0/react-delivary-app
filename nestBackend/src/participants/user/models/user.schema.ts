@@ -24,12 +24,12 @@ export class User extends Document {
   @Prop()
   createdAt: string;
 
-  @Prop({
-    type: 'enum',
-    enum: UserStatuses,
-    default: UserStatuses.ACTIVE,
-  })
-  status: UserStatuses;
+  // @Prop({
+  //   type: 'enum',
+  //   enum: UserStatuses,
+  //   default: UserStatuses.ACTIVE,
+  // })
+  // status: UserStatuses;
 
   @Prop()
   role: { type: Types.ObjectId, ref: 'Role' };
@@ -38,7 +38,7 @@ export class User extends Document {
   ownership: [{ type: Types.ObjectId, ref: 'Restaurant' }];
 
   @Prop()
-  lovedReastaurant: [{ type: Types.ObjectId, ref: 'Restaurant' }];
+  lovedRestaurant: [{ type: Types.ObjectId, ref: 'Restaurant' }];
 
   @Prop()
   cart: [{ type: Types.ObjectId, ref: 'Meal' }];

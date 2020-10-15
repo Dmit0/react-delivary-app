@@ -1,5 +1,6 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { UserRegistrationDto } from './models/auth.models';
 
 @Controller('restaurants')
 export class AuthController {
@@ -7,15 +8,15 @@ export class AuthController {
   constructor(private authService: AuthService) {
   }
 
-  @Get()
+  @Post()
   //type for returning getMeal
   //type fot input
-  login(): any {
+  async login() {
     return this.authService.SignIn();
   }
 
-  @Get()
-  SignUp():any{
-    return this.authService.SignUp()
+  @Post()
+  signUp(@Body() userRegistrationDto: UserRegistrationDto) {
+    return this.authService.SignUp(userRegistrationDto);
   }
 }
