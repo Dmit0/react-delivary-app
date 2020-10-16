@@ -1,23 +1,27 @@
-.App__meals-container{
+.App__meals-container {
     padding-top: 300px;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:space-around;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     user-select: none;
 }
-.meal-card{
-    margin-left:100px;
+
+.meal-card {
+    margin-left: 100px;
     user-select: none;
 }
-.App__content-main-card-info{
+
+.App__content-main-card-info {
     display: flex;
 }
-.card-inline-price{
-   text-align: center; 
-   font-size: 20px;
-   
+
+.card-inline-price {
+    text-align: center;
+    font-size: 20px;
+
 }
-.meal-cart{
+
+.meal-cart {
     align-self: flex-end;
     margin-right: 25px;
 }

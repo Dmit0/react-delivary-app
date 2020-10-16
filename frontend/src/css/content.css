@@ -1,118 +1,130 @@
 
-.App__content{
-  width:1600px;
-  margin:0 auto;
-  
+.App__content {
+    width: 1600px;
+    margin: 0 auto;
+
 }
-.App__content-banner{
-  margin:120px 0 0 0;
-  border-radius: 20px 20px 0  0;
-  cursor: pointer;
+
+.App__content-banner {
+    margin: 120px 0 0 0;
+    border-radius: 20px 20px 0 0;
+    cursor: pointer;
 }
-.card-inline{
-display:flex;
-flex-direction: column;
-border-radius: 50px;
-width: 280px;
-height:450px;
-margin:10px 20px 65px 20px;
-box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
-cursor: pointer;
-transition: all 0.5s ease-out;
+
+.card-inline {
+    display: flex;
+    flex-direction: column;
+    border-radius: 50px;
+    width: 280px;
+    height: 450px;
+    margin: 10px 20px 65px 20px;
+    box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+    cursor: pointer;
+    transition: all 0.5s ease-out;
 }
 
 
-.card-inline:hover{
-  
-  transform: scale(1.1);
-}
-.App__content-main{
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-between;
+.card-inline:hover {
 
- 
-}
-.App__content-main a{
-  color:#6d6a6a;
-  text-decoration: none;
-}
-.card-inline-name{
-  text-align: center;
-  font-size:25px;
-  margin-bottom: 20px;
-}
-.card-img-top{
-  width: 230px;
-  margin:20px 27px 60px 27px;
-  align-self:flex-start;
-}
-.card-inline-content{
-  text-align: center;
-}
-.card-inline-time{
-  text-align: center;
-  align-self:center;
-  margin: 30px;
-  font-size: 15px;
-  width:130px;
-  border-radius: 50px;
-  background-color:#fff;
-  border: 1px solid grey;
-  
-}
-.App__content-main-card-info{
-  display:flex;
-  flex-direction: column;
- 
+    transform: scale(1.1);
 }
 
-.App_content_part{
-  margin:0 auto;
-  border:solid 1px #e0dede;
+.App__content-main {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+
 }
-.App_content_part_main{
-  width:1400px;
-  margin:0 auto;
+
+.App__content-main a {
+    color: #6d6a6a;
+    text-decoration: none;
+}
+
+.card-inline-name {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.card-img-top {
+    width: 230px;
+    margin: 20px 27px 60px 27px;
+    align-self: flex-start;
+}
+
+.card-inline-content {
+    text-align: center;
+}
+
+.card-inline-time {
+    text-align: center;
+    align-self: center;
+    margin: 30px;
+    font-size: 15px;
+    width: 130px;
+    border-radius: 50px;
+    background-color: #fff;
+    border: 1px solid grey;
+
+}
+
+.App__content-main-card-info {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.App_content_part {
+    margin: 0 auto;
+    border: solid 1px #e0dede;
+}
+
+.App_content_part_main {
+    width: 1400px;
+    margin: 0 auto;
 }
 
 
-.myCheckbox__input{
+.myCheckbox__input {
     appearance: none;
     -webkit-appearance: none;
-    position:absolute;
+    position: absolute;
 }
 
-.loading{
-  z-index:1100;
+.loading {
+    z-index: 1100;
 }
 
-.swiper-pagination{
- position: absolute;
- top:300px;
- color:black;
+.swiper-pagination {
+    position: absolute;
+    top: 300px;
+    color: black;
 }
 
-.check__box{
-  position:absolute;
-  height:2em;
-  width:2em;
-  background-image:url('data:image/svg+xml,\
+.check__box {
+    position: absolute;
+    height: 2em;
+    width: 2em;
+    background-image: url('data:image/svg+xml,\
   <svg width="2em" height="2em" viewBox="0 0 17 17" class="bi bi-heart" fill="currentColor" xmlns="http://www.w3.org/2000/svg">\
   <path fill-rule="evenodd" d="M8 2.748l-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>\
   </svg>');
 }
-.myCheckbox__input:checked + .check__box{
-  background-image:url('data:image/svg+xml,\
+
+.myCheckbox__input:checked + .check__box {
+    background-image: url('data:image/svg+xml,\
   <svg width="2em" height="2em" viewBox="0 0 17 17" class="bi bi-heart-fill" fill="tomato" xmlns="http://www.w3.org/2000/svg">\
   <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>\
   </svg>');
 }
-.option{
-  padding:20px 0 0 20px;
-  cursor: pointer;
+
+.option {
+    padding: 20px 0 0 20px;
+    cursor: pointer;
 }
 
-.swiper-slide{
-  width:100%;
+.swiper-slide {
+    width: 100%;
 }
