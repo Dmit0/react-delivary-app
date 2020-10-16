@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { BunnerService } from './bunner.service';
 
-@Controller('restaurants')
+@Controller('banners')
 export class BunnerController {
 
   constructor(private bunnerService: BunnerService) {
@@ -10,7 +10,7 @@ export class BunnerController {
   @Get()
   //type for returning getMeal
   //type fot input
-  getBunner(): any {
+  getBanners(): any {
     return this.bunnerService.getBunners();
   }
 }

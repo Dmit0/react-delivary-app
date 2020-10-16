@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { MealService } from './meals.service';
 
-@Controller('restaurants')
+@Controller('meal')
 export class RestaurantController {
 
   constructor(private restaurantService: MealService) {
@@ -10,7 +10,7 @@ export class RestaurantController {
   @Get()
   //type for returning getMeal
   //type fot input
-  getMeal(@Query('id') id): any {
+  getMeals(@Query('id') id): any {
     return this.restaurantService.getMeal(id);
   }
 }

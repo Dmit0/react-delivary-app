@@ -21,7 +21,7 @@ export class User extends Document {
   @Prop({ require: true })
   telephone: string;
 
-  @Prop()
+  @Prop({default:Date.now()})
   createdAt: string;
 
   // @Prop({

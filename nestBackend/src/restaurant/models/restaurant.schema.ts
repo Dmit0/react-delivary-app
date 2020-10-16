@@ -7,7 +7,7 @@ export class Restaurant extends Document {
   name: string;
 
   @Prop({ require: true })
-  working_time: string;
+  working_time: string;//изменитть на дейт
 
   @Prop({ require: true })
   description: string;

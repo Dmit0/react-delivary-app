@@ -1,4 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
+import { IRestaurant } from './models/restaurants.types';
 import { RestaurantService } from './restaurant.service';
 
 @Controller('restaurants')

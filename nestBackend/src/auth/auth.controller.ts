@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 
-@Controller('restaurants')
+@Controller('authentication')
 export class AuthController {
 
   constructor(private authService: AuthService) {

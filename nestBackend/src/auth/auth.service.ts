@@ -21,8 +21,8 @@ export class AuthService {
           return of(false);
         }
       }),
-      mergeMap(() => {
-        const hashedPassword = passwordUtils.hashPassword(userData.password);
+      mergeMap(async() => {
+        const hashedPassword = await passwordUtils.hashPassword(userData.password);
         return this.userService.createUser({ userData, password: hashedPassword }).pipe(
           map(() => true),
         );
