@@ -3,3 +3,8 @@ export interface UserRegistrationDto{
   password:string
   telephone:string
 }
+
+export interface UserSignInDto{
+  email:string,
+  password:string
+}

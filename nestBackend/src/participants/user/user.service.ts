@@ -12,15 +12,17 @@ export class UserService {
   ) {
   }
 
-  getUser(property: any):Observable<User> {
+  getUser(property: any): Observable<User> {
     return from(this.userModel.findOne({ property })).pipe(
       map((user) => user || null),
     );
   }
-  createUser(user:any):Observable<User>{
-    return
+
+  createUser(user: any): Observable<User> {
+    return from(this.userModel.create(user));//проверить
   }
-  updateUser(){
-    return
+
+  updateUser() {
+    return;
   }
 }

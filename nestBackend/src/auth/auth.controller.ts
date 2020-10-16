@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserRegistrationDto } from './models/auth.models';
+import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 
 @Controller('restaurants')
 export class AuthController {
@@ -11,8 +11,8 @@ export class AuthController {
   @Post()
   //type for returning getMeal
   //type fot input
-  async login() {
-    return this.authService.SignIn();
+  async signIn(@Body() userSignInDto: UserSignInDto) {
+    return this.authService.SignIn(userSignInDto);
   }
 
   @Post()

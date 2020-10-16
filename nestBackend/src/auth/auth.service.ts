@@ -1,15 +1,16 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { UserService } from '../participants/user/user.service';
-import { UserRegistrationDto } from './models/auth.models';
+import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
+import { passwordUtils } from './utils/password.utils';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly userService: UserService,
+    private readonly jwtService: JwtService,
   ) {
   }
 
@@ -21,24 +22,37 @@ export class AuthService {
         }
       }),
       mergeMap(() => {
-        return this.userService.createUser(userData).pipe(
-          mergeMap((user) => this.createAccessToken(user).pipe(
-            map(() => true),
-          )),
+        const hashedPassword = passwordUtils.hashPassword(userData.password);
+        return this.userService.createUser({ userData, password: hashedPassword }).pipe(
+          map(() => true),
         );
       }),
     );
   }
 
-  SignIn() {
-
+  SignIn(userData: UserSignInDto): Observable<any> {
+    return this.verifyUser(userData).pipe(
+      mergeMap((verifyResult) => {
+        if (verifyResult) {
+          return this.createAccessToken(userData);
+        }
+        throw new Error('verify error');
+      }),
+    );
   }
 
-  private createAccessToken(data:any):Observable<any> {
-    return of({})
+  private createAccessToken(data: any) {
+    return this.jwtService.sign({
+      id: data.id,
+    });//добавить нужные филды
   }
 
-  private verifyUser(verifyingData:any):boolean {
-    return true
+  private verifyUser(verifyingData: any): Observable<boolean> {
+    return this.userService.getUser(verifyingData.email).pipe(
+      mergeMap((user) => passwordUtils.comparePassword(user.password, verifyingData.password).pipe(
+        mergeMap((compareResult) => map(() => compareResult)),
+      )),
+    );
   }
+
 }

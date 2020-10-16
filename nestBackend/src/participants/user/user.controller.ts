@@ -8,8 +8,8 @@ export class UserController {
   constructor(private userService: UserService) {
   }
 
-  @Get()
-  updateUser(): any {
-    return this.userService.createUser();
-  }
+  // @Get()
+  // updateUser(): any {
+  //   return this.userService.createUser();
+  // }
 }
