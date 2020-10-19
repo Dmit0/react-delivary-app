@@ -83,7 +83,7 @@ router.post('/addBanner', async (req, res) => {
     banner_img = req.body.banner
     const banner = new Bunner({ picture: banner_img })
     await banner.save()
-    res.status(201).json({ message: "bunner was saved" })
+    res.status(201).json({ message: "banner was saved" })
   } catch (e) {
     res.status(500).json({ message: "server error with adding banner" })
   }
