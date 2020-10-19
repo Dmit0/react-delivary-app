@@ -5,7 +5,7 @@ import { Banner } from './models/banner.schema';
 
 @Injectable()
 export class BannerService {
-  constructor(
+  constructor( // @ts-ignore
     @InjectModel(Banner.name) private bannerModel: Model<Banner>,
   ) {
   }

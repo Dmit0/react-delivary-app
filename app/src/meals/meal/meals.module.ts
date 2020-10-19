@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MealController } from './meals.controller';
 import { MealService } from './meals.service';
 import { Meal, MealSchema } from './models/meals.schema';
 
@@ -9,7 +10,7 @@ import { Meal, MealSchema } from './models/meals.schema';
       { name: Meal.name, schema: MealSchema },
     ]),
   ],
-  controllers: [],
+  controllers: [MealController],
   providers: [MealService],
 })
 export class MealModule {

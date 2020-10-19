@@ -1,12 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { BannerModule } from './src/advertisement /bunner/bunner.module';
-import { AuthModule } from './src/auth/auth.module';
-import { CuisineModule } from './src/meals/cuisen/cuisen.module';
-import { MealModule } from './src/meals/meal/meals.module';
-import { UserModule } from './src/participants/user/user.module';
-import { RestaurantModule } from './src/restaurant/restaurant.module';
+import { BannerModule } from './advertisement/banner/banner.module';
+import { AuthModule } from './auth/auth.module';
+import { CuisineModule } from './meals/cuisen/cuisen.module';
+import { MealModule } from './meals/meal/meals.module';
+import { UserModule } from './participants/user/user.module';
+import { RestaurantModule } from './restaurant/restaurant.module';
+
 
 
 @Module({

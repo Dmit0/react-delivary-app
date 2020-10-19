@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { BannerService } from './banner.service';
 
-@Controller('restaurants')
+@Controller('banners')
 export class BannerController {
 
   constructor(private bannerService: BannerService) {
@@ -10,7 +10,7 @@ export class BannerController {
   @Get('getBanners')
   //type for returning getMeal
   //type fot input
-  getBunner(): any {
+  getBanner(): any {
     return this.bannerService.getBanners();
   }
 }

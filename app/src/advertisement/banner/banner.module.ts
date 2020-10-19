@@ -13,5 +13,5 @@ import { Banner, BannerSchema } from './models/banner.schema';
   controllers: [BannerController],
   providers: [BannerService],
 })
-export class MealModule {
+export class BannerModule {
 }

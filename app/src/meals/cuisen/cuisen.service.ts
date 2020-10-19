@@ -6,7 +6,7 @@ import { Selitem } from './models/cuisen.schema';
 
 @Injectable()
 export class CuisineService {
-  constructor(
+  constructor(// @ts-ignore
     @InjectModel(Selitem.name) private cuisineModel: Model<Selitem>,
   ) {
   }

@@ -6,7 +6,7 @@ import {http} from './api'
 
 export const AuthenticationAPI={
     async createAccount(user:any){
-        const response = await http('/api/authentication/AccountCreate','POST',JSON.stringify(user),{
+        const response = await http('/authentication/SignUp','POST',JSON.stringify(user),{
             'Content-Type': 'application/json;charset=utf-8'
         })
         return response
