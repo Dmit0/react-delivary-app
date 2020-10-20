@@ -5,7 +5,7 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class RestaurantService {
-  constructor(  // @ts-ignore
+  constructor(
     @InjectModel(Restaurant.name) private restaurantModel: Model<Restaurant>,
   ) {
   }

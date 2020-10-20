@@ -7,7 +7,7 @@ import { RestaurantService } from './restaurant.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([// @ts-ignore
+    MongooseModule.forFeature([
       { name: Restaurant.name, schema: RestaurantSchema },
     ]),
   ],

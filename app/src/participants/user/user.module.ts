@@ -7,7 +7,7 @@ import { UserService } from './user.service';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([ // @ts-ignore
+    MongooseModule.forFeature([
       { name: User.name, schema: UserSchema },
     ]),
   ],

@@ -6,7 +6,7 @@ import { Meal, MealSchema } from './models/meals.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([// @ts-ignore
+    MongooseModule.forFeature([
       { name: Meal.name, schema: MealSchema },
     ]),
   ],

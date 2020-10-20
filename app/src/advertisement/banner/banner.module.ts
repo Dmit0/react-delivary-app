@@ -6,7 +6,7 @@ import { Banner, BannerSchema } from './models/banner.schema';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([// @ts-ignore
+    MongooseModule.forFeature([
       { name: Banner.name, schema: BannerSchema },
     ]),
   ],

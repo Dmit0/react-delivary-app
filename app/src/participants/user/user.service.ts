@@ -4,11 +4,11 @@ import { Model } from 'mongoose';
 
 import { map } from 'rxjs/operators';
 import { User } from './models/user.schema';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  constructor( // @ts-ignore
+  constructor(
     @InjectModel(User.name) private userModel: Model<User>,
   ) {
   }

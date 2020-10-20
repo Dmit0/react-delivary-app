@@ -6,7 +6,7 @@ import { Meal } from './models/meals.schema';
 @Injectable()
 export class MealService {
 
-  constructor(// @ts-ignore
+  constructor(
     @InjectModel(Meal.name) private mealModel: Model<Meal>,
   ) {
   }
