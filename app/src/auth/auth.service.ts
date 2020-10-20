@@ -20,12 +20,11 @@ export class AuthService {
         if (user) {
           return of(false);
         }
-      }),
-      mergeMap(async() => {
-        const hashedPassword = await passwordUtils.hashPassword(userData.password);
-        return this.userService.createUser({ userData, password: hashedPassword }).pipe(
-          map(() => true),
-        );
+        return passwordUtils.hashPassword(userData.password).pipe(
+          mergeMap((hashedPassword)=>this.userService.createUser({ userData, password: hashedPassword }).pipe(
+            map(()=>true)
+          ))
+        )
       }),
     );
   }
@@ -36,7 +35,6 @@ export class AuthService {
         if (verifyResult) {
           return this.createAccessToken(userData);
         }
-        // @ts-ignore
         throw new Error('verify error');
       }),
     );
