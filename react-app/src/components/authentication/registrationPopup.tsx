@@ -7,10 +7,10 @@ interface RegistrationProps{
     createAccount(user:userForCreateAccont):void
 }
 interface formData{
-    Email:string,
-    Telephone:string,
-    Password:string,
-    Name:string,
+    email:string,
+    telephone:string,
+    password:string,
+    name:string,
 }
 
 export const  RegistrationPopup:React.FC<RegistrationProps>=({handleAuthOpen,createAccount})=>{
@@ -19,8 +19,6 @@ export const  RegistrationPopup:React.FC<RegistrationProps>=({handleAuthOpen,cre
     const onSubmit = (data:formData) =>{
         createAccount(data)
     }
-    
-    
     return(
             <div className='main-auth-popup'>
                 <div className="auth-title">
@@ -49,25 +47,25 @@ export const  RegistrationPopup:React.FC<RegistrationProps>=({handleAuthOpen,cre
                             
                             
                             <span className='Authentication-Label' >Your name</span>
-                            <input  name='Name' ref={register({ required: true })}/>
-                            {errors.Name && errors.Name.type==='required' && <span>This field is required</span>}                         
+                            <input  name='name' ref={register({ required: true })}/>
+                            {errors.name && errors.name.type==='required' && <span>This field is required</span>}
                             <span className='Authentication-Label'>Telephone number</span>{/*Only belarus prefix +375*/}
                             
-                            <span>+375</span><input  name='Telephone' ref={register({ required: true,minLength:11,maxLength:13,pattern:/^((8|\+375)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/})}/>
-                            {errors.Telephone && errors.Telephone.type==='required' && <span>Telephone is required</span>}
-                            {errors.Telephone &&( errors.Telephone.type==='pattern' || errors.Telephone.type==='minLength' || errors.Telephone.type==='maxLength') && <span>it isnt`t telephon number</span>}
+                            <span>+375</span><input  name='telephone' ref={register({ required: true,minLength:11,maxLength:13,pattern:/^((8|\+375)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/})}/>
+                            {errors.telephone && errors.telephone.type==='required' && <span>Telephone is required</span>}
+                            {errors.telephone &&( errors.telephone.type==='pattern' || errors.telephone.type==='minLength' || errors.telephone.type==='maxLength') && <span>it isnt`t telephon number</span>}
                             
                             <span className='Authentication-Label'>Email Adress</span>
-                            <input name='Email' ref={register({required:true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ })}/>
-                            {errors.Email && errors.Email.type==='required' && <p>Email is required</p>}
-                            {errors.Email && errors.Email.type==='pattern' && <p>it isnt`t email</p>}
+                            <input name='email' ref={register({required:true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ })}/>
+                            {errors.email && errors.email.type==='required' && <p>Email is required</p>}
+                            {errors.email && errors.email.type==='pattern' && <p>it isnt`t email</p>}
                             
                             <span className='Authentication-Label' >Password</span>
-                            <input type="password"  name='Password' ref={register({ required: true, minLength: 8,maxLength:30 , pattern:/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/})}/>
-                            {errors.Password && errors.Password.type==='required' && <span>This field is required</span>}
-                            {errors.Password && errors.Password.type==='minLength' && <span>The minimal length of password should be more than 8</span>}
-                            {errors.Password && errors.Password.type==='maxLength' && <span>The minimal length of password should less than 30</span>}
-                            {errors.Password && errors.Password.type==='pattern' && <span>The password should contain letters Upper and Lower case</span>}
+                            <input type="password"  name='password' ref={register({ required: true, minLength: 8,maxLength:30 , pattern:/(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/})}/>
+                            {errors.password && errors.password.type==='required' && <span>This field is required</span>}
+                            {errors.password && errors.password.type==='minLength' && <span>The minimal length of password should be more than 8</span>}
+                            {errors.password && errors.password.type==='maxLength' && <span>The minimal length of password should less than 30</span>}
+                            {errors.password && errors.password.type==='pattern' && <span>The password should contain letters Upper and Lower case</span>}
                         </div>
                     </div>
                     <div className="auth-reg-futer">

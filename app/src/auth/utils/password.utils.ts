@@ -1,5 +1,5 @@
 import { from, Observable, of } from 'rxjs';
-import bcrypt from 'bcrypt'
+import * as bcrypt from 'bcrypt'
 
 export class passwordUtils {
   static hashPassword(password: string): Observable<string> {
@@ -7,6 +7,6 @@ export class passwordUtils {
   }
 
   static comparePassword(hashPasswordToCompare: string, basicPassword: string): Observable<boolean> {
-    return from(bcrypt.compare(basicPassword, hashPasswordToCompare));//чекнуть что возвращает
+    return from(bcrypt.compare(basicPassword, hashPasswordToCompare));//чекнуть что возвращает bool?
   }
 }

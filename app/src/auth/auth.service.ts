@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { UserService } from '../participants/user/user.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 import { passwordUtils } from './utils/password.utils';
@@ -16,16 +16,22 @@ export class AuthService {
 
   SignUp(userData: UserRegistrationDto) {
     return this.userService.getUser(userData.email).pipe(
-      mergeMap((user) => {
+      tap((user) => {
         if (user) {
           return of(false);
         }
-        return passwordUtils.hashPassword(userData.password).pipe(
-          mergeMap((hashedPassword)=>this.userService.createUser({ userData, password: hashedPassword }).pipe(
-            map(()=>true)
-          ))
-        )
       }),
+      mergeMap(() => passwordUtils.hashPassword(userData.password).pipe(
+        mergeMap((hashedPassword) => this.userService.createUser({ ...userData, password: hashedPassword }).pipe(
+          tap((res) => {
+            if (res) {
+              return of(true);
+            } else {
+              throw new Error('system error');
+            }
+          }),
+        ))),
+      ),
     );
   }
 
@@ -46,7 +52,7 @@ export class AuthService {
     });//добавить нужные филды
   }
 
-  private verifyUser(verifyingData: any): Observable<any> {
+  private verifyUser(verifyingData: UserSignInDto): Observable<any> {
     return this.userService.getUser(verifyingData.email).pipe(
       mergeMap((user) => passwordUtils.comparePassword(user.password, verifyingData.password).pipe(
         mergeMap((compareResult) => map(() => compareResult)),

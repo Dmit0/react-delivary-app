@@ -1,6 +1,6 @@
 export interface userForCreateAccont{
-    Email:string
-    Password:string
-    Telephone:string
-    Name:string
+    email:string
+    password:string
+    telephone:string
+    name:string
 }
