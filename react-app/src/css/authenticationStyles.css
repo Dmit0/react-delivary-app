@@ -67,6 +67,7 @@
 }
 .auth-body{
     align-self: center;
+    margin-left: 14%;
 }
 .google-button {
     display:flex;

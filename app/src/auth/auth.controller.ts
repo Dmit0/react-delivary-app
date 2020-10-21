@@ -19,4 +19,9 @@ export class AuthController {
   signUp(@Body() userRegistrationDto: UserRegistrationDto) {
     return this.authService.SignUp(userRegistrationDto);
   }
+
+  @Post('verifyMail')
+  verifyMail(@Body() email: string) {
+    return this.authService.verifyMail(email);
+  }
 }

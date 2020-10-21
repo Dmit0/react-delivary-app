@@ -2,12 +2,13 @@ import React from 'react';
 import '../../css/header.css';
 import { Link } from 'react-router-dom';
 import { meals } from '../../interfaces/meals';
+import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
 import { userForCreateAccont } from '../../interfaces/authentication';
-import { useDispatch } from 'react-redux';
-import { create_account } from '../../redux/actions/authentication';
+import { useDispatch, useSelector } from 'react-redux';
+import { create_account, logIn, verifyMail } from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
@@ -18,11 +19,16 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [popuBody, setPopupBody] = React.useState<any>(null);//найти тип для html el
   const [isLogin, setisLogin] = React.useState<boolean>(true);
-  const dispath = useDispatch();
+  const dispatch = useDispatch();
   const handleAuthOpen = () => {
     setIsPopupOpen(true);
     setisLogin(true);
-    setPopupBody(<LoginPopup registrationHeandler={registrationHeandler}/>);
+    setPopupBody(
+      <LoginPopup
+        registrationHeandler={registrationHeandler}
+        verifyMail = {(mail:string)=>dispatch(verifyMail(mail))}
+        logIn={(data)=>dispatch(logIn(data))}
+      />);
   };
 
   const handleClose = () => {
@@ -31,7 +37,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
 
   //убрать это от сюда СРОЧНО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const createAccount = (user: userForCreateAccont) => {
-    dispath(create_account(user));
+    dispatch(create_account(user));
   };
   const registrationHeandler = () => {
     setIsPopupOpen(true);

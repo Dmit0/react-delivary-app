@@ -4,3 +4,8 @@ export interface userForCreateAccont{
     telephone:string
     name:string
 }
+
+export interface loginData{
+    email:string,
+    password:string
+}

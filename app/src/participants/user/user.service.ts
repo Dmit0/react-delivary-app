@@ -15,7 +15,7 @@ export class UserService {
   }
 
   getUser(property: any): Observable<User> {
-    return from(this.userModel.findOne({ property })).pipe(
+    return from(this.userModel.findOne(property)).pipe(
       map((user) => user || null),
     );
   }

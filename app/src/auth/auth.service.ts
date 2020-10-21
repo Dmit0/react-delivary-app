@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { UserService } from '../participants/user/user.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
@@ -23,7 +23,7 @@ export class AuthService {
       }),
       mergeMap(() => passwordUtils.hashPassword(userData.password).pipe(
         mergeMap((hashedPassword) => this.userService.createUser({ ...userData, password: hashedPassword }).pipe(
-          tap((res) => {
+          map((res) => {
             if (res) {
               return of(true);
             } else {
@@ -35,29 +35,48 @@ export class AuthService {
     );
   }
 
-  SignIn(userData: UserSignInDto): Observable<any> {
+  SignIn(userData: UserSignInDto): any {
     return this.verifyUser(userData).pipe(
       mergeMap((verifyResult) => {
         if (verifyResult) {
-          return this.createAccessToken(userData);
+          return this.createAccessToken(verifyResult)
         }
         throw new Error('verify error');
       }),
     );
   }
 
-  private createAccessToken(data: any) {
-    return this.jwtService.sign({
+  private async createAccessToken(data: any) {
+    const token = await this.jwtService.sign({
       id: data.id,
-    });//добавить нужные филды
+    });
+    return {token, firstName:data.name}
   }
 
   private verifyUser(verifyingData: UserSignInDto): Observable<any> {
-    return this.userService.getUser(verifyingData.email).pipe(
+    return this.userService.getUser({ email: verifyingData.email }).pipe(
       mergeMap((user) => passwordUtils.comparePassword(user.password, verifyingData.password).pipe(
-        mergeMap((compareResult) => map(() => compareResult)),
+        map((compareResult) => {
+          if (compareResult) {
+            return  user;
+          } else {
+            return of(false);
+          }
+        }),
       )),
     );
+  }
+
+  verifyMail(email: string) {
+    return this.userService.getUser( email ).pipe(
+      map((user) => {
+        if (user) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+    )
   }
 
 }
