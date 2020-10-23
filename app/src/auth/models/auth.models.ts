@@ -9,3 +9,7 @@ export interface UserSignInDto {
   email: string,
   password: string
 }
+
+export interface AuthReturnData{
+  token:string
+}

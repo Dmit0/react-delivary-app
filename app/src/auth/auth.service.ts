@@ -49,8 +49,9 @@ export class AuthService {
   private async createAccessToken(data: any) {
     const token = await this.jwtService.sign({
       id: data.id,
+      firstName:data.name
     });
-    return {token, firstName:data.name}
+    return token
   }
 
   private verifyUser(verifyingData: UserSignInDto): Observable<any> {

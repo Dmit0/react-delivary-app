@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { config, ENV_VAR } from '../config';
 import { BannerModule } from './advertisement/banner/banner.module';
 import { AuthModule } from './auth/auth.module';
 import { CuisineModule } from './meals/cuisen/cuisen.module';
@@ -18,8 +19,11 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     CuisineModule,
     AuthModule,
     BannerModule,
-    ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb+srv://sheshunov00:h387rqy834grif@cluster0.qb2dz.azure.mongodb.net/react-delivary-app?retryWrites=true&w=majority'),
+    ConfigService,// how to use it?
+    ConfigModule.forRoot({
+      load: [config],
+    }),
+    MongooseModule.forRoot(ENV_VAR.mongoDb.url),
   ],
 })
 export class AppModule {
