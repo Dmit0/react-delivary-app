@@ -1,6 +1,8 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LocalAuthGuard } from './guards/local.guard';
 import { AuthReturnData, UserRegistrationDto, UserSignInDto } from './models/auth.models';
+import { CurrentUser } from './utils/auth.utils';
 
 @Controller('authentication')
 export class AuthController {
@@ -8,11 +10,10 @@ export class AuthController {
   constructor(private authService: AuthService) {
   }
 
+  @UseGuards(LocalAuthGuard)
   @Post('signIn')
-  //type for returning getMeal
-  //type fot input
-  signIn(@Body() userSignInDto: UserSignInDto): AuthReturnData {
-    return this.authService.SignIn(userSignInDto);
+  signIn(@CurrentUser() user: any, @Body() userSignInDto: UserSignInDto): AuthReturnData {
+    return this.authService.SignIn(user);
   }
 
   @Post('signUp')

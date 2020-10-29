@@ -35,15 +35,9 @@ export class AuthService {
     );
   }
 
-  SignIn(userData: UserSignInDto): any {
-    return this.verifyUser(userData).pipe(
-      mergeMap((verifyResult) => {
-        if (verifyResult) {
-          return this.createAccessToken(verifyResult)
-        }
-        throw new Error('verify error');
-      }),
-    );
+  //create user Type
+  SignIn(userData: any): any {
+    return this.createAccessToken(userData)
   }
 
   private async createAccessToken(data: any) {
