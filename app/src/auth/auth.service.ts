@@ -54,7 +54,7 @@ export class AuthService {
     return token
   }
 
-  private verifyUser(verifyingData: UserSignInDto): Observable<any> {
+   verifyUser(verifyingData: UserSignInDto): Observable<any> {
     return this.userService.getUser({ email: verifyingData.email }).pipe(
       mergeMap((user) => passwordUtils.comparePassword(user.password, verifyingData.password).pipe(
         map((compareResult) => {
