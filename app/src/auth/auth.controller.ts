@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.guard';
 import { AuthReturnData, UserRegistrationDto, UserSignInDto } from './models/auth.models';
@@ -24,5 +25,16 @@ export class AuthController {
   @Post('verifyMail')
   verifyMail(@Body() email: string) {
     return this.authService.verifyMail(email);
+  }
+
+  @Get('google')
+  @UseGuards(AuthGuard('google'))
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  googleAuth(@Req() req) {}
+
+  @Get('redirect')
+  @UseGuards(AuthGuard('google'))
+  googleAuthRedirect(@CurrentUser() user: any) {
+    console.log('null')
   }
 }

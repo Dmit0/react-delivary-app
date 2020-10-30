@@ -4,6 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../participants/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { GoogleStrategy } from './strategies/google.stratage';
 import { LocalStrategy } from './strategies/local.stratage';
 
 //сделать все из конфига
@@ -18,8 +19,8 @@ import { LocalStrategy } from './strategies/local.stratage';
       }),
     }),
   ],
-  providers: [AuthService,LocalStrategy],
-  controllers:[AuthController]
+  providers: [AuthService, LocalStrategy, GoogleStrategy],
+  controllers: [AuthController],
 })
 export class AuthModule {
 }

@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { from, Observable, of } from 'rxjs';
+import { from, Observable, of, throwError } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { exceptionErrors } from '../constants/errors/exeptionsErrors';
 import { UserService } from '../participants/user/user.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 import { passwordUtils } from './utils/password.utils';
@@ -15,21 +16,11 @@ export class AuthService {
   }
 
   SignUp(userData: UserRegistrationDto) {
-    return this.userService.getUser(userData.email).pipe(
-      tap((user) => {
-        if (user) {
-          return of(false);
-        }
-      }),
+    return this.userService.getUser({ email: userData.email }).pipe(
+      tap((user) => user && exceptionErrors.throwForbiddenError('user exist')),
       mergeMap(() => passwordUtils.hashPassword(userData.password).pipe(
         mergeMap((hashedPassword) => this.userService.createUser({ ...userData, password: hashedPassword }).pipe(
-          map((res) => {
-            if (res) {
-              return of(true);
-            } else {
-              throw new Error('system error');
-            }
-          }),
+          map((res) => res && true || exceptionErrors.badRequestException('BadRequestException')),
         ))),
       ),
     );
@@ -37,41 +28,34 @@ export class AuthService {
 
   //create user Type
   SignIn(userData: any): any {
-    return this.createAccessToken(userData)
+    return this.createAccessToken(userData);
   }
 
   private async createAccessToken(data: any) {
     const token = await this.jwtService.sign({
-      id: data.id,
-      firstName:data.name
+      id: data._id,
+      telephone: data.telephone,
+      email: data.email,
+      firstName: data.name,
     });
-    return token
+    return token;
   }
 
-   verifyUser(verifyingData: UserSignInDto): Observable<any> {
+  verifyUser(verifyingData: UserSignInDto): Observable<any> {
     return this.userService.getUser({ email: verifyingData.email }).pipe(
       mergeMap((user) => passwordUtils.comparePassword(user.password, verifyingData.password).pipe(
-        map((compareResult) => {
-          if (compareResult) {
-            return  user;
-          } else {
-            return of(false);
-          }
-        }),
+        map((compareResult) => compareResult && user || null),
       )),
     );
   }
 
   verifyMail(email: string) {
-    return this.userService.getUser( email ).pipe(
-      map((user) => {
-        if (user) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-    )
+    return this.userService.getUser(email).pipe(
+      map((user) => user && true || exceptionErrors.badRequestException('bad request')),
+    );
   }
 
+  googleLogin(user: any) {
+    //return this.userService.findOrCreate({ email: user.email })
+  }
 }

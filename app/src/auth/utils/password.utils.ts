@@ -7,6 +7,6 @@ export class passwordUtils {
   }
 
   static comparePassword(hashPasswordToCompare: string, basicPassword: string): Observable<boolean> {
-    return from(bcrypt.compare(basicPassword, hashPasswordToCompare));//чекнуть что возвращает bool?
+    return from(bcrypt.compare(basicPassword, hashPasswordToCompare))
   }
 }

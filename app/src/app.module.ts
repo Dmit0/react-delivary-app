@@ -23,7 +23,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     ConfigModule.forRoot({
       load: [config],
     }),
-    MongooseModule.forRoot(ENV_VAR.mongoDb.url),
+    MongooseModule.forRoot(process.env.MONGO_DB_URL),
   ],
 })
 export class AppModule {
