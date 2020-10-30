@@ -1,11 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types } from 'mongoose';
+import { Document, Schema as MongooseSchema, Types } from 'mongoose';
+import { Role } from '../../../constants/Entity/Roles';
+import { Meal } from '../../../meals/meal/models/meals.schema';
+import { Restaurant } from '../../../restaurant/models/restaurant.schema';
 
-export enum UserStatuses {
-  BLOCKED = 'blocked',
-  ACTIVE = 'active',
-  DEACTIVATED = 'deactivated',
-}
+export const UserStatuses = [
+  'BRONZE',
+  'SILVER',
+  'GOLD',
+  'ADMIN'
+]
 
 @Schema()
 export class User extends Document {
@@ -24,24 +28,23 @@ export class User extends Document {
   @Prop({default:Date.now()})
   createdAt: string;
 
-  // @Prop({
-  //   type: 'enum',
-  //   enum: UserStatuses,
-  //   default: UserStatuses.ACTIVE,
-  // })
-  // status: UserStatuses;
+  @Prop({
+    enum: UserStatuses,
+    default: UserStatuses[0],
+  })
+  status: string;
 
-  @Prop()
-  role: { type: Types.ObjectId, ref: 'Role' };
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Role'})
+  role: Role;
 
-  @Prop()
-  ownership: [{ type: Types.ObjectId, ref: 'Restaurant' }];
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Restaurant', default:null })
+  ownership: [Restaurant];
 
-  @Prop()
-  lovedRestaurant: [{ type: Types.ObjectId, ref: 'Restaurant' }];
+  @Prop({ type: Types.ObjectId, ref: 'Restaurant', default:[] })
+  lovedRestaurant: [Restaurant];
 
-  @Prop()
-  cart: [{ type: Types.ObjectId, ref: 'Meal' }];
+  @Prop({ type: Types.ObjectId, ref: 'Meal', default:[] })
+  cart: [Meal];
 
 }
 
