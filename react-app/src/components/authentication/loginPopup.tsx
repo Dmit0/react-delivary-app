@@ -32,7 +32,7 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
       logIn(data);
       //login check -> password
       //exit from popup into main menu and set state of this 0 or smth
-      //initialize user bonuses(later task)
+      //initialize user-main bonuses(later task)
       //добавить изменить мыло
       //добавить забыл пароль
     }

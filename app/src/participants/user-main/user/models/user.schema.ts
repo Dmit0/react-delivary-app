@@ -1,8 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
-import { Role } from '../../../constants/Entity/Roles';
-import { Meal } from '../../../meals/meal/models/meals.schema';
-import { Restaurant } from '../../../restaurant/models/restaurant.schema';
+import { Phone } from '../../phone/models/phone.schema';
+import { Role } from '../../roles/models/Roles';
+import { Meal } from '../../../../meals/meal/models/meals.schema';
+import { Restaurant } from '../../../../restaurant/models/restaurant.schema';
 
 export const UserStatuses = [
   'BRONZE',
@@ -22,8 +23,8 @@ export class User extends Document {
   @Prop({ require: true })
   password: string;
 
-  @Prop({ require: true })
-  telephone: string;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone'})
+  telephone: Phone;
 
   @Prop({default:Date.now()})
   createdAt: string;

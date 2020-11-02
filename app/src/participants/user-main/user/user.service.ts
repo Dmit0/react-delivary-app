@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {Role} from '../../constants/Entity/Roles';
+import {Role} from '../roles/models/Roles';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { User } from './models/user.schema';
 import { from, Observable, of } from 'rxjs';
@@ -38,7 +38,7 @@ export class UserService {
       mergeMap((role) => role && role._id || this.createRole('BASE')));
   }
 
-  private createRole(name) {
+  private createRole(name): Observable<Role> {
     const newBaseRole = new this.roleModel({ name });
     return from(newBaseRole.save()).pipe(
       map((role) => role._id),

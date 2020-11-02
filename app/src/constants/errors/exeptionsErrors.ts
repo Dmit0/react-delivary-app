@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, NotAcceptableException } from '@nestjs/common';
 
 export class exceptionErrors {
    static throwForbiddenError(message: string) {
@@ -7,4 +7,8 @@ export class exceptionErrors {
    static badRequestException(message: string) {
     throw new BadRequestException(message);
   }
+
+    static mongoDbError(message: string){
+     throw new NotAcceptableException(message)
+    }
 }

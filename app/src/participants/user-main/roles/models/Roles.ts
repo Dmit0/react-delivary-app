@@ -8,7 +8,7 @@ export class Role extends Document {
   name: string;
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Opportunity', default:null })
-  representative:[Opportunity]
+  opportunities:[Opportunity]
 }
 
 export const RoleSchema = SchemaFactory.createForClass(Role);
