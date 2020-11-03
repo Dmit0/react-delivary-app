@@ -10,7 +10,7 @@ export class dbUtils {
     Promise.all([
       this.addRoles(),
       this.addCuisines(),
-      this.addTelephonePrefixes(),
+      this.addCounty(),
     ]).catch((error) => {
        new exceptionErrors.mongoDbError(error);
     });
@@ -24,7 +24,7 @@ export class dbUtils {
     return axios.post(`${this.host}/cuisine/generate`);
   }
 
-  private static addTelephonePrefixes(): Promise<any> {
-    return axios.post(`${this.host}/phone/prefix/generate`);
+  private static addCounty(): Promise<any> {
+    return axios.post(`${this.host}/country/generate`);
   }
 }

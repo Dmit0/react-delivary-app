@@ -8,7 +8,7 @@ export class RolesController {
   }
 
   @Post('generate')
-  generateBaseRole() {
-    return this.rolesService.generateBaseRole()
+  generateRoles() {
+    return this.rolesService.generateRoles()
   }
 }

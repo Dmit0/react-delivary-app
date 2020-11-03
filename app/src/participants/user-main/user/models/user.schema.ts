@@ -23,8 +23,11 @@ export class User extends Document {
   @Prop({ require: true })
   password: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone'})
-  telephone: Phone;
+  // @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone'})
+  // telephone: Phone;
+
+  @Prop()
+  telephone: string;
 
   @Prop({default:Date.now()})
   createdAt: string;

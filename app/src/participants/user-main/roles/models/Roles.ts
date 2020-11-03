@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema } from 'mongoose';
-import { Opportunity } from './Opportunities';
+import { Opportunity } from '../../opportunities/models/Opportunities';
 
 @Schema()
 export class Role extends Document {

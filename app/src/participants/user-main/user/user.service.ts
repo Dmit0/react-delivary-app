@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {Role} from '../roles/models/Roles';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
 import { from, Observable, of } from 'rxjs';
 import { IUserCreate } from './models/user.types';
@@ -11,7 +12,7 @@ import { IUserCreate } from './models/user.types';
 export class UserService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
-    @InjectModel(Role.name) private roleModel: Model<Role>,
+    private readonly roleService: RolesService,
   ) {
   }
 
@@ -22,26 +23,13 @@ export class UserService {
   }
 
   createUser(user: IUserCreate): Observable<User> {
-    return this.createOrReturnBaseRole().pipe(
-      mergeMap((roleId) => {
-        console.log(roleId)
-        const newUser = new this.userModel({ ...user, role: roleId });
+    return this.roleService.findRole({ name:'BASE' }).pipe(
+      mergeMap((role) => {
+        const newUser = new this.userModel({ ...user, role: role._id });
         return from(newUser.save()).pipe(
           map((user) => user || null),//check wat is return frm save method
         );
       }),
-    );
-  }
-
-  private createOrReturnBaseRole(): Observable<any> {
-    return from(this.roleModel.findOne({ name: 'BASE' })).pipe(
-      mergeMap((role) => role && role._id || this.createRole('BASE')));
-  }
-
-  private createRole(name): Observable<Role> {
-    const newBaseRole = new this.roleModel({ name });
-    return from(newBaseRole.save()).pipe(
-      map((role) => role._id),
     );
   }
 

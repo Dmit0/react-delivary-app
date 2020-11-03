@@ -1,4 +1,4 @@
-const cuisines = [
+export const cuisines = [
   { name: 'Asian' },
   { name: 'Kebab' },
   { name: 'Sushi' },
