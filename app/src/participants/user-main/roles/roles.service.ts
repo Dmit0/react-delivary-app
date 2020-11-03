@@ -4,9 +4,7 @@ import { Model } from "mongoose";
 import { from, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { opportunity as  opportunities} from '../../../constants/initializeData/opportunities.base';
-import { Opportunity } from '../opportunities/models/Opportunities';
 import { OpportunitiesService } from '../opportunities/opportunities.service';
-import { UserService } from '../user/user.service';
 import { Role } from './models/Roles';
 import { roles } from '../../../constants/initializeData/roles.base'
 
@@ -34,7 +32,7 @@ export class RolesService {
 
    findRole(property): Observable<Role> {
     return from(this.roleModel.findOne(property)).pipe(
-      map((role)=> role || null)
+      map((role) => role || null)
     )
   }
 }

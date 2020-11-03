@@ -11,7 +11,6 @@ import { RolesService } from './roles.service';
   imports: [
     MongooseModule.forFeature([
       { name: Role.name, schema: RoleSchema },
-      { name: Opportunity.name, schema: OpportunitySchema }
     ]),
     OpportunitiesModule,
   ],
