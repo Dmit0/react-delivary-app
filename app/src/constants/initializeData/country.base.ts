@@ -282,7 +282,8 @@ export const country = [{ 'name': 'Israel', 'dial_code': '+972', 'code': 'IL' },
   'name': 'land Islands',
   'dial_code': '',
   'code': 'AX',
-}, { 'name': 'Antarctica', 'dial_code': null, 'code': 'AQ' }, {
+},
+  {
   'name': 'Bolivia, Plurinational State of',
   'dial_code': '+591',
   'code': 'BO',

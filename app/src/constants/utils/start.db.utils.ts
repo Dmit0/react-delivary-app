@@ -6,17 +6,23 @@ export class dbUtils {
 
   private static host = ENV_VAR.host
 
-  static initializeStaticDbItems() {
-    Promise.all([
-      this.addRoles(),
-      this.addCuisines(),
-      this.addCounty(),
-    ]).catch((error) => {
-       new exceptionErrors.mongoDbError(error);
-    });
+  static async initializeStaticDbItems() {
+    // Promise.all([
+    //   this.addRoles(),
+    //   this.addCuisines(),
+    //   this.addCounty(),
+    // ]).then(() => console.log('susses initialize'))
+    //   .catch((error) => {
+    //   console.log(error)
+    //    //new exceptionErrors.mongoDbError(error);
+    // });
+    // await dbUtils.addRoles()
+   //await this.addCuisines()
+   //await this.addCounty()
+    return axios.post(`${this.host}/roles/generate`);
   }
 
-  private static addRoles(): any {
+  private static addRoles(): Promise<any> {
     return axios.post(`${this.host}/roles/generate`);
   }
 

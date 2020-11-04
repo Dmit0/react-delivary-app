@@ -7,7 +7,7 @@ export class Opportunity extends Document {
   @Prop({ require: true, unique: true, default:"base" })
   name: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Opportunities', default:[] })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Opportunities', default:null })
   representative:[Role]
 }
 
