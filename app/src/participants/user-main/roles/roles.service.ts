@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
-import { from, Observable } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { opportunity as  opportunities} from '../../../constants/initializeData/opportunities.base';
 import { OpportunitiesService } from '../opportunities/opportunities.service';
@@ -16,19 +16,34 @@ export class RolesService {
   ) {
   }
 
- async generateRoles() {
-    await opportunities.forEach((opportunity) => this.opportunitiesService.createOpportunity({ name: opportunity.name }))
-    await roles.forEach((role) => this.opportunitiesService.findOpportunities(role.opportunities))
-    //   .pipe(
-    //   tap(console.log),
-    //   mergeMap((opportunities:[]) => this.createRole({ ...role, opportunities:opportunities.map((opportunity: any) => opportunity._id) }))
-    // ))
+  generateRoles() {
+    return forkJoin(opportunities.map((opportunity) => this.opportunitiesService.createOpportunity({ name: opportunity.name }))).pipe(
+      mergeMap((res) => {
+        return forkJoin(roles.map((role) => this.opportunitiesService.findOpportunities(role.opportunities).pipe(
+          mergeMap((opportunities) => this.createRole({
+            name: role.name, opportunities: opportunities.map((item) => {
+              return item?._id;
+            }),
+          })),
+        ))).pipe(
+          map(() => true),
+        );
+      }),
+    );
   }
 
-  private createRole(property): Observable<Role> {
-    const newRole = new this.roleModel({ ...property } );
-    return from(newRole.save()).pipe(
-      map((role) => role ),
+ private createRole(property): Observable<any> {
+    return from(this.roleModel.find()).pipe(
+      mergeMap((response) => {
+        if (response.length > 0) {
+          return of(null);
+        } else {
+          const newRole = new this.roleModel({ name:property.name, opportunities:[...property.opportunities]});
+          return from(newRole.save()).pipe(
+            map((role) => role),
+          );
+        }
+      }),
     );
   }
 

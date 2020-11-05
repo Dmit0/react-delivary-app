@@ -14,7 +14,6 @@ export class AuthController {
   @UseGuards(LocalAuthGuard)
   @Post('signIn')
   signIn(@CurrentUser() user: any, @Body() userSignInDto: UserSignInDto): AuthReturnData {
-    console.log(user)
     return this.authService.SignIn(user);
   }
 

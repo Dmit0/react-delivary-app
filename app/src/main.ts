@@ -6,8 +6,7 @@ import { dbUtils } from './constants/utils/start.db.utils';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await app.listen(ENV_VAR.appPort);
-  //dbUtils.initializeStaticDbItems()
   console.log(`server was started on ${ENV_VAR.appPort} port`)
 }
 
-bootstrap();
+bootstrap().then(() => dbUtils.initializeStaticDbItems());

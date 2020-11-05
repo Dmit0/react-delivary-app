@@ -16,7 +16,7 @@ export class OpportunitiesService {
   createOpportunity(property): Observable<any> {
     return from(this.opportunityModel.find()).pipe(
       mergeMap((response) => {
-        if (response) {
+        if (response.length > 0) {
           return of(null);
         } else {
           const newOpportunity = new this.opportunityModel({ ...property });
@@ -26,10 +26,6 @@ export class OpportunitiesService {
         }
       }),
     );
-    // const newOpportunity = new this.opportunityModel({ ...property } );
-    // return from(newOpportunity.save()).pipe(
-    //   map((opportunity) => opportunity ),
-    // );
   }
 
   findOpportunities(property: string[]): Observable<any> {
@@ -37,9 +33,7 @@ export class OpportunitiesService {
      return this.findOpportunity({name:item}).pipe(
        map((opportunity) => opportunity || null)
      )
-   })).pipe(
-     tap(console.log)
-   )
+   }))
   }
 
   findOpportunity(property: any): Observable<any> {

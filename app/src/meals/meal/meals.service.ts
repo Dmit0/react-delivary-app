@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel} from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Meal } from './models/meals.schema';
 
 @Injectable()
@@ -12,6 +14,8 @@ export class MealService {
   }
 
   async getMeal(id) {
-   return this.mealModel.find({ restaurant: id });
+   return from(this.mealModel.find({ restaurant: id })).pipe(
+     map((meals) => meals)
+   );
   }
 }
