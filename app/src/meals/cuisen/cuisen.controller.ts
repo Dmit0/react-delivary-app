@@ -14,6 +14,7 @@ export class CuisineController {
 
   @Post('generate')
   generateCuisines(){
+    console.log('generate cuisines')
     return this.cuisineService.generateCuisines()
   }
 }

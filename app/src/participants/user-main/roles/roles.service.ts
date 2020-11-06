@@ -22,7 +22,7 @@ export class RolesService {
         return forkJoin(roles.map((role) => this.opportunitiesService.findOpportunities(role.opportunities).pipe(
           mergeMap((opportunities) => this.createRole({
             name: role.name, opportunities: opportunities.map((item) => {
-              return item?._id;
+              return item._id;
             }),
           })),
         ))).pipe(

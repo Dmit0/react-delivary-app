@@ -88,7 +88,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ handleAuthOpen,
             <button onClick={handleAuthOpen} type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
           </div>
           <div className="auth-next-step">
-            <button type="submit" className="btn btn-outline-primary reg-next-step-button ">Sign Up</button>
+            <button type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
           </div>
         </div>
       </form>

@@ -7,7 +7,7 @@ export const ENV_VAR = {
   mongoDb:{
     url:process.env.MONGO_DB_URL
   },
-  host:process.env.front || `localhost:${process.env.PORT || '7000'}`
+  host:process.env.front || `http://localhost:${process.env.PORT || '7000'}`
 }
 
 export const config = () => ENV_VAR;

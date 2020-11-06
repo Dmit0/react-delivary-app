@@ -19,7 +19,7 @@ export class CountryService {
         if (response.length > 0) {
           return of(null);
         } else {
-          const newCountry = new this.countryModel({ name:property.name, opportunities:[...property.opportunities]});
+          const newCountry = new this.countryModel({ ...property } );
           return from(newCountry.save()).pipe(
             map((country) => country),
           );

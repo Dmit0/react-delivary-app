@@ -8,8 +8,6 @@ export class BannerController {
   }
 
   @Get('getBanners')
-  //type for returning getMeal
-  //type fot input
   getBanner(): any {
     return this.bannerService.getBanners();
   }

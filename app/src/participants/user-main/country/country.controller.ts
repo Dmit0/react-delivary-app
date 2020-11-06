@@ -7,6 +7,7 @@ export class CountryController {
   }
   @Post('generate')
   generate(){
+    console.log('generate counties')
     return this.countryService.generateCountry()
   }
 }

@@ -32,7 +32,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     ConfigModule.forRoot({
       load: [config],
     }),
-    MongooseModule.forRoot(process.env.MONGO_DB_URL1),
+    MongooseModule.forRoot(process.env.MONGO_DB_URL),
   ],
 })
 export class AppModule {

@@ -8,17 +8,15 @@ export class dbUtils {
   private static host = ENV_VAR.host;
 
   static async initializeStaticDbItems() {
-    const arr = await Promise.all([
+    return Promise.all([
       this.addRoles(),
       this.addCuisines(),
       this.addCounty(),
-    ]).then((res) => console.log(res))
+    ]).then((res) => console.log('db was initialize'))
       .catch((err) => new exceptionErrors.mongoDbError(err));
-    console.log(arr);
   }
 
   private static addRoles() {
-    console.log(`${ this.host }/roles/generate`)
     return axios.post(`${ this.host }/roles/generate`);
   }
 

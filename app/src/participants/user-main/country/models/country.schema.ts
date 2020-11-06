@@ -7,10 +7,10 @@ export class Country extends Document {
   name: string;
 
   @Prop({ require: true })
-  dial_cod: string;
+  dial_code: string;
 
   @Prop({ require: true })
-  country_cod: string;
+  code: string;
 }
 
 export const CountrySchema = SchemaFactory.createForClass(Country);

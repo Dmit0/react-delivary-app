@@ -9,7 +9,7 @@ export class RolesController {
 
   @Post('generate')
   generateRoles() {
-    console.log('generate')
+    console.log('generate roles')
     return this.rolesService.generateRoles()
   }
 }
