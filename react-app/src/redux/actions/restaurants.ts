@@ -2,40 +2,38 @@ import {ThunkAction} from 'redux-thunk'
 import { RootState } from '../reducers/rootReducer'
 import { Action } from 'redux'
 import {restaurant,cuisen} from '../../interfaces/restaurant'
-import {Sorts} from '../../api/sorts'
+import {Sorts} from '../../api/utils/sorts'
 import { showLoading, hideLoading } from 'react-redux-loading-bar'
-import {restaurantAPI,MealAPI} from '../../api/ReastaurantApi'
+import {restaurantAPI,MealAPI} from '../../api/part_apis/ReastaurantApi'
 import {SET_CURRENT_RESTAURANT,SET_REASTAURANTS,SET_MEALS,restaurantActionTypes,SET_CUISENS,SET_FILTER_RESTAURANTS,SET_INPUT_FILTER,DELETE_CURRENT_RESTAURANT_AND_MEALS} from '../types/restaurantsTypes'
 
 
 
 type ThunkType=ThunkAction<Promise<void>, RootState, unknown, Action<string>>
 
-
-
-export const set_restaurants=():ThunkType=>{
-    return async dispatch=>{
-        dispatch(showLoading())
-        try{
-        let restaurants=await restaurantAPI.get()
-        let cuisenTypes=await restaurantAPI.getCuisenTypes()
-        dispatch({
-           type:SET_REASTAURANTS,
-           restaurants
-       })
-       dispatch({
-           type:SET_CUISENS,
-           cuisenTypes
-       })
-       if(restaurants!==undefined){
-          dispatch(set_filtered_restaurants(restaurants,'All')) 
-       }
-       dispatch(hideLoading())
-    }catch(e){
-        dispatch(hideLoading())
-    }
-    }
-}
+export const set_restaurants = (): ThunkType => {
+    return async dispatch => {
+        dispatch(showLoading());
+        try {
+            let restaurants = await restaurantAPI.get();
+            let cuisenTypes = await restaurantAPI.getCuisenTypes();
+            dispatch({
+                type: SET_REASTAURANTS,
+                restaurants,
+            });
+            dispatch({
+                type: SET_CUISENS,
+                cuisenTypes,
+            });
+            if (restaurants !== undefined) {
+                dispatch(set_filtered_restaurants(restaurants, 'All'));
+            }
+            dispatch(hideLoading());
+        } catch (e) {
+            dispatch(hideLoading());
+        }
+    };
+};
 export const set_current_restaurant=(current_restaurant:restaurant):ThunkType=>{
     return async dispatch=>{
         dispatch(showLoading())

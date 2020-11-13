@@ -2,6 +2,7 @@ import React from 'react';
 import '../../css/header.css';
 import { Link } from 'react-router-dom';
 import { meals } from '../../interfaces/meals';
+import { set_current_country } from '../../redux/actions/countriesActions';
 import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
@@ -30,6 +31,14 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
         logIn={(data)=>dispatch(logIn(data))}
       />);
   };
+  const { selectCountries, countries } = useSelector((state: RootState) => {
+    return {
+      selectCountries: state.countries.countries.map((country) => {
+        return { value: country.name, label: country.name };
+      }),
+      countries:state.countries.countries,
+    };
+  });
 
   const handleClose = () => {
     setIsPopupOpen(false);
@@ -42,8 +51,15 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   const registrationHeandler = () => {
     setIsPopupOpen(true);
     setisLogin(false);
-    setPopupBody(<RegistrationPopup handleAuthOpen={handleAuthOpen} createAccount={createAccount}/>);
+    setPopupBody(<RegistrationPopup handleAuthOpen={handleAuthOpen} createAccount={createAccount} countries={selectCountries} onSelectCountry={handleSelectCountry}/>);
   };
+
+  const handleSelectCountry = (value:string) =>{
+    const country = countries.find((country)=>country.name === value)
+    if(country){
+      dispatch(set_current_country(country))
+    }
+  }
 
   const count = (): Number => {
     let num = cart_length.reduce((sum, current) => (
@@ -61,7 +77,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
             <div className="container-fluid App_header__main-container ">
               <Link to={`/HomePage`}>
                       <span className="navbar-brand  App_header__main-Header">
-                          <img src="http://localhost:3000/assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
+                          <img src="assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
                           Delivary
                       </span>
               </Link>

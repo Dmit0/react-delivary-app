@@ -199,3 +199,7 @@
     align-self: center;
     margin-left: 10px;
 }
+.phone_part-number{
+    width:400px;
+    background: grey;
+}

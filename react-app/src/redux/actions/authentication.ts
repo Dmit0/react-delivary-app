@@ -3,7 +3,7 @@ import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../enums/errorEnum';
 import { RootState } from '../reducers/rootReducer';
 import { Action } from 'redux';
-import { AuthenticationAPI } from '../../api/authenticationApi';
+import { AuthenticationAPI } from '../../api/part_apis/authenticationApi';
 import { loginData, userForCreateAccont } from '../../interfaces/authentication';
 import { AUTH_CHECK_EMAIL, AUTH_ERRORS, AuthenticationActionTypes, IS_PASSWORD_FIELD } from '../types/authTypes';
 
@@ -15,7 +15,6 @@ export const create_account = (user: userForCreateAccont): ThunkType => {
     try {
       let response = await AuthenticationAPI.createAccount(user);
       console.log(response);
-      //show response
       dispatch(hideLoading());
     } catch (e) {
       dispatch(hideLoading());

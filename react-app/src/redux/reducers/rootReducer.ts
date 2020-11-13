@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 import {appStateReducer} from './appStateReducer'
 import { authReducer } from './authReducer';
+import { countryReducer } from './countrieReducer';
 import {restaurantReducer} from './restaurantReducer'
 import {cartReducer} from './cartStateReducer'
 import {lovedReducer} from './lovedStateReducer'
@@ -14,6 +15,7 @@ export const rootReducer = combineReducers({
     loved:lovedReducer,
     loadingBar: loadingBarReducer,
     authentication:authReducer,
+    countries: countryReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

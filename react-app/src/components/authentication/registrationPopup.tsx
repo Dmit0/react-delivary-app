@@ -1,11 +1,15 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { userForCreateAccont } from '../../interfaces/authentication';
-
+import '../../css/phone.css'
+import Select from 'react-select'
+import { RootState } from '../../redux/reducers/rootReducer';
 interface RegistrationProps {
   handleAuthOpen(): void
-
+  countries:any
   createAccount(user: userForCreateAccont): void
+  onSelectCountry(country:string): void
 }
 
 interface formData {
@@ -13,19 +17,46 @@ interface formData {
   telephone: string,
   password: string,
   name: string,
+  country: string
 }
 
-export const RegistrationPopup: React.FC<RegistrationProps> = ({ handleAuthOpen, createAccount }) => {
+export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, handleAuthOpen, createAccount, onSelectCountry }) => {
 
+  const {  current_country } = useSelector((state: RootState) => {
+    return {
+      current_country:state.countries.country?.dial_code,
+    };
+  });
+
+  const [phone,setPhone] = useState<any>()
+  const [currentChangeCountry,setCurrentChangeCountry] = useState<any>(false)
+
+  useEffect(()=>{
+    if(currentChangeCountry){
+      setPhone(current_country)
+    }
+  },[currentChangeCountry])
+
+  const handleChange = (value:any) =>{
+    onSelectCountry(value?.value)
+    setCurrentChangeCountry(true)
+  }
+  const changeHandler=(event:React.ChangeEvent<HTMLInputElement>)=>{
+    setPhone(current_country ? current_country + event.target.value.slice(current_country.length) : '' + event.target.value)
+    setCurrentChangeCountry(false)
+  }
   const { register, handleSubmit, watch, errors } = useForm<formData>();
   const onSubmit = (data: formData) => {
-    createAccount(data);
+    console.log(data)
+    if(current_country){
+      createAccount({ ...data, country:current_country });
+    }
   };
   return (
     <div className='main-auth-popup'>
       <div className="auth-title">
         <div className="auth-title-header">
-          <img src="http://localhost:3000/assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
+          <img src="assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
           Delivary
         </div>
         <div className="reg-sub-title">
@@ -57,17 +88,16 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ handleAuthOpen,
             <span className='Authentication-Label'>Your name</span>
             <input name='name' ref={register({ required: true })}/>
             {errors.name && errors.name.type === 'required' && <span>This field is required</span>}
-            <span className='Authentication-Label'>Telephone number</span>{/*Only belarus prefix +375*/}
 
-            <span>+375</span><input name='telephone' ref={register({
-            required: true,
-            minLength: 11,
-            maxLength: 13,
-            pattern: /^((8|\+375)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$/,
-          })}/>
-            {errors.telephone && errors.telephone.type === 'required' && <span>Telephone is required</span>}
-            {errors.telephone && (errors.telephone.type === 'pattern' || errors.telephone.type === 'minLength' || errors.telephone.type === 'maxLength') &&
-            <span>it isnt`t telephon number</span>}
+            <span className='Authentication-Label'>Your country</span>
+            <Select name='country' options={ countries }  onChange={(event)=>handleChange(event)} />
+
+
+            <span className='Authentication-Label'>Telephone number</span>{/*Only belarus prefix +375*/}
+            <Item register={register} current_country={phone} changeHandler={changeHandler}/>
+            { errors.telephone && errors.telephone.type === 'required' && <span>Telephone is required</span> }
+            { errors.telephone && (errors.telephone.type === 'pattern' || errors.telephone.type === 'minLength' || errors.telephone.type === 'maxLength') &&
+            <span>it isnt`t telephon number</span> }
 
             <span className='Authentication-Label'>Email Adress</span>
             <input name='email' ref={register({ required: true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ })}/>
@@ -95,3 +125,15 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ handleAuthOpen,
     </div>
   );
 };
+
+export const Item = ({ register,current_country,changeHandler }:any) =>{
+  return (
+    <>
+      <input name='telephone' value={current_country ? current_country : '+375 '} onChange={changeHandler} ref={ register({
+        required: true,
+        minLength: 8,
+        maxLength: 10,
+      }) }/>
+    </>
+  )
+}

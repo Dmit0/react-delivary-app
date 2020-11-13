@@ -50,12 +50,12 @@ export const Categories: React.FC<CategoriesProps> = ({ main_categories, Type, c
             : currentCuisen
           }
         </button>
-        <ul className="dropdown-menu dropdown-menu-items" aria-labelledby="dropdownMenuButton">{foundTypes().map(cuisen => (
-          <li onClick={() => onSetType(cuisen.name)} key={cuisen._id}><span className="dropdown-item dropdown-menu-item">{cuisen.name}</span></li>))}
+        <ul className="dropdown-menu dropdown-menu-items" aria-labelledby="dropdownMenuButton">
+          { foundTypes().map(cuisen => (
+          <li onClick={ () => onSetType(cuisen.name) } key={ cuisen._id }><span className="dropdown-item dropdown-menu-item">{ cuisen.name }</span>
+          </li>)) }
         </ul>
       </div>
     </div>
   );
 };
-
-//(cuisen=>(<li onClick={()=>onSetType(cuisen.name)} key={cuisen._id} ><span className="dropdown-item dropdown-menu-item">{cuisen.name}</span ></li >))

@@ -1,6 +1,6 @@
-import { restaurant, cuisen } from '../interfaces/restaurant';
-import { meals } from '../interfaces/meals';
-import { http } from './api';
+import { restaurant, cuisen } from '../../interfaces/restaurant';
+import { meals } from '../../interfaces/meals';
+import { http } from '../api';
 
 // type RestaurantResponseType={
 //     data:restaurant[],

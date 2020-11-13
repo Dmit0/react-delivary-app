@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
 import { forkJoin, from, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { catchError, map, mergeMap } from 'rxjs/operators';
+import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { country } from '../../../constants/initializeData/country.base';
 import { Country } from './models/country.schema';
 
@@ -31,6 +32,14 @@ export class CountryService {
   generateCountry() {
     return forkJoin(country.map((item)=>this.createCountry(item))).pipe(
       map(()=>true)
+    )
+  }
+
+  get() {
+    return from(this.countryModel.find()).pipe(
+      catchError((err) => {
+        throw exceptionErrors.throwForbiddenError(err)
+      })
     )
   }
 }

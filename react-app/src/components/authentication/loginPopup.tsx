@@ -41,7 +41,7 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
     <div className='main-auth-popup'>
       <div className="auth-title">
         <div className="auth-title-header">
-          <img src="http://localhost:3000/assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
+          <img src="assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
           Delivary
         </div>
         <div className="auth-sub-title">

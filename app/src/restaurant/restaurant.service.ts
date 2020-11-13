@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { from } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { exceptionErrors } from '../constants/errors/exeptionsErrors';
 import { Restaurant } from './models/restaurant.schema';
 import { Model } from 'mongoose';
 
@@ -11,6 +14,6 @@ export class RestaurantService {
   }
 
   get() {
-    return this.restaurantModel.find();
+    return from(this.restaurantModel.find());
   }
 }

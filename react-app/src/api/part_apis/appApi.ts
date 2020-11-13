@@ -1,5 +1,5 @@
-import { http } from './api';
-import { bunner } from '../interfaces/bunner';
+import { http } from '../api';
+import { bunner } from '../../interfaces/bunner';
 
 export const AppAPI = {
   async get() {

@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import "../../css/authenticationStyles.css"
+import { useDispatch } from 'react-redux';
 
 
 interface PopupProps{

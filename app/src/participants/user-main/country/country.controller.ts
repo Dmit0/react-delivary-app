@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
 import { CountryService } from './country.service';
 
 @Controller('country')
@@ -7,7 +7,12 @@ export class CountryController {
   }
   @Post('generate')
   generate(){
-    console.log('generate counties')
+    console.log('generate countries')
     return this.countryService.generateCountry()
+  }
+
+  @Get('get')
+  getCountries(){
+    return this.countryService.get()
   }
 }

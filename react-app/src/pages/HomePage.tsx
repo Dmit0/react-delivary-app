@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavBar } from '../components/navbar/navbar';
 import { Banners } from '../components/content/banners';
 import { Restaurant } from '../components/content/restaurant';
+import { get_countries } from '../redux/actions/countriesActions';
 import {
   set_restaurants,
   set_current_restaurant,
@@ -101,6 +102,11 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(get_bunners());
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    dispatch(get_countries());
     // eslint-disable-next-line
   }, []);
 
