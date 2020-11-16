@@ -8,9 +8,6 @@ export class Phone extends Document {
 
   @Prop({ require: true, unique: true })
   phoneNumber: string;
-
-  @Prop({ require: true, default: false })
-  isConfirmed: boolean;
 }
 
 export const PhoneSchema = SchemaFactory.createForClass(Phone);

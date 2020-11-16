@@ -5,19 +5,29 @@ import { RootState } from '../reducers/rootReducer';
 import { Action } from 'redux';
 import { AuthenticationAPI } from '../../api/part_apis/authenticationApi';
 import { loginData, userForCreateAccont } from '../../interfaces/authentication';
-import { AUTH_CHECK_EMAIL, AUTH_ERRORS, AuthenticationActionTypes, IS_PASSWORD_FIELD } from '../types/authTypes';
+import {
+  AUTH_CHECK_EMAIL,
+  AUTH_ERRORS,
+  AuthenticationActionTypes,
+  IS_PASSWORD_FIELD, SIGNUP_FIRST_STEP_CANCEL, SIGNUP_FIRST_STEP_CONTINUE, SIGNUP_STEP_FAIL,
+  SIGNUP_STEP_START,
+  SIGNUP_STEP_SUCCESS,
+} from '../types/authTypes';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
 
 export const create_account = (user: userForCreateAccont): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
+    dispatch(setSignUpStart())
     try {
       let response = await AuthenticationAPI.createAccount(user);
+      response ? dispatch(setSignUpStepSuccess()) :  dispatch(setSignUpStepFailed())
       console.log(response);
       dispatch(hideLoading());
     } catch (e) {
       dispatch(hideLoading());
+      dispatch(setSignUpStepFailed())
     }
   };
 };
@@ -72,3 +82,39 @@ export const setStateAuthErrors = (status: boolean, message: string | null): Aut
     status: message,
   };
 };
+
+export const setSignUpStart = (status = true): AuthenticationActionTypes => {
+  return {
+    type: SIGNUP_STEP_START,
+    status,
+  };
+};
+
+export const setSignUpStepSuccess = (status = true): AuthenticationActionTypes => {
+  return {
+    type: SIGNUP_STEP_SUCCESS,
+    status,
+  };
+};
+
+export const setSignUpStepFailed = (status = true): AuthenticationActionTypes => {
+  return {
+    type: SIGNUP_STEP_FAIL,
+    status,
+  };
+};
+
+export const setSignUpStepCancel = (status = true): AuthenticationActionTypes => {
+  return {
+    type: SIGNUP_FIRST_STEP_CANCEL,
+    status,
+  };
+};
+export const setSignUpStepContinue = (status = true): AuthenticationActionTypes => {
+  return {
+    type: SIGNUP_FIRST_STEP_CONTINUE,
+    status,
+  };
+};
+
+

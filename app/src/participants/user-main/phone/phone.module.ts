@@ -11,6 +11,7 @@ import { PhoneService } from './phone.service';
     ]),
   ],
   controllers: [PhoneController],
-  providers: [PhoneService]
+  providers: [PhoneService],
+  exports: [PhoneService]
 })
 export class PhoneModule {}

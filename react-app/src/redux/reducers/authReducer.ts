@@ -1,7 +1,13 @@
 import {
   AUTH_ERRORS,
   AuthenticationActionTypes,
-  AuthenticationState, IS_PASSWORD_FIELD,
+  AuthenticationState,
+  IS_PASSWORD_FIELD,
+  SIGNUP_FIRST_STEP_CANCEL,
+  SIGNUP_FIRST_STEP_CONTINUE,
+  SIGNUP_STEP_FAIL,
+  SIGNUP_STEP_START,
+  SIGNUP_STEP_SUCCESS,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
@@ -10,7 +16,12 @@ const initialState: AuthenticationState = {
   AuthError: null,
   CreateAccError: null,
   authRedirectPath: "/",
-  isPasswordField: false
+  isPasswordField: false,
+  isStepStart: false,
+  isStepFail: false,
+  isStepSuccess: false,
+  isSignUpStepCancel: false,
+  isSignUpSuccess: null
 };
 
 export const authReducer = (state = initialState, action: AuthenticationActionTypes): AuthenticationState => {
@@ -20,6 +31,16 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
       return { ...state, AuthError:action.status };
     case IS_PASSWORD_FIELD:
       return { ...state, isPasswordField:action.statusOfVerify }
+    case SIGNUP_STEP_START:
+      return { ...state, isStepStart:action.status }
+    case SIGNUP_STEP_SUCCESS:
+      return { ...state, isStepFail:action.status }
+    case SIGNUP_STEP_FAIL:
+      return { ...state, isStepSuccess:action.status }
+    case SIGNUP_FIRST_STEP_CANCEL:
+      return { ...state, isSignUpStepCancel:action.status }
+    case SIGNUP_FIRST_STEP_CONTINUE:
+      return { ...state, isSignUpSuccess:action.status }
     default:
       return state;
   }

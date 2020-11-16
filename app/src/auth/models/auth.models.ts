@@ -1,10 +1,14 @@
 export interface UserRegistrationDto {
   email: string
   password: string
-  telephone: string // Phone
+  telephone: string
   name: string
-  //country: string
-  //address: Address
+  country: {
+    _id:string
+    name:string
+    dial_code:string
+    code:string
+  }
 }
 
 export interface UserSignInDto {

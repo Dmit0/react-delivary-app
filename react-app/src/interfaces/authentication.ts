@@ -3,7 +3,12 @@ export interface userForCreateAccont{
     password: string
     telephone: string
     name: string
-    country: string
+    country: {
+        _id:string
+        name:string
+        dial_code:string
+        code:string
+    }
 
 }
 

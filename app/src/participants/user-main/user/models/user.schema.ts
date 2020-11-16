@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
+import { Address } from '../../address/models/address.model';
 import { Phone } from '../../phone/models/phone.schema';
 import { Role } from '../../roles/models/Roles';
 import { Meal } from '../../../../meals/meal/models/meals.schema';
@@ -9,8 +10,8 @@ export const UserStatuses = [
   'BRONZE',
   'SILVER',
   'GOLD',
-  'ADMIN'
-]
+  'ADMIN',
+];
 
 @Schema()
 export class User extends Document {
@@ -23,13 +24,13 @@ export class User extends Document {
   @Prop({ require: true })
   password: string;
 
-  // @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone'})
-  // telephone: Phone;
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone' })
+  telephone: Phone;
 
-  @Prop()
-  telephone: string;
+  // @Prop()
+  // telephone: string;
 
-  @Prop({default:Date.now()})
+  @Prop({ default: Date.now() })
   createdAt: string;
 
   @Prop({
@@ -38,17 +39,20 @@ export class User extends Document {
   })
   status: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Role'})
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Role' })
   role: Role;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Restaurant', default:null })
-  ownership: [Restaurant];
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Restaurant', default: null })
+  ownership: [ Restaurant ];
 
-  @Prop({ type: Types.ObjectId, ref: 'Restaurant', default:[] })
-  lovedRestaurant: [Restaurant];
+  @Prop({ type: Types.ObjectId, ref: 'Restaurant', default: [] })
+  lovedRestaurant: [ Restaurant ];
 
-  @Prop({ type: Types.ObjectId, ref: 'Meal', default:[] })
-  cart: [Meal];
+  @Prop({ type: Types.ObjectId, ref: 'Meal', default: [] })
+  cart: [ Meal ];
+
+  @Prop({ type: Types.ObjectId, ref: 'Address' })
+  addresses: [ Address ];
 
 }
 

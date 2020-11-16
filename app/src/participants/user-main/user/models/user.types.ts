@@ -15,4 +15,10 @@ export interface IUserCreate {
   password: string
   telephone: string
   name: string
+  country: {
+    _id:string
+    name:string
+    dial_code:string
+    code:string
+  }
 }

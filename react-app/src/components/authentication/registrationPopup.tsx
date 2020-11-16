@@ -22,9 +22,9 @@ interface formData {
 
 export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, handleAuthOpen, createAccount, onSelectCountry }) => {
 
-  const {  current_country } = useSelector((state: RootState) => {
+  const { country } = useSelector((state: RootState) => {
     return {
-      current_country:state.countries.country?.dial_code,
+      country:state.countries.country,
     };
   });
 
@@ -33,7 +33,8 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
 
   useEffect(()=>{
     if(currentChangeCountry){
-      setPhone(current_country)
+      setPhone(country?.dial_code)
+      setCurrentChangeCountry(false)
     }
   },[currentChangeCountry])
 
@@ -42,14 +43,14 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
     setCurrentChangeCountry(true)
   }
   const changeHandler=(event:React.ChangeEvent<HTMLInputElement>)=>{
-    setPhone(current_country ? current_country + event.target.value.slice(current_country.length) : '' + event.target.value)
+    setPhone(country?.dial_code ? country.dial_code + event.target.value.slice(country.dial_code.length) : '' + event.target.value)
     setCurrentChangeCountry(false)
   }
   const { register, handleSubmit, watch, errors } = useForm<formData>();
   const onSubmit = (data: formData) => {
     console.log(data)
-    if(current_country){
-      createAccount({ ...data, country:current_country });
+    if(country){
+      createAccount({ ...data, country });
     }
   };
   return (
@@ -94,7 +95,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
 
 
             <span className='Authentication-Label'>Telephone number</span>{/*Only belarus prefix +375*/}
-            <Item register={register} current_country={phone} changeHandler={changeHandler}/>
+            <Item register={register} current_country_code={phone} changeHandler={changeHandler}/>
             { errors.telephone && errors.telephone.type === 'required' && <span>Telephone is required</span> }
             { errors.telephone && (errors.telephone.type === 'pattern' || errors.telephone.type === 'minLength' || errors.telephone.type === 'maxLength') &&
             <span>it isnt`t telephon number</span> }
@@ -126,13 +127,13 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
   );
 };
 
-export const Item = ({ register,current_country,changeHandler }:any) =>{
+export const Item = ({ register,current_country_code,changeHandler }:any) =>{
   return (
     <>
-      <input name='telephone' value={current_country ? current_country : '+375 '} onChange={changeHandler} ref={ register({
+      <input name='telephone' value={current_country_code ? current_country_code : '+375 '} onChange={changeHandler} ref={ register({
         required: true,
-        minLength: 8,
-        maxLength: 10,
+        minLength: 11,
+        maxLength: 15,
       }) }/>
     </>
   )
