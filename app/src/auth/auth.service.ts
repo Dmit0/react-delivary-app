@@ -3,6 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { from, Observable, of, throwError } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
+import { User } from '../participants/user-main/user/models/user.schema';
+import { IUser } from '../participants/user-main/user/models/user.types';
 import { UserService } from '../participants/user-main/user/user.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 import { passwordUtils } from './utils/password.utils';
@@ -21,7 +23,8 @@ export class AuthService {
       mergeMap(() => passwordUtils.hashPassword(userData.password).pipe(
         mergeMap((hashedPassword) => this.userService.createUser({ ...userData, password: hashedPassword }).pipe(
           map((res) => res && true || exceptionErrors.badRequestException('BadRequestException')),
-        ))),
+        ))
+        ),
       ),
     );
   }
@@ -53,6 +56,11 @@ export class AuthService {
     return this.userService.getUser(email).pipe(
       map((user) => user && true || exceptionErrors.badRequestException('bad request')),
     );
+  }
+
+  validateTokenPayload(payload: any): Observable<User> {
+    return this.userService.getUser({ id: payload.id }).pipe(
+      map((user) => user || null));
   }
 
   googleLogin(user: any) {

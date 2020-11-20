@@ -9,7 +9,7 @@ import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
 import { userForCreateAccont } from '../../interfaces/authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { create_account, logIn, verifyMail } from '../../redux/actions/authentication';
+import { create_account, logIn, setSignUpStepCancel, setSignUpStepContinue, verifyMail } from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
@@ -51,7 +51,15 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   const registrationHeandler = () => {
     setIsPopupOpen(true);
     setisLogin(false);
-    setPopupBody(<RegistrationPopup handleAuthOpen={handleAuthOpen} createAccount={createAccount} countries={selectCountries} onSelectCountry={handleSelectCountry}/>);
+    setPopupBody(
+      <RegistrationPopup
+      handleAuthOpen={handleAuthOpen}
+      createAccount={createAccount}
+      countries={selectCountries}
+      onSelectCountry={handleSelectCountry}
+      authStepStop={handleAuthStepStop}
+      authStepContinue = {handleAuthStepContinue}
+    />);
   };
 
   const handleSelectCountry = (value:string) =>{
@@ -59,6 +67,14 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     if(country){
       dispatch(set_current_country(country))
     }
+  }
+
+  const handleAuthStepStop = () => {
+    dispatch(setSignUpStepCancel())
+  }
+
+  const handleAuthStepContinue = () =>{
+    dispatch(setSignUpStepContinue())
   }
 
   const count = (): Number => {

@@ -1,15 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 
 
-@Controller('restaurants')
+@Controller('user')
 export class UserController {
 
   constructor(private userService: UserService) {
   }
-
-  // @Get()
-  // updateUser(): any {
-  //   return this.userService.createUser();
-  // }
 }

@@ -24,14 +24,11 @@ export class User extends Document {
   @Prop({ require: true })
   password: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Phone', default: null })
   telephone: Phone;
 
-  // @Prop()
-  // telephone: string;
-
   @Prop({ default: Date.now() })
-  createdAt: string;
+  createdAt: Date;
 
   @Prop({
     enum: UserStatuses,
@@ -42,16 +39,16 @@ export class User extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Role' })
   role: Role;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Restaurant', default: null })
+  @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Restaurant', default: null })
   ownership: [ Restaurant ];
 
-  @Prop({ type: Types.ObjectId, ref: 'Restaurant', default: [] })
+  @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Restaurant', default: [] })
   lovedRestaurant: [ Restaurant ];
 
-  @Prop({ type: Types.ObjectId, ref: 'Meal', default: [] })
+  @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Meal', default: [] })
   cart: [ Meal ];
 
-  @Prop({ type: Types.ObjectId, ref: 'Address' })
+  @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Address', default: [] })
   addresses: [ Address ];
 
 }

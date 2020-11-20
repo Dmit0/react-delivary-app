@@ -1,6 +1,9 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { map } from 'rxjs/operators';
+import { exceptionErrors } from '../../constants/errors/exeptionsErrors';
+import { User } from '../../participants/user-main/user/models/user.schema';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -12,7 +15,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: any) {
-    return { userId: payload.sub, username: payload.username };
+  validate(payload: { id: string, name: string, email: string, role: string; }) {//check
+    return this.authService.validateTokenPayload(payload).pipe(
+      map((user) => user || new exceptionErrors.throwForbiddenError('not aftorizate')),
+    ).toPromise();
   }
 }

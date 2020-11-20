@@ -18,6 +18,9 @@ export const SIGNUP_STEP_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS';
 export const SIGNUP_STEP_FAIL = 'SIGNUP_FIRST_STEP_FAIL';
 export const SIGNUP_FIRST_STEP_CANCEL = 'SIGNUP_FIRST_STEP_SUCCESS_CANCEL';
 export const SIGNUP_FIRST_STEP_CONTINUE = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+export const SIGNUP_ADD_ADDRESS_FAIL = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+export const SIGNUP_ADD_ADDRESS_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+export const INITIAL_AUTH_STEP = 'INITIAL_AUTH_STEP'
 
 export interface AuthenticationState {
   token: number | null
@@ -73,6 +76,10 @@ interface STEP_CONTINUE {
   status: boolean
 }
 
+interface INITIAL_AUTH_STEP {
+  type: typeof INITIAL_AUTH_STEP
+}
+
 export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_ERRORS
   | IS_PASSWORD_FIELD
@@ -81,4 +88,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | STEP_FIELD
   | STEP_CANCEL
   | STEP_CONTINUE
+  | INITIAL_AUTH_STEP
 

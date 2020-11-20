@@ -27,23 +27,31 @@ export class UserService {
 
   createUser(user: IUserCreate): Observable<User> {
     return this.roleService.findRole({ name: 'BASE' }).pipe(
-      mergeMap((role) => this.phoneService.createPhone({
-        code: user.country.dial_code,
-        phoneNumber: user.telephone.slice(user.country.dial_code.length),
-      }).pipe(
-        mergeMap((phone) => this.addressService.generateAddress({ country: user.country.name }).pipe(
-          mergeMap((address) => {
-            const newUser = new this.userModel({ ...user, role: role._id, telephone: phone._id, addresses: [address._id] });
-            return from(newUser.save()).pipe(
-              map((user) => user || null),
-            );
-          }),
-        )),
-      )),
+      mergeMap((role) => {
+        const newUser = new this.userModel({ ...user, role: role._id });
+        return from(newUser.save())
+          .pipe(
+            mergeMap((createdUser) => this.phoneService.createPhone({
+              phoneNumber: user.telephone.slice(user.country.dial_code.length),
+              code: user.country.dial_code,
+              userId: createdUser._id,
+            }).pipe(
+              mergeMap((phone) => this.addressService.generateAddress({ country: user.country.name, userId: createdUser._id }).pipe(
+                  mergeMap((address) => this.updateUser(createdUser._id, { addresses: [ address._id ], telephone: phone._id }).pipe(
+                    map((user) => user || null),
+                  )),
+                ),
+              ),
+              map(() => createdUser),
+            )),
+          );
+      }),
     );
   }
 
-  updateUser() {
-    return;
+  updateUser(userId, data: any): Observable<User> {
+    return from(this.userModel.updateOne({ userId }, { ...data })).pipe(
+      map((user) => user || null),
+    );
   }
 }

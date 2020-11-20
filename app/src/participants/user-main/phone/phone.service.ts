@@ -14,11 +14,9 @@ export class PhoneService {
   ) {
   }
 
-  createPhone(property: { phoneNumber: string, code: string }): Observable<any> {
-    console.log(property)
+  createPhone(property: { phoneNumber: string, code: string, userId: string }): Observable<any> {
     return from(this.phoneModel.findOne({ phoneNumber: property.phoneNumber })).pipe(
       mergeMap((response) => {
-        console.log(response)
         if (response) {
           return of(null);
         } else {

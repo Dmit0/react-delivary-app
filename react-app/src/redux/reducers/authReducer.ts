@@ -32,15 +32,15 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
     case IS_PASSWORD_FIELD:
       return { ...state, isPasswordField:action.statusOfVerify }
     case SIGNUP_STEP_START:
-      return { ...state, isStepStart:action.status }
+      return { ...state, isStepStart:action.status, isStepFail: false, isStepSuccess: false, isSignUpStepCancel: false, isSignUpSuccess: null }
     case SIGNUP_STEP_SUCCESS:
-      return { ...state, isStepFail:action.status }
-    case SIGNUP_STEP_FAIL:
       return { ...state, isStepSuccess:action.status }
+    case SIGNUP_STEP_FAIL:
+      return { ...state, isStepFail:action.status }
     case SIGNUP_FIRST_STEP_CANCEL:
-      return { ...state, isSignUpStepCancel:action.status }
+      return { ...state, isSignUpStepCancel:action.status, isStepStart:false, isStepFail: false, isStepSuccess: false, isSignUpSuccess: true}
     case SIGNUP_FIRST_STEP_CONTINUE:
-      return { ...state, isSignUpSuccess:action.status }
+      return { ...state, isSignUpSuccess:action.status, isStepSuccess: true}
     default:
       return state;
   }
