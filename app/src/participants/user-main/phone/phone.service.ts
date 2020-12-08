@@ -4,7 +4,6 @@ import { Model } from "mongoose";
 import { from, Observable, of } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
-import { Opportunity } from '../opportunities/models/Opportunities';
 import { Phone } from './models/phone.schema';
 
 @Injectable()
@@ -14,11 +13,11 @@ export class PhoneService {
   ) {
   }
 
-  createPhone(property: { phoneNumber: string, code: string, userId: string }): Observable<any> {
+  createPhone(property: { phoneNumber: string, code: string }): Observable<any> {
     return from(this.phoneModel.findOne({ phoneNumber: property.phoneNumber })).pipe(
       mergeMap((response) => {
         if (response) {
-          return of(null);
+          throw exceptionErrors.throwForbiddenError;
         } else {
           const newPhone = new this.phoneModel({ ...property });
           return from(newPhone.save()).pipe(
@@ -30,6 +29,18 @@ export class PhoneService {
         }
       }),
     );
+  }
+
+  updatePhone(criteria, data: any): Observable<any> {
+    return from(this.phoneModel.updateOne(criteria, data)).pipe(
+      map((phone) => phone || null),
+    );
+  }
+
+  getPhone(criteria): Observable<Phone> {
+    return from(this.phoneModel.findOne(criteria)).pipe(
+      map((phone) => phone || null)
+    )
   }
 
   sendVerifyMessage(){

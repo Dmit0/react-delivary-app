@@ -1,14 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { userForCreateAccont } from '../../interfaces/authentication';
+import { userForCreateAccount } from '../../interfaces/authentication';
 import '../../css/phone.css'
 import Select from 'react-select'
 import { RootState } from '../../redux/reducers/rootReducer';
 interface RegistrationProps {
   handleAuthOpen(): void
   countries:any
-  createAccount(user: userForCreateAccont): void
+  createAccount(user: userForCreateAccount): void
   onSelectCountry(country:string): void
   authStepStop(): void
   authStepContinue(): void
@@ -24,11 +24,11 @@ interface formData {
 
 export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, handleAuthOpen, createAccount, onSelectCountry, authStepStop, authStepContinue }) => {
 
-  const { country,authStepSuccess,isSignUpSuccess } = useSelector((state: RootState) => {
+  const { country, isAuthStepContinue, authStepSuccess } = useSelector((state: RootState) => {
     return {
       country:state.countries.country,
+      isAuthStepContinue:state.authentication.isStepContinue,
       authStepSuccess:state.authentication.isStepSuccess,
-      isSignUpSuccess: state.authentication.isSignUpSuccess
     };
   });
 
@@ -64,13 +64,13 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
             <img src="assets/leaf.svg" width="30" height="30" alt="" loading="lazy"/>
             Delivary
           </div>
-          <div className="reg-sub-title">
-            { authStepSuccess ? 'Want to continue sign up ?' : 'Create your account' }
-          </div>
         </div>
         { authStepSuccess
-          ? isSignUpSuccess
-            ? (<form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
+          ? isAuthStepContinue
+            ? (
+              <>
+              <div className="reg-sub-title">Add Your Address</div>
+              <form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
                 <div className="auth-body_Mail_auth">
                   <div>
                     <span className='Authentication-Label'>Your country</span>
@@ -96,25 +96,32 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
                     <input name='Door' ref={ register({ required: true }) }/>
                     { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
                   </div>
+                  <div className="auth-step-button">
                   <div className="auth-next-step">
                     <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
                   </div>
                   <div className="auth-next-step">
                     <button type="submit" className="btn btn-outline-primary reg-next-step-button ">Add Address</button>
                   </div>
+                  </div>
                 </div>
               </form>
+              </>
             )
-            : (<div className="auth-reg-futer">
-              <div className="auth-next-step">
-                <button onClick={ authStepStop } style={ { display: 'flex', margin: '0, 30px', justifyContent: 'space-between' } } type="button"
+            : (
+              <>
+              <div className="reg-step-title">Want to continue sign up ? <br /> Need To Add Address of Delivery</div>
+              <div className="auth-step-futer">
+              <div className="auth-continue-step-button">
+                <button onClick={ authStepStop }  type="button"
                         className="btn btn-outline-primary">No, Return
                 </button>
               </div>
-              <div className="auth-next-step">
-                <button onClick={ authStepContinue } type="submit" className="btn btn-outline-primary reg-next-step-button ">Next step</button>
+              <div className="auth-continue-step-button">
+                <button onClick={ authStepContinue } type="submit" className="btn btn-outline-primary ">Next step</button>
               </div>
-            </div>)
+            </div>
+              </>)
           : (<form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
             <div>
               <div className="auth-body_Google_auth">
@@ -184,7 +191,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
 export const Item = ({ register, current_country_code, changeHandler }: any) => {
   return (
     <>
-      <input name='telephone' value={ current_country_code ? current_country_code : '+375 ' } onChange={ changeHandler } ref={ register({
+      <input name='telephone' disabled = { !current_country_code } value={ current_country_code ? current_country_code : ' select country ' } onChange={ changeHandler } ref={ register({
         required: true,
         minLength: 11,
         maxLength: 15,

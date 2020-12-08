@@ -1,92 +1,102 @@
-import { userForCreateAccont } from '../../interfaces/authentication';
+ import { userForCreateAccount, userToStore } from '../../interfaces/authentication';
 
-export const AUTH_CHECK_STATE = 'AUTH_CHECK_STATE';//чекает в сагах
-export const AUTH_USER = 'AUTH_USER';//за этим будут смотреть саги
-export const AUTH_START = 'AUTH_START';//начнет сага
-export const AUTH_SUCCESS = 'AUTH_SUCCESS';//если +
-export const AUTH_FAIL = 'AUTH_FAIL';//если -
-export const AUTH_CHECK_TIMEOUT = 'AUTH_CHECK_TIMEOUT';
-export const AUTH_INITIATE_LOGOUT = 'AUTH_INITIATE_LOGOUT';
-export const AUTH_LOGOUT = 'AUTH_LOGOUT';
-export const AUTH_CHECK_EMAIL = 'AUTH_CHECK_EMAIL';
-export const AUTH_ERRORS = 'AUTH_ERRORS';
-export const IS_PASSWORD_FIELD = 'IS_PASSWORD_FIELD';
+// export const AUTH_CHECK_TIMEOUT = 'AUTH_CHECK_TIMEOUT';
+// export const AUTH_INITIATE_LOGOUT = 'AUTH_INITIATE_LOGOUT';
+// export const AUTH_LOGOUT = 'AUTH_LOGOUT';
+//
+// //export const IS_PASSWORD_FIELD = 'IS_PASSWORD_FIELD';// === export const AUTH_VERIFY_SUCCESS = 'AUTH_VERIFY_SUCCESS'
+//
+// export const AUTH_VERIFY_START = 'AUTH_START';
+// export const AUTH_VERIFY_SUCCESS = 'AUTH_VERIFY_SUCCESS'
+// export const AUTH_CHECK_PASSWORD_START = 'AUTH_CHECK_PASSWORD_START'
+// export const AUTH_SUCCESS = 'AUTH_SUCCESS'
+// export const AUTH_FAIL = 'AUTH_VERIFY_FAIL'
+// export const AUTH_ERRORS = 'AUTH_ERRORS';
+// export const SIGNUP_STEP_START = 'SIGNUP_START';
+// export const SIGNUP_STEP_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS';
+// export const SIGNUP_STEP_FAIL = 'SIGNUP_FIRST_STEP_FAIL';
+// export const SIGNUP_FIRST_STEP_CANCEL = 'SIGNUP_FIRST_STEP_SUCCESS_CANCEL';
+// export const SIGNUP_FIRST_STEP_CONTINUE = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+// export const SIGNUP_ADD_ADDRESS_FAIL = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+// export const SIGNUP_ADD_ADDRESS_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
+// export const INITIAL_AUTH_STEP = 'INITIAL_AUTH_STEP'
 
 export const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
-export const SIGNUP_STEP_START = 'SIGNUP_START';
-export const SIGNUP_STEP_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS';
-export const SIGNUP_STEP_FAIL = 'SIGNUP_FIRST_STEP_FAIL';
-export const SIGNUP_FIRST_STEP_CANCEL = 'SIGNUP_FIRST_STEP_SUCCESS_CANCEL';
-export const SIGNUP_FIRST_STEP_CONTINUE = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
-export const SIGNUP_ADD_ADDRESS_FAIL = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
-export const SIGNUP_ADD_ADDRESS_SUCCESS = 'SIGNUP_FIRST_STEP_SUCCESS_CONTINUE';
-export const INITIAL_AUTH_STEP = 'INITIAL_AUTH_STEP'
+export const AUTH_SET_ERRORS = 'AUTH_SET_ERRORS'
+export const AUTH_STEP_START = 'AUTH_STEP_START';
+export const AUTH_STEP_SUCCESS = 'AUTH_STEP_SUCCESS';
+export const AUTH_END = 'AUTH_END';
+export const AUTH_FAIL = 'AUTH_FAIL';
+export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
+export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
+
 
 export interface AuthenticationState {
-  token: number | null
+  token: string | null
   userId: string | null
-  AuthError: string | null
-  CreateAccError: string[] | null
-  authRedirectPath: string
-  isPasswordField: boolean
+  userName: string | null
+  userRole: string | null
+  userPhone: string | null
+  AuthErrors: string | null
+  isAuthSuccess: boolean | null
+  isAuthFail: boolean
   isStepStart: boolean
-  isStepFail: boolean
   isStepSuccess: boolean
-  isSignUpStepCancel: boolean
-  isSignUpSuccess: boolean | null
-}
+  isStepCancel: boolean
+  isStepContinue: boolean
+  authRedirectPath: string
 
+  //isAuthVerifySuccess: boolean //step success
+  //isAuthFail: boolean //step fail
+  //isAuthFirstStepStart: boolean
+  //isAuthSecondStepStart: boolean
+  //isSignUpSuccess: boolean | null
+  //CreateAccError: string[] | null
+
+}
 interface CREATE_ACCOUNT {
   type: typeof CREATE_ACCOUNT
-  userForCreateAccount: userForCreateAccont
+  userForCreateAccount: userForCreateAccount
 }
-
 interface AUTH_ERRORS {
-  type: typeof AUTH_ERRORS
+  type: typeof AUTH_SET_ERRORS
   status: string | null
 }
 
-interface IS_PASSWORD_FIELD {
-  type: typeof IS_PASSWORD_FIELD
-  statusOfVerify: boolean
+interface AUTH_END {
+  type: typeof AUTH_END
+  data: userToStore
 }
 
 interface STEP_START {
-  type: typeof SIGNUP_STEP_START
+  type: typeof AUTH_STEP_START
   status: boolean
 }
 
 interface STEP_SUCCESS {
-  type: typeof SIGNUP_STEP_SUCCESS
+  type: typeof AUTH_STEP_SUCCESS
   status: boolean
 }
 
-interface STEP_FIELD {
-  type: typeof SIGNUP_STEP_FAIL
-  status: boolean
+interface AUTH_FAIL {
+  type: typeof AUTH_FAIL
 }
 
 interface STEP_CANCEL {
-  type: typeof SIGNUP_FIRST_STEP_CANCEL
+  type: typeof AUTH_STEP_CANCEL
   status: boolean
 }
 
 interface STEP_CONTINUE {
-  type: typeof SIGNUP_FIRST_STEP_CONTINUE
-  status: boolean
-}
-
-interface INITIAL_AUTH_STEP {
-  type: typeof INITIAL_AUTH_STEP
+  type: typeof AUTH_STEP_CONTINUE
 }
 
 export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_ERRORS
-  | IS_PASSWORD_FIELD
+  | AUTH_END
   | STEP_START
   | STEP_SUCCESS
-  | STEP_FIELD
   | STEP_CANCEL
   | STEP_CONTINUE
-  | INITIAL_AUTH_STEP
+  | AUTH_FAIL
 

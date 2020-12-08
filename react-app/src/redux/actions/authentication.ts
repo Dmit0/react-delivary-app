@@ -1,36 +1,41 @@
+import jwt from 'jsonwebtoken';
+import { env } from '../../env'
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../enums/errorEnum';
 import { RootState } from '../reducers/rootReducer';
 import { Action } from 'redux';
 import { AuthenticationAPI } from '../../api/part_apis/authenticationApi';
-import { loginData, userForCreateAccont } from '../../interfaces/authentication';
+import { loginData, userForCreateAccount, userToStore } from '../../interfaces/authentication';
 import {
-  AUTH_CHECK_EMAIL,
-  AUTH_ERRORS,
+  AUTH_END,
+  AUTH_FAIL,
+  AUTH_SET_ERRORS,
+  AUTH_STEP_CANCEL,
+  AUTH_STEP_CONTINUE,
+  AUTH_STEP_START,
+  AUTH_STEP_SUCCESS,
   AuthenticationActionTypes,
-  IS_PASSWORD_FIELD,
-  SIGNUP_FIRST_STEP_CANCEL,
-  SIGNUP_FIRST_STEP_CONTINUE,
-  SIGNUP_STEP_FAIL,
-  SIGNUP_STEP_START,
-  SIGNUP_STEP_SUCCESS,
 } from '../types/authTypes';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
 
-export const create_account = (user: userForCreateAccont): ThunkType => {
+export const create_account = (user: userForCreateAccount): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
-    dispatch(setSignUpStart())
+    dispatch(setAuthStepStart())
     try {
+      console.log('step start')
       let response = await AuthenticationAPI.createAccount(user);
-      response ? dispatch(setSignUpStepSuccess()) :  dispatch(setSignUpStepFailed())
-      console.log(response);
+      if(response) {
+        await dispatch(logIn({ email:user.email, password: user.password }))
+      } else dispatch(setAuthFailed())
       dispatch(hideLoading());
     } catch (e) {
+      console.log(e)
       dispatch(hideLoading());
-      dispatch(setSignUpStepFailed())
+      dispatch(setAuthFailed())
+      //add errors to banner
     }
   };
 };
@@ -39,84 +44,93 @@ export const verifyMail = (mail: string): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.verifyMail(mail);//сделать что б сбэка приходил нормальный респонс
-      dispatch(setIsPasswordField(response));
-      //let message = null;
-      //if (!response) {
-      //    message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
-      ///} else message = errorEnum.NO_ERROR
-      // dispatch(setStateAuthErrors(response, message));
+      let response = await AuthenticationAPI.verifyMail(mail);
+      if(response){
+        dispatch(setAuthStepSuccess(response));
+      } else {
+        const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+        dispatch(setAuthErrors(message));
+        dispatch(setAuthFailed())
+      }
       dispatch(hideLoading());
     } catch (e) {
+      console.log(e)
       dispatch(hideLoading());
-      //show some notification if mail is wrong
+      const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+      dispatch(setAuthErrors(message)); //TO DO REMOVE LOGIC OF ERROR INTO ANOTHER METHOD
+      dispatch(setAuthFailed())//TO DO REMOVE LOGIC OF FAIL AUTH INTO ANOTHER METHOD
     }
   };
 };
 
 export const logIn = (data: loginData): ThunkType => {
   return async dispatch => {
+    dispatch(showLoading());
     try {
       let response = await AuthenticationAPI.logIn(data);
-      //dispatch(secondStepOfLogin(response));
+      console.log(response)
+      if (response) {
+        dispatch(setAuthStepSuccess(!!response));
+        const decodedToken = jwt.verify(response.token, env.JWT_SECRET_KEY)
+        dispatch(setAuthSuccess(response.token, decodedToken))
+      } else {
+        dispatch(hideLoading());
+        dispatch(setAuthFailed());
+      }
     } catch (e) {
-
+      console.log(e)
+      dispatch(hideLoading());
+      dispatch(setAuthFailed());
     }
   };
 };
 
-// export const secondStepOfLogin = (logInResponse:{token:string,name:string}) =>{
-//     return{
-//       type:,
-//
-//     }
-// }
-
-export const setIsPasswordField = (status: boolean) => {
+export const setAuthSuccess = ( token: string, userData: any) => {
   return {
-    type: IS_PASSWORD_FIELD,
-    statusOfVerify: status,
+    type: AUTH_END,
+    data: {
+      ...userData,
+      token
+    }
   };
 };
 
-export const setStateAuthErrors = (status: boolean, message: string | null): AuthenticationActionTypes => {
+export const setAuthErrors = (message: string | null): AuthenticationActionTypes => {
   return {
-    type: AUTH_ERRORS,
+    type: AUTH_SET_ERRORS,
     status: message,
   };
 };
 
-export const setSignUpStart = (status = true): AuthenticationActionTypes => {
+export const setAuthStepStart = (status = true): AuthenticationActionTypes => {
   return {
-    type: SIGNUP_STEP_START,
+    type: AUTH_STEP_START,
     status,
   };
 };
 
-export const setSignUpStepSuccess = (status = true): AuthenticationActionTypes => {
+export const setAuthStepSuccess = (status = true): AuthenticationActionTypes => {
   return {
-    type: SIGNUP_STEP_SUCCESS,
+    type: AUTH_STEP_SUCCESS,
     status,
   };
 };
 
-export const setSignUpStepFailed = (status = true): AuthenticationActionTypes => {
+export const setAuthFailed = (): AuthenticationActionTypes => {
   return {
-    type: SIGNUP_STEP_FAIL,
-    status,
+    type: AUTH_FAIL,
   };
 };
 
-export const setSignUpStepCancel = (status = true): AuthenticationActionTypes => {
+export const setStepCancel = (status = true): AuthenticationActionTypes => {
   return {
-    type: SIGNUP_FIRST_STEP_CANCEL,
+    type: AUTH_STEP_CANCEL,
     status,
   };
 };
-export const setSignUpStepContinue = (status = true): AuthenticationActionTypes => {
+export const setStepContinue = (): AuthenticationActionTypes => {
   return {
-    type: SIGNUP_FIRST_STEP_CONTINUE,
-    status,
+    type: AUTH_STEP_CONTINUE,
   };
 };
 

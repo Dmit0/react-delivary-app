@@ -10,7 +10,7 @@ export class Phone extends Document {
   @Prop({ require: true, unique: true })
   phoneNumber: string;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', default: null })
   userId: User;
 }
 

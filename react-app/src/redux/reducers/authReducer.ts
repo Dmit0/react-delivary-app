@@ -1,46 +1,49 @@
 import {
-  AUTH_ERRORS,
+  AUTH_FAIL,
+  AUTH_SET_ERRORS,
+  AUTH_STEP_CANCEL,
+  AUTH_STEP_CONTINUE,
+  AUTH_STEP_START,
+  AUTH_STEP_SUCCESS,
+  AUTH_END,
   AuthenticationActionTypes,
   AuthenticationState,
-  IS_PASSWORD_FIELD,
-  SIGNUP_FIRST_STEP_CANCEL,
-  SIGNUP_FIRST_STEP_CONTINUE,
-  SIGNUP_STEP_FAIL,
-  SIGNUP_STEP_START,
-  SIGNUP_STEP_SUCCESS,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
   token: null,
   userId: null,
-  AuthError: null,
-  CreateAccError: null,
-  authRedirectPath: "/",
-  isPasswordField: false,
+  userName: null,
+  userRole: null,
+  userPhone: null,
+  AuthErrors: null,
+  isAuthSuccess: null,
+  isAuthFail: false,
   isStepStart: false,
-  isStepFail: false,
   isStepSuccess: false,
-  isSignUpStepCancel: false,
-  isSignUpSuccess: null
+  isStepCancel: false,
+  isStepContinue: false,
+  authRedirectPath: "/",
 };
 
 export const authReducer = (state = initialState, action: AuthenticationActionTypes): AuthenticationState => {
 
   switch (action.type) {
-    case AUTH_ERRORS:
-      return { ...state, AuthError:action.status };
-    case IS_PASSWORD_FIELD:
-      return { ...state, isPasswordField:action.statusOfVerify }
-    case SIGNUP_STEP_START:
-      return { ...state, isStepStart:action.status, isStepFail: false, isStepSuccess: false, isSignUpStepCancel: false, isSignUpSuccess: null }
-    case SIGNUP_STEP_SUCCESS:
-      return { ...state, isStepSuccess:action.status }
-    case SIGNUP_STEP_FAIL:
-      return { ...state, isStepFail:action.status }
-    case SIGNUP_FIRST_STEP_CANCEL:
-      return { ...state, isSignUpStepCancel:action.status, isStepStart:false, isStepFail: false, isStepSuccess: false, isSignUpSuccess: true}
-    case SIGNUP_FIRST_STEP_CONTINUE:
-      return { ...state, isSignUpSuccess:action.status, isStepSuccess: true}
+    case AUTH_END:
+      console.log(action.data)
+      return {...state, token: action.data.token, userId: action.data.id, userName: action.data.firstName, userPhone: action.data.phone, userRole: action.data.role }
+    case AUTH_SET_ERRORS:
+      return { ...state, AuthErrors:action.status };
+    case AUTH_STEP_START:
+      return { ...initialState, isStepStart:action.status }
+    case AUTH_FAIL:
+      return { ...state, isAuthFail: true }
+    case AUTH_STEP_CANCEL:
+      return { ...initialState, isStepCancel:action.status}
+    case AUTH_STEP_CONTINUE:
+      return { ...state, isStepContinue: true, isStepSuccess: true }
+    case AUTH_STEP_SUCCESS:
+      return { ...initialState, isStepSuccess: true }
     default:
       return state;
   }

@@ -1,10 +1,12 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { from, Observable, of, throwError } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
+import { AddressService } from '../participants/user-main/address/address.service';
+import { PhoneService } from '../participants/user-main/phone/phone.service';
+import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
-import { IUser } from '../participants/user-main/user/models/user.types';
 import { UserService } from '../participants/user-main/user/user.service';
 import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
 import { passwordUtils } from './utils/password.utils';
@@ -14,6 +16,8 @@ export class AuthService {
   constructor(
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
+    private readonly phoneService: PhoneService,
+    private readonly roleService: RolesService,
   ) {
   }
 
@@ -31,7 +35,13 @@ export class AuthService {
 
   //create user-main Type
   SignIn(userData: any): any {
-    return this.createAccessToken(userData);
+    return this.phoneService.getPhone({ _id: userData.telephone }).pipe(
+      mergeMap((phone) => this.roleService.findRole({ _id: userData.role }).pipe(
+        map((role) => {
+          return this.createAccessToken({ ...userData._doc, role: role.name, phone: `${ phone.code }${ phone.phoneNumber }` });
+        }),
+      )),
+    );
   }
 
   private async createAccessToken(data: any) {
@@ -40,8 +50,11 @@ export class AuthService {
       telephone: data.telephone,
       email: data.email,
       firstName: data.name,
+      status: data.status,
+      phone: data.phone,
+      role: data.role,
     });
-    return token;
+    return { token };
   }
 
   verifyUser(verifyingData: UserSignInDto): Observable<any> {

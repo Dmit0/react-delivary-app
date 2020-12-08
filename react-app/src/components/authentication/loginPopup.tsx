@@ -19,7 +19,7 @@ interface formData {
 export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyMail, logIn }) => {
   const {isEmailVerified} = useSelector((state: RootState) => {
     return {
-      isEmailVerified: state.authentication.isPasswordField,
+      isEmailVerified: state.authentication.isStepSuccess,
     };
   });
   const { register, handleSubmit, watch, errors } = useForm<formData>();
@@ -27,7 +27,6 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
   const onSubmit = (data: formData) => {
     if (!isEmailVerified) {
       verifyMail(data.email);
-
     } else if (isEmailVerified) {
       logIn(data);
       //login check -> password
@@ -94,8 +93,8 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
           <div className="auth-next-step">
             <button type="submit" className="btn btn-outline-primary auth-next-step-button ">
               {isEmailVerified
-                ? 'Next'
-                : 'SignIn'
+                ? 'SignIn'
+                : 'Next'
               }
             </button>
           </div>

@@ -1,4 +1,4 @@
-export interface userForCreateAccont{
+export interface userForCreateAccount{
     email: string
     password: string
     telephone: string
@@ -15,4 +15,14 @@ export interface userForCreateAccont{
 export interface loginData{
     email:string,
     password:string
+}
+
+export interface userToStore {
+    token: string,
+    email: string
+    firstName: string
+    id: string
+    phone: string
+    role: string
+    status: string
 }

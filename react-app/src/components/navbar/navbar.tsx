@@ -7,9 +7,9 @@ import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
-import { userForCreateAccont } from '../../interfaces/authentication';
+import { userForCreateAccount } from '../../interfaces/authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { create_account, logIn, setSignUpStepCancel, setSignUpStepContinue, verifyMail } from '../../redux/actions/authentication';
+import { create_account, logIn, setStepCancel, setStepContinue, verifyMail } from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
@@ -45,7 +45,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   };
 
   //убрать это от сюда СРОЧНО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  const createAccount = (user: userForCreateAccont) => {
+  const createAccount = (user: userForCreateAccount) => {
     dispatch(create_account(user));
   };
   const registrationHeandler = () => {
@@ -70,11 +70,11 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   }
 
   const handleAuthStepStop = () => {
-    dispatch(setSignUpStepCancel())
+    dispatch(setStepCancel())
   }
 
   const handleAuthStepContinue = () =>{
-    dispatch(setSignUpStepContinue())
+    dispatch(setStepContinue())
   }
 
   const count = (): Number => {

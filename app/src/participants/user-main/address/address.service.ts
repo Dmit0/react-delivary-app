@@ -2,10 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
 import { from, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
-import { UserService } from '../user/user.service';
+import { map } from 'rxjs/operators';
 import { Address } from './models/address.model';
-import { DataToUpdateAddress } from './models/address.types';
 
 @Injectable()
 export class AddressService {
@@ -27,8 +25,10 @@ export class AddressService {
     )
   }
 
-  updateAddress(userId: any, data: DataToUpdateAddress) {
-    return this.addressModel.updateOne({ userId }, { ...data });
+  updateAddress(criteria, data: any): Observable<any> {
+    return from(this.addressModel.updateOne(criteria, data)).pipe(
+      map((phone) => phone || null),
+    );
   }
 
 }

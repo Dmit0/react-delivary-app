@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.guard';
 import { AuthReturnData, UserRegistrationDto, UserSignInDto } from './models/auth.models';

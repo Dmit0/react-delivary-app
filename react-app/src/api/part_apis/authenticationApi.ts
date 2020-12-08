@@ -12,17 +12,22 @@ export const AuthenticationAPI = {
         }
     },
     async verifyMail(email: string) {
-
-        const response = await http<boolean>('/authentication/verifyMail', 'POST', JSON.stringify({ email }), {
-            'Content-Type': 'application/json;charset=utf-8',
-        })
-        return response
+        try {
+            return await http<boolean>('/authentication/verifyMail', 'POST', JSON.stringify({ email }), {
+                'Content-Type': 'application/json;charset=utf-8',
+            });
+        } catch (e) {
+            return false;
+        }
     },
 
-    //logInResponse
     async logIn(data: loginData) {
-        return await http<any>('/authentication/signIn', 'POST', JSON.stringify( data ), {
-            'Content-Type': 'application/json;charset=utf-8',
-        });
+        try {
+            return await http<{ token: string }>('/authentication/signIn', 'POST', JSON.stringify(data), {
+                'Content-Type': 'application/json;charset=utf-8',
+            });
+        } catch (e) {
+            return false;
+        }
     },
 };
