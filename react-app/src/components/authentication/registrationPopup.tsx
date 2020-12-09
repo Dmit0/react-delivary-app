@@ -5,6 +5,7 @@ import { userForCreateAccount } from '../../interfaces/authentication';
 import '../../css/phone.css'
 import Select from 'react-select'
 import { RootState } from '../../redux/reducers/rootReducer';
+import { fetchGeoModel } from "../../interfaces/geo";
 interface RegistrationProps {
   handleAuthOpen(): void
   countries:any
@@ -14,7 +15,6 @@ interface RegistrationProps {
   authStepContinue(): void
   onClose(): void
   fetchRegions(code: any): any
-  fetchCities(region: string, countryCode: string): void
 }
 
 interface formData {
@@ -33,19 +33,15 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
       authStepContinue,
       onClose,
       fetchRegions,
-      fetchCities
   }) => {
-  const { country, isAuthStepContinue, authStepSuccess, firstUserCountry, regions, cities } = useSelector((state: RootState) => {
+  const { country, isAuthStepContinue, authStepSuccess, firstUserCountry, regions } = useSelector((state: RootState) => {
     return {
       country: state.countries.country,
       isAuthStepContinue: state.authentication.isStepContinue,
       authStepSuccess: state.authentication.isStepSuccess,
       firstUserCountry: state.authentication.firstAddress,
-      regions: state.geo.regions && state.geo.regions.map((region) => {
+      regions: state.geo.regions && state.geo.regions.map((region: fetchGeoModel) => {
         return { value: region.name, label: region.name };
-      }),
-      cities: state.geo.cities && state.geo.cities.map((cities) => {
-        return { value: cities.name, label: cities.name };
       }),
     };
   });
@@ -58,6 +54,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
 
   const [phone,setPhone] = useState<any>()
   const [currentChangeCountry,setCurrentChangeCountry] = useState<any>(false)
+  const [currentRegion, setCurrentRegion] = useState('select')
 
   useEffect(()=>{
     if(currentChangeCountry){
@@ -68,13 +65,12 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
 
   const handleChange = (value:any, needToFetchRegion = false, needToFetchCity = false) => {
     onSelectCountry(value?.value, needToFetchRegion, needToFetchCity)
+    setCurrentRegion('select')
     setCurrentChangeCountry(true)
   }
 
-  const handleChangeRegion = (value: any, countryCode: any) => {
-    if(value && countryCode) {
-      fetchCities(value?.value, countryCode)
-    }
+  const handleChangeRegion = (value: any) => {
+    setCurrentRegion(value.value)
   }
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(country?.dial_code ? country.dial_code + event.target.value.slice(country.dial_code.length) : '' + event.target.value);
@@ -104,13 +100,10 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
                 <div className="auth-body_Mail_auth">
                   <div>
                     <span className='Authentication-Label'>Your Country</span>
-                    <Select name='city' defaultValue = {{ value: firstUserCountry?.country, label: firstUserCountry?.country }} options={ countries } onChange={ (event) => handleChange(event, true) }/>
+                    <Select name='city' defaultValue = {{ value: firstUserCountry?.country, label: firstUserCountry?.country }} options={ countries } onChange={ (event: any) => handleChange(event, true) }/>
 
                     <span className='Authentication-Label'>Your Region</span>
-                    <Select name='region' options={ regions && regions } onChange={ (event) => handleChangeRegion(event, country?.code) }/>
-
-                    <span className='Authentication-Label'>Your City</span>
-                    <Select name='city' options={ cities && cities }/>
+                    <Select name='region' value={ { value: currentRegion, label: currentRegion } } options={ regions } onChange={ (event: any) => handleChangeRegion(event) }/>
 
                     <span className='Authentication-Label'>street</span>{/*Only belarus prefix +375*/ }
                     <input name='street' ref={ register({ required: true }) }/>
@@ -118,14 +111,6 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
 
                     <span className='Authentication-Label'>street number</span>
                     <input name='streetNumber' ref={ register({ required: true }) }/>
-                    { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
-
-                    <span className='Authentication-Label'>Floor</span>
-                    <input name='Floor' ref={ register({ required: true }) }/>
-                    { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
-
-                    <span className='Authentication-Label'>Door</span>
-                    <input name='Door' ref={ register({ required: true }) }/>
                     { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
                   </div>
                   <div className="auth-step-button">
@@ -181,10 +166,10 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
                 { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
 
                 <span className='Authentication-Label'>Your country</span>
-                <Select name='country' options={ countries } onChange={ (event) => handleChange(event) }/>
+                <Select name='country' options={ countries } onChange={ (event: any) => handleChange(event) }/>
 
 
-                <span className='Authentication-Label'>Telephone number</span>{/*Only belarus prefix +375*/ }
+                <span className='Authentication-Label'>Telephone number</span>
                 <Item register={ register } current_country_code={ phone } changeHandler={ changeHandler }/>
                 { errors.telephone && errors.telephone.type === 'required' && <span>Telephone is required</span> }
                 { errors.telephone && (errors.telephone.type === 'pattern' || errors.telephone.type === 'minLength' || errors.telephone.type === 'maxLength') &&

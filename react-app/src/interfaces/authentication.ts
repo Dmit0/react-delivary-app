@@ -1,3 +1,5 @@
+import React from "react";
+
 export interface userForCreateAccount{
     email: string
     password: string
@@ -32,4 +34,13 @@ export interface firstCountry {
     addressId: string,
     country: string,
     code: string
+}
+
+export interface addressDataStep {
+    userId: string,
+    addressId: string,
+    country: string,
+    region: string,
+    street: string,
+    streetNumber: string,
 }

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { geoAPI } from '../../api/part_apis/geoApi';
 import { meals } from '../../interfaces/meals';
 import { set_current_country } from '../../redux/actions/countriesActions';
-import { setRegions } from '../../redux/actions/geoAction';
+import { setCities, setRegions } from '../../redux/actions/geoAction';
 import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
@@ -18,14 +18,6 @@ interface NavBarProps {
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
-
-  const { regions } = useSelector((state: RootState) => {
-    return {
-      regions: state.geo.regions
-    };
-  });
-
-  console.log(regions)
 
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [popuBody, setPopupBody] = React.useState<any>(null);//найти тип для html el
@@ -57,15 +49,18 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     }
   }
 
-  const fetchCities = async (region: string, countryCode: string) => {
-    console.log(regions)
-    const myRegion = regions.length > 0 && regions.find((Region)=> Region.name === region)
-    console.log(myRegion)
-    if(myRegion) {
-      const cities = myRegion &&  await geoAPI.fetchCities(myRegion.countryCode, countryCode)
-      console.log(cities)
-    }
-  }
+  // const fetchCities = async (region: string, countryCode: string, regions: any) => {
+  //   const myRegion = regions.length > 0 && regions.find((Region: any)=> Region.name === region)
+  //   if(myRegion) {
+  //     const country = await geoAPI.fetchCountry(countryCode)
+  //     if(country) {
+  //        myRegion && await setTimeout( async () => {
+  //         const cities = await geoAPI.fetchCities(myRegion.isoCode, country.data.wikiDataId)
+  //          cities && dispatch(setCities(cities.data))
+  //       }, 1500)
+  //     }
+  //   }
+  // }
 
   const handleClose = () => {
     setIsPopupOpen(false);
@@ -90,7 +85,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
       authStepContinue = {handleAuthStepContinue}
       onClose={handleClose}
       fetchRegions={fetchRegions}
-      fetchCities={fetchCities}
+      //fetchCities={fetchCities}
     />);
   };
 

@@ -8,7 +8,7 @@ import { PhoneService } from '../participants/user-main/phone/phone.service';
 import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
 import { UserService } from '../participants/user-main/user/user.service';
-import { UserRegistrationDto, UserSignInDto } from './models/auth.models';
+import { UserRegistrationDto, UserSignInDto, UserSignUpAddressDto } from './models/auth.models';
 import { passwordUtils } from './utils/password.utils';
 
 @Injectable()
@@ -77,6 +77,10 @@ export class AuthService {
     return this.userService.getUser(email).pipe(
       map((user) => user && true || exceptionErrors.badRequestException('bad request')),
     );
+  }
+
+  signUpStep3(data: UserSignUpAddressDto) {
+    return this.userService.setVerify(data)
   }
 
   validateTokenPayload(payload: any): Observable<User> {

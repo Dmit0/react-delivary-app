@@ -11,6 +11,15 @@ export interface UserRegistrationDto {
   }
 }
 
+export interface UserSignUpAddressDto {
+  userId: string,
+  addressId: string,
+  country: string,
+  region: string,
+  street: string,
+  streetNumber: string,
+}
+
 export interface UserSignInDto {
   email: string,
   password: string

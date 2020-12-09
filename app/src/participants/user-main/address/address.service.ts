@@ -30,7 +30,7 @@ export class AddressService {
     )
   }
 
-  updateAddress(criteria, data: any): Observable<any> {
+  updateAddress(criteria, data: any): Observable<Address> {
     return from(this.addressModel.updateOne(criteria, data)).pipe(
       map((address) => address || null),
     );

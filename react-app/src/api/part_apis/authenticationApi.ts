@@ -1,4 +1,4 @@
-import { loginData } from '../../interfaces/authentication';
+import { addressDataStep, loginData } from '../../interfaces/authentication';
 import {http} from '../api'
 
 export const AuthenticationAPI = {
@@ -30,4 +30,14 @@ export const AuthenticationAPI = {
             return false;
         }
     },
+
+    async addAddressStep(data: addressDataStep) {
+        try {
+            return await http<{ status: boolean }>('/authentication/signUpStep3', 'POST', JSON.stringify(data), {
+                'Content-Type': 'application/json;charset=utf-8',
+            });
+        } catch (e) {
+            return false;
+        }
+    }
 };

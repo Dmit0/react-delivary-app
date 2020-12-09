@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { tap } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local.guard';
-import { AuthReturnData, UserRegistrationDto, UserSignInDto } from './models/auth.models';
+import { AuthReturnData, UserRegistrationDto, UserSignInDto, UserSignUpAddressDto } from './models/auth.models';
 import { CurrentUser } from './utils/auth.utils';
 
 @Controller('authentication')
@@ -26,6 +26,12 @@ export class AuthController {
   @Post('verifyMail')
   verifyMail(@Body() email: string) {
     return this.authService.verifyMail(email);
+  }
+
+  //JWT CHECK
+  @Post('signUpStep3')
+  signUpStep3(@Body() userSignUpAddressDto: UserSignUpAddressDto) {
+    return this.authService.signUpStep3(userSignUpAddressDto)
   }
 
   @Get('google')

@@ -8,6 +8,7 @@ import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
 import { forkJoin, from, Observable } from 'rxjs';
 import { IUserCreate } from './models/user.types';
+import { roles } from "../../../constants/enums/roles";
 
 @Injectable()
 export class UserService {
@@ -48,8 +49,19 @@ export class UserService {
     );
   }
 
+    setVerify(data: any): Observable<User> {
+      const { country, region, street, streetNumber } = data
+      return from(this.roleService.findRole({name: roles.VERIFIED})).pipe(
+          mergeMap((role)=>this.addressService.updateAddress({_id: data.addressId},{country, region, street, streetNumber}).pipe(
+              mergeMap((address) => this.updateUser({ _id: data.userId }, { role: role._id, addresses: [address._id] }).pipe(
+                  map((user) => user || null)
+              ))
+          ))
+      )
+    }
+
   updateUser(criteria, data: any): Observable<User> {
-    return from(this.userModel.updateOne({ criteria }, { ...data })).pipe(
+    return from(this.userModel.updateOne( criteria, { ...data })).pipe(
       map((user) => user || null),
     );
   }
