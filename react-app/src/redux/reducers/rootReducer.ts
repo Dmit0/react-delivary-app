@@ -2,6 +2,7 @@ import {combineReducers} from 'redux'
 import {appStateReducer} from './appStateReducer'
 import { authReducer } from './authReducer';
 import { countryReducer } from './countrieReducer';
+import { geoReducer } from './geoReducer';
 import {restaurantReducer} from './restaurantReducer'
 import {cartReducer} from './cartStateReducer'
 import {lovedReducer} from './lovedStateReducer'
@@ -16,6 +17,7 @@ export const rootReducer = combineReducers({
     loadingBar: loadingBarReducer,
     authentication:authReducer,
     countries: countryReducer,
+    geo: geoReducer,
 })
 
 export type RootState = ReturnType<typeof rootReducer>

@@ -17,7 +17,7 @@ export class PhoneService {
     return from(this.phoneModel.findOne({ phoneNumber: property.phoneNumber })).pipe(
       mergeMap((response) => {
         if (response) {
-          throw exceptionErrors.throwForbiddenError;
+          throw exceptionErrors.throwForbiddenError('phone create error');
         } else {
           const newPhone = new this.phoneModel({ ...property });
           return from(newPhone.save()).pipe(

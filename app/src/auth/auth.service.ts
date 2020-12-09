@@ -18,6 +18,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly phoneService: PhoneService,
     private readonly roleService: RolesService,
+    private readonly addressService: AddressService,
   ) {
   }
 
@@ -37,9 +38,16 @@ export class AuthService {
   SignIn(userData: any): any {
     return this.phoneService.getPhone({ _id: userData.telephone }).pipe(
       mergeMap((phone) => this.roleService.findRole({ _id: userData.role }).pipe(
-        map((role) => {
-          return this.createAccessToken({ ...userData._doc, role: role.name, phone: `${ phone.code }${ phone.phoneNumber }` });
-        }),
+        mergeMap((role) => this.addressService.getAddressesByIds(userData.addresses).pipe(
+          map((addresses) => {
+            return this.createAccessToken({
+              ...userData._doc,
+              role: role.name,
+              phone: `${ phone.code }${ phone.phoneNumber }`,
+              firstAddress: { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode },
+            });
+          }),
+        )),
       )),
     );
   }
@@ -47,12 +55,12 @@ export class AuthService {
   private async createAccessToken(data: any) {
     const token = await this.jwtService.sign({
       id: data._id,
-      telephone: data.telephone,
       email: data.email,
       firstName: data.name,
       status: data.status,
       phone: data.phone,
       role: data.role,
+      firstAddress: data.firstAddress
     });
     return { token };
   }

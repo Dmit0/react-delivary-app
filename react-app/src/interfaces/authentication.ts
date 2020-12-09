@@ -25,4 +25,11 @@ export interface userToStore {
     phone: string
     role: string
     status: string
+    firstAddress: firstCountry,
+}
+
+export interface firstCountry {
+    addressId: string,
+    country: string,
+    code: string
 }

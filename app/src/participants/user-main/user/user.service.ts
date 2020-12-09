@@ -37,7 +37,7 @@ export class UserService {
             const newUser = new this.userModel({ email, password, name, role: role._id, telephone: phone._id, addresses: [ addresses._id ] });
             return from(newUser.save()).pipe(
               mergeMap((user) => this.phoneService.updatePhone({ _id: user.telephone }, { userId: user._id }).pipe(
-                mergeMap((phone) => this.addressService.updateAddress({ _id: user.addresses[0]._id }, { userId: user._id }).pipe(
+                mergeMap(() => this.addressService.updateAddress({ _id: user.addresses[0]._id }, { userId: user._id }).pipe(
                   map((user) => user || null),
                 )),
               )),

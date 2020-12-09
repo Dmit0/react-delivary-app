@@ -9,9 +9,12 @@ interface RegistrationProps {
   handleAuthOpen(): void
   countries:any
   createAccount(user: userForCreateAccount): void
-  onSelectCountry(country:string): void
+  onSelectCountry(country:string, needToFetch: boolean, needToFetchCity: boolean): void
   authStepStop(): void
   authStepContinue(): void
+  onClose(): void
+  fetchRegions(code: any): any
+  fetchCities(region: string, countryCode: string): void
 }
 
 interface formData {
@@ -22,15 +25,36 @@ interface formData {
   country: string
 }
 
-export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, handleAuthOpen, createAccount, onSelectCountry, authStepStop, authStepContinue }) => {
-
-  const { country, isAuthStepContinue, authStepSuccess } = useSelector((state: RootState) => {
+export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
+      handleAuthOpen,
+      createAccount,
+      onSelectCountry,
+      authStepStop,
+      authStepContinue,
+      onClose,
+      fetchRegions,
+      fetchCities
+  }) => {
+  const { country, isAuthStepContinue, authStepSuccess, firstUserCountry, regions, cities } = useSelector((state: RootState) => {
     return {
-      country:state.countries.country,
-      isAuthStepContinue:state.authentication.isStepContinue,
-      authStepSuccess:state.authentication.isStepSuccess,
+      country: state.countries.country,
+      isAuthStepContinue: state.authentication.isStepContinue,
+      authStepSuccess: state.authentication.isStepSuccess,
+      firstUserCountry: state.authentication.firstAddress,
+      regions: state.geo.regions && state.geo.regions.map((region) => {
+        return { value: region.name, label: region.name };
+      }),
+      cities: state.geo.cities && state.geo.cities.map((cities) => {
+        return { value: cities.name, label: cities.name };
+      }),
     };
   });
+
+  useEffect(()=>{
+    if(isAuthStepContinue){
+      fetchRegions(firstUserCountry?.code)
+    }
+  }, [isAuthStepContinue])
 
   const [phone,setPhone] = useState<any>()
   const [currentChangeCountry,setCurrentChangeCountry] = useState<any>(false)
@@ -42,9 +66,15 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
     }
   },[currentChangeCountry])
 
-  const handleChange = (value:any) => {
-    onSelectCountry(value?.value)
+  const handleChange = (value:any, needToFetchRegion = false, needToFetchCity = false) => {
+    onSelectCountry(value?.value, needToFetchRegion, needToFetchCity)
     setCurrentChangeCountry(true)
+  }
+
+  const handleChangeRegion = (value: any, countryCode: any) => {
+    if(value && countryCode) {
+      fetchCities(value?.value, countryCode)
+    }
   }
   const changeHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(country?.dial_code ? country.dial_code + event.target.value.slice(country.dial_code.length) : '' + event.target.value);
@@ -73,12 +103,14 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
               <form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
                 <div className="auth-body_Mail_auth">
                   <div>
-                    <span className='Authentication-Label'>Your country</span>
-                    <input name='country' ref={ register({ required: true }) }/>
-                    { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
+                    <span className='Authentication-Label'>Your Country</span>
+                    <Select name='city' defaultValue = {{ value: firstUserCountry?.country, label: firstUserCountry?.country }} options={ countries } onChange={ (event) => handleChange(event, true) }/>
 
-                    <span className='Authentication-Label'>Your city</span>
-                    <Select name='city' options={ countries } onChange={ (event) => handleChange(event) }/>
+                    <span className='Authentication-Label'>Your Region</span>
+                    <Select name='region' options={ regions && regions } onChange={ (event) => handleChangeRegion(event, country?.code) }/>
+
+                    <span className='Authentication-Label'>Your City</span>
+                    <Select name='city' options={ cities && cities }/>
 
                     <span className='Authentication-Label'>street</span>{/*Only belarus prefix +375*/ }
                     <input name='street' ref={ register({ required: true }) }/>
@@ -98,7 +130,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries, hand
                   </div>
                   <div className="auth-step-button">
                   <div className="auth-next-step">
-                    <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
+                    <button onClick={ onClose } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
                   </div>
                   <div className="auth-next-step">
                     <button type="submit" className="btn btn-outline-primary reg-next-step-button ">Add Address</button>

@@ -8,6 +8,8 @@ export class Address extends Document {
   userId: User;
   @Prop({ require: true })
   country?: string;
+  @Prop({ require: true })
+  countryCode?: string;
   @Prop({ default: null })
   city?: string;
   @Prop({ default: null })

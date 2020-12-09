@@ -1,4 +1,4 @@
- import { userForCreateAccount, userToStore } from '../../interfaces/authentication';
+ import { firstCountry, userForCreateAccount, userToStore } from '../../interfaces/authentication';
 
 // export const AUTH_CHECK_TIMEOUT = 'AUTH_CHECK_TIMEOUT';
 // export const AUTH_INITIATE_LOGOUT = 'AUTH_INITIATE_LOGOUT';
@@ -29,6 +29,7 @@ export const AUTH_END = 'AUTH_END';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
+export const AUTH_CLOSE = 'AUTH_CLOSE'
 
 
 export interface AuthenticationState {
@@ -37,6 +38,7 @@ export interface AuthenticationState {
   userName: string | null
   userRole: string | null
   userPhone: string | null
+  firstAddress: firstCountry | null
   AuthErrors: string | null
   isAuthSuccess: boolean | null
   isAuthFail: boolean
@@ -45,18 +47,13 @@ export interface AuthenticationState {
   isStepCancel: boolean
   isStepContinue: boolean
   authRedirectPath: string
-
-  //isAuthVerifySuccess: boolean //step success
-  //isAuthFail: boolean //step fail
-  //isAuthFirstStepStart: boolean
-  //isAuthSecondStepStart: boolean
-  //isSignUpSuccess: boolean | null
-  //CreateAccError: string[] | null
-
 }
 interface CREATE_ACCOUNT {
   type: typeof CREATE_ACCOUNT
   userForCreateAccount: userForCreateAccount
+}
+interface AUTH_CLOSE {
+  type: typeof AUTH_CLOSE
 }
 interface AUTH_ERRORS {
   type: typeof AUTH_SET_ERRORS
@@ -99,4 +96,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | STEP_CANCEL
   | STEP_CONTINUE
   | AUTH_FAIL
+  | AUTH_CLOSE
 

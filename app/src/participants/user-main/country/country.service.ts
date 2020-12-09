@@ -42,4 +42,10 @@ export class CountryService {
       })
     )
   }
+
+  findOne(data): Observable<Country> {
+    return from(this.countryModel.findOne(data)).pipe(
+      map((country) => country || null)
+    )
+  }
 }

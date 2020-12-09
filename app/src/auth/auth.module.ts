@@ -17,6 +17,7 @@ import { LocalStrategy } from './strategies/local.stratage';
     PassportModule,
     RolesModule,
     PhoneModule,
+    AddressModule,
     JwtModule.registerAsync({
       useFactory: () => ({
         secret: process.env.JWT_SECRET_KEY,

@@ -8,6 +8,7 @@ import { Action } from 'redux';
 import { AuthenticationAPI } from '../../api/part_apis/authenticationApi';
 import { loginData, userForCreateAccount, userToStore } from '../../interfaces/authentication';
 import {
+  AUTH_CLOSE,
   AUTH_END,
   AUTH_FAIL,
   AUTH_SET_ERRORS,
@@ -121,6 +122,12 @@ export const setAuthFailed = (): AuthenticationActionTypes => {
     type: AUTH_FAIL,
   };
 };
+
+export const authClose = (): AuthenticationActionTypes => {
+  return {
+    type: AUTH_CLOSE
+  }
+}
 
 export const setStepCancel = (status = true): AuthenticationActionTypes => {
   return {

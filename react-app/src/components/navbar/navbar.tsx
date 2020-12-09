@@ -1,21 +1,31 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import '../../css/header.css';
 import { Link } from 'react-router-dom';
+import { geoAPI } from '../../api/part_apis/geoApi';
 import { meals } from '../../interfaces/meals';
 import { set_current_country } from '../../redux/actions/countriesActions';
+import { setRegions } from '../../redux/actions/geoAction';
 import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
 import { userForCreateAccount } from '../../interfaces/authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { create_account, logIn, setStepCancel, setStepContinue, verifyMail } from '../../redux/actions/authentication';
+import { authClose, create_account, logIn, setAuthFailed, setStepCancel, setStepContinue, verifyMail } from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
+
+  const { regions } = useSelector((state: RootState) => {
+    return {
+      regions: state.geo.regions
+    };
+  });
+
+  console.log(regions)
 
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [popuBody, setPopupBody] = React.useState<any>(null);//найти тип для html el
@@ -40,17 +50,36 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     };
   });
 
+  const fetchRegions = async (code: any) => {
+    const regions = await geoAPI.fetchRegions(code)
+    if (regions) {
+      dispatch(setRegions(regions.data))
+    }
+  }
+
+  const fetchCities = async (region: string, countryCode: string) => {
+    console.log(regions)
+    const myRegion = regions.length > 0 && regions.find((Region)=> Region.name === region)
+    console.log(myRegion)
+    if(myRegion) {
+      const cities = myRegion &&  await geoAPI.fetchCities(myRegion.countryCode, countryCode)
+      console.log(cities)
+    }
+  }
+
   const handleClose = () => {
     setIsPopupOpen(false);
+    dispatch(authClose())
   };
 
-  //убрать это от сюда СРОЧНО!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  //TO DO remove logic to another place
   const createAccount = (user: userForCreateAccount) => {
     dispatch(create_account(user));
   };
   const registrationHeandler = () => {
     setIsPopupOpen(true);
     setisLogin(false);
+    dispatch(authClose())
     setPopupBody(
       <RegistrationPopup
       handleAuthOpen={handleAuthOpen}
@@ -59,18 +88,29 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
       onSelectCountry={handleSelectCountry}
       authStepStop={handleAuthStepStop}
       authStepContinue = {handleAuthStepContinue}
+      onClose={handleClose}
+      fetchRegions={fetchRegions}
+      fetchCities={fetchCities}
     />);
   };
 
-  const handleSelectCountry = (value:string) =>{
-    const country = countries.find((country)=>country.name === value)
-    if(country){
-      dispatch(set_current_country(country))
+  const handleSelectCountry = async (value: string, needToFetch: boolean) => {
+    const country = countries.find((country) => country.name === value);
+    if (country) {
+      dispatch(set_current_country(country));
+      if (needToFetch) {
+        const regions = await geoAPI.fetchRegions(country.code);
+        if (regions) {
+          dispatch(setRegions(regions.data));
+        }
+      }
     }
-  }
+  };
 
   const handleAuthStepStop = () => {
     dispatch(setStepCancel())
+    setIsPopupOpen(false);
+    dispatch(authClose())
   }
 
   const handleAuthStepContinue = () =>{
