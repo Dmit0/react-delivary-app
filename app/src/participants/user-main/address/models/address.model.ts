@@ -11,15 +11,9 @@ export class Address extends Document {
   @Prop({ require: true })
   countryCode?: string;
   @Prop({ default: null })
-  city?: string;
-  @Prop({ default: null })
   street?: string;
   @Prop({ default: null })
   streetNumber?: string;
-  @Prop({ default: null })
-  floor?: string;
-  @Prop({ default: null })
-  door?: string;
 }
 
 export const AddressSchema = SchemaFactory.createForClass(Address);

@@ -1,3 +1,4 @@
+import { isBoolean } from 'util';
 import {
   AUTH_FAIL,
   AUTH_SET_ERRORS,
@@ -7,7 +8,7 @@ import {
   AUTH_STEP_SUCCESS,
   AUTH_END,
   AuthenticationActionTypes,
-  AuthenticationState, AUTH_CLOSE,
+  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
@@ -25,6 +26,7 @@ const initialState: AuthenticationState = {
   isStepCancel: false,
   isStepContinue: false,
   authRedirectPath: "/",
+  isPopupClose: false,
 };
 
 export const authReducer = (state = initialState, action: AuthenticationActionTypes): AuthenticationState => {
@@ -46,7 +48,9 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
     case AUTH_STEP_SUCCESS:
       return { ...initialState, isStepSuccess: true }
     case AUTH_CLOSE:
-      return initialState
+      return state
+    case AUTH_LAST_STEP_CLOSE:
+      return {...state, isPopupClose: true}
     default:
       return state;
   }

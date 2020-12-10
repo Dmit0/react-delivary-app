@@ -30,6 +30,7 @@ export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
 export const AUTH_CLOSE = 'AUTH_CLOSE'
+export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE'
 
 
 export interface AuthenticationState {
@@ -47,11 +48,17 @@ export interface AuthenticationState {
   isStepCancel: boolean
   isStepContinue: boolean
   authRedirectPath: string
+  isPopupClose: boolean
 }
 interface CREATE_ACCOUNT {
   type: typeof CREATE_ACCOUNT
   userForCreateAccount: userForCreateAccount
 }
+
+ interface AUTH_LAST_STEP_CLOSE {
+   type: typeof AUTH_LAST_STEP_CLOSE
+ }
+
 interface AUTH_CLOSE {
   type: typeof AUTH_CLOSE
 }
@@ -97,4 +104,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | STEP_CONTINUE
   | AUTH_FAIL
   | AUTH_CLOSE
+  | AUTH_LAST_STEP_CLOSE
 

@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { userForCreateAccount } from '../../interfaces/authentication';
+import { addressDataStep, userForCreateAccount } from '../../interfaces/authentication';
 import '../../css/phone.css'
 import Select from 'react-select'
 import { RootState } from '../../redux/reducers/rootReducer';
@@ -15,6 +15,7 @@ interface RegistrationProps {
   authStepContinue(): void
   onClose(): void
   fetchRegions(code: any): any
+  onAddFirstAddress(updateFirstAddress: any): void
 }
 
 interface formData {
@@ -22,7 +23,9 @@ interface formData {
   telephone: string,
   password: string,
   name: string,
-  country: string
+  country: string,
+  street: string,
+  streetNumber: string
 }
 
 export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
@@ -33,8 +36,9 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
       authStepContinue,
       onClose,
       fetchRegions,
+      onAddFirstAddress
   }) => {
-  const { country, isAuthStepContinue, authStepSuccess, firstUserCountry, regions } = useSelector((state: RootState) => {
+  const { country, isAuthStepContinue, authStepSuccess, firstUserCountry, regions, userId } = useSelector((state: RootState) => {
     return {
       country: state.countries.country,
       isAuthStepContinue: state.authentication.isStepContinue,
@@ -43,6 +47,7 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
       regions: state.geo.regions && state.geo.regions.map((region: fetchGeoModel) => {
         return { value: region.name, label: region.name };
       }),
+      userId: state.authentication.userId
     };
   });
 
@@ -78,8 +83,15 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
   };
   const { register, handleSubmit, watch, errors } = useForm<formData>();
   const onSubmit = (data: formData) => {
-    if (country) {
+    if (country && data.name) {
       createAccount({ ...data, country });
+    }else if (country && currentRegion && userId && firstUserCountry?.addressId) {
+      onAddFirstAddress({ userId,
+        addressId:firstUserCountry?.addressId,
+        countryCode: country.code,
+        country: (country && country.name) || firstUserCountry.country,
+        currentRegion, street: data.street,
+        streetNumber: data.streetNumber })
     }
   };
   return (
@@ -167,7 +179,6 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
 
                 <span className='Authentication-Label'>Your country</span>
                 <Select name='country' options={ countries } onChange={ (event: any) => handleChange(event) }/>
-
 
                 <span className='Authentication-Label'>Telephone number</span>
                 <Item register={ register } current_country_code={ phone } changeHandler={ changeHandler }/>

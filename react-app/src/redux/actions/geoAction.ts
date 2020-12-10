@@ -1,3 +1,4 @@
+import { addressDataStep } from '../../interfaces/authentication';
 import { fetchGeoModel } from '../../interfaces/geo';
 import { ADD_CITIES, ADD_REGIONS, GeoActionTypes } from '../types/geoTypes';
 

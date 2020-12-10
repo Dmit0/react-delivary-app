@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import "../../css/authenticationStyles.css"
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchGeoModel } from '../../interfaces/geo';
+import { RootState } from '../../redux/reducers/rootReducer';
 
 
 interface PopupProps{
@@ -10,6 +12,16 @@ interface PopupProps{
 }
 
 export const PopupContainer: React.FC<PopupProps> = ({ isOpen, onClose, children, isLogin }) => {
+    const { isClose } = useSelector((state: RootState) => {
+        return {
+            isClose: state.authentication.isPopupClose,
+        };
+    });
+    useEffect(() => {
+        if (isClose) {
+            onClose();
+        }
+    }, [ isClose ]);
     return (
       <>
           { isOpen

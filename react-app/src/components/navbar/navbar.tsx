@@ -9,9 +9,9 @@ import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
-import { userForCreateAccount } from '../../interfaces/authentication';
+import { addressDataStep, userForCreateAccount } from '../../interfaces/authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { authClose, create_account, logIn, setAuthFailed, setStepCancel, setStepContinue, verifyMail } from '../../redux/actions/authentication';
+import { authClose, create_account, logIn, setStepCancel, setStepContinue, updateAddress, verifyMail } from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
@@ -22,6 +22,14 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [popuBody, setPopupBody] = React.useState<any>(null);//найти тип для html el
   const [isLogin, setisLogin] = React.useState<boolean>(true);
+
+  const { token, userName } = useSelector((state: RootState) => {
+    return {
+      token: state.authentication.token,
+      userName:state.authentication.userName
+    };
+  });
+
   const dispatch = useDispatch();
   const handleAuthOpen = () => {
     setIsPopupOpen(true);
@@ -47,6 +55,10 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     if (regions) {
       dispatch(setRegions(regions.data))
     }
+  }
+
+  const onAddFirstAddress = async (data: addressDataStep) => {
+    dispatch(updateAddress(data))
   }
 
   // const fetchCities = async (region: string, countryCode: string, regions: any) => {
@@ -86,6 +98,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
       onClose={handleClose}
       fetchRegions={fetchRegions}
       //fetchCities={fetchCities}
+      onAddFirstAddress={onAddFirstAddress}
     />);
   };
 
@@ -108,9 +121,14 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     dispatch(authClose())
   }
 
-  const handleAuthStepContinue = () =>{
+  const handleAuthStepContinue = () => {
     dispatch(setStepContinue())
   }
+
+  const userPageRedirect = () => {
+
+  }
+
 
   const count = (): Number => {
     let num = cart_length.reduce((sum, current) => (
@@ -134,7 +152,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
               </Link>
               <span className="Partnership">Partnership</span>
               <div className="button-controller">
-                <button type="button" onClick={handleAuthOpen} className="btn btn-outline-info App_header__main-button">LogIn</button>
+                <button type="button" onClick={ token ? userPageRedirect : handleAuthOpen } className="btn btn-outline-info App_header__main-button">{token ? userName : 'LogIn'}</button>
                 <Link to={'/cart'}>
                   <button type="button" className="btn btn-warning App_header__secondary-button">
                     Cart
