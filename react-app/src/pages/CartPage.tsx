@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react';
+import React, { useCallback, useEffect } from 'react';
 import {useSelector,useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
 import {RootState} from '../redux/reducers/rootReducer'
@@ -20,19 +20,19 @@ export const Cart =()=>{
         }
       })
 
-      const count_items=():Number=>{
+      const count_items=useCallback(():Number=>{
             let num=cart.reduce((sum,current)=>(
               sum+current.count
             ),0)
             return num    
-      }
+      },[cart])
 
-      const count_total_price=():Number=>{
+      const count_total_price=useCallback(():Number=>{
           let num = cart.reduce((sum,current)=>(
             sum+current.price*current.count
           ),0)
           return num
-      }
+      },[cart])
 
     useEffect(()=>{
           

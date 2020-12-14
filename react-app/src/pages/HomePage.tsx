@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavBar } from '../components/navbar/navbar';
 import { Banners } from '../components/content/banners';
@@ -42,7 +42,7 @@ export const HomePage: React.FC = () => {
   const [currentSortType, setCurrentSortType] = useState<string>('All');
   const [currentCuisen, setCurrentCuisen] = useState<string>('');
 
-  const sortTypeHeandler = (type: string) => {
+  const sortTypeHeandler = useCallback((type: string) => {
 
     //setCurrentFilterText('')
     setCurrentSortType(type);
@@ -60,12 +60,12 @@ export const HomePage: React.FC = () => {
       dispatch(set_filtered_restaurants(fetched_restaurants, type));
     }
 
-  };
+  },[cuisenTypes, fetched_restaurants, loverestaurant]);
 
-  const handleFilterTextChange = (valyStr: string) => {
+  const handleFilterTextChange = useCallback((valyStr: string) => {
     setCurrentFilterText(valyStr);
     dispatch(set_input_filter(fetched_restaurants, valyStr));
-  };
+  },[fetched_restaurants]);
 
   const restaurantHeandler = (restaurant: restaurantType) => {
     dispatch(set_current_restaurant(restaurant));//чанком добавить милы ?
@@ -79,7 +79,7 @@ export const HomePage: React.FC = () => {
     }
   };
 
-  const check = (id: string) => {
+  const check = useCallback((id: string) => {
     if (loverestaurant.length) {
       let checked = loverestaurant.find((item) => {
         return item._id === id;
@@ -88,7 +88,7 @@ export const HomePage: React.FC = () => {
     } else {
       return false;
     }
-  };
+  },[loverestaurant]);
 
   useEffect(() => {
     dispatch(set_restaurants());
