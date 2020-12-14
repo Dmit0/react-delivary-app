@@ -1,6 +1,7 @@
 import React,{useEffect} from 'react';
 import {useSelector,useDispatch} from 'react-redux'
 import {Link} from 'react-router-dom'
+import { Roles } from '../interfaces/enums';
 import {RootState} from '../redux/reducers/rootReducer'
 import {NavBar} from '../components/navbar/navbar'
 import {Cart_item} from '../components/content/cart_item'
@@ -14,9 +15,10 @@ export const Cart =()=>{
 
     const dispatch=useDispatch()
 
-    const {cart}=useSelector((state:RootState)=>{
+    const {cart, role}=useSelector((state:RootState)=>{
         return{
-          cart:state.cart.cart
+          cart:state.cart.cart,
+          role: state.authentication.userRole
         }
       })
 
@@ -61,6 +63,12 @@ export const Cart =()=>{
     const clear_cart_Heandler=()=>{
         dispatch(clean_cart())
     }
+
+    const payNow = () => {
+      if(role === Roles.VERIFIED) {
+        dispatch(clean_cart())
+      }
+    }
     return (
         <>
          <div className="App">
@@ -98,7 +106,7 @@ export const Cart =()=>{
                     </div>
                     <div className='cart-footer'>
                         <Link to={'/HomePage'}><button type="button" className="btn btn-outline-warning return_button">Return</button></Link>
-                        <button type="button" className="btn btn-outline-warning pay_button">Pay now</button>
+                        <button type="button" onClick = {payNow} className="btn btn-outline-warning pay_button">Pay now</button>
                     </div>
                 </div>
             </div>

@@ -1,4 +1,4 @@
-import { isBoolean } from 'util';
+import { Roles } from '../../interfaces/enums';
 import {
   AUTH_FAIL,
   AUTH_SET_ERRORS,
@@ -8,7 +8,7 @@ import {
   AUTH_STEP_SUCCESS,
   AUTH_END,
   AuthenticationActionTypes,
-  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE,
+  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE, AUTH_CHANGE_ROLE,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
@@ -50,6 +50,8 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
       return initialState
     case AUTH_LAST_STEP_CLOSE:
       return {...state, isPopupClose: true}
+    case AUTH_CHANGE_ROLE:
+      return {...state, userRole: Roles.VERIFIED}
     default:
       return state;
   }

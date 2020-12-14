@@ -31,6 +31,7 @@ export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
 export const AUTH_CLOSE = 'AUTH_CLOSE'
 export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE'
+export const AUTH_CHANGE_ROLE = 'AUTH_CHANGE_ROLE'
 
 
 export interface AuthenticationState {
@@ -65,6 +66,9 @@ interface AUTH_CLOSE {
 interface AUTH_ERRORS {
   type: typeof AUTH_SET_ERRORS
   status: string | null
+}
+interface AUTH_CHANGE_ROLE {
+  type: typeof AUTH_CHANGE_ROLE
 }
 
 interface AUTH_END {
@@ -105,4 +109,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_FAIL
   | AUTH_CLOSE
   | AUTH_LAST_STEP_CLOSE
+  |AUTH_CHANGE_ROLE
 

@@ -8,6 +8,7 @@ import { Action } from 'redux';
 import { AuthenticationAPI } from '../../api/part_apis/authenticationApi';
 import { addressDataStep, loginData, userForCreateAccount, userToStore } from '../../interfaces/authentication';
 import {
+  AUTH_CHANGE_ROLE,
   AUTH_CLOSE,
   AUTH_END,
   AUTH_FAIL, AUTH_LAST_STEP_CLOSE,
@@ -47,6 +48,7 @@ export const updateAddress = (address: addressDataStep): ThunkType => {
     try {
       let response = await AuthenticationAPI.addAddressStep(address);
       if (response) {
+        dispatch(changeRoleInRedux())
         dispatch(authLastStepClose());
       } else {
         dispatch(hideLoading());
@@ -166,5 +168,11 @@ export const setStepContinue = (): AuthenticationActionTypes => {
     type: AUTH_STEP_CONTINUE,
   };
 };
+
+export const changeRoleInRedux = ():AuthenticationActionTypes => {
+  return {
+    type: AUTH_CHANGE_ROLE
+  }
+}
 
 
