@@ -13,7 +13,7 @@ import {meals as Mealtype} from '../interfaces/meals'
 
 export const MealsPage:React.FC = () => {
     
-    let {id}=useParams();
+    let { id } = useParams();
     const dispatch=useDispatch()
     const {meals,cart}=useSelector((state:RootState)=>{
         return {

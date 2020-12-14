@@ -13,7 +13,7 @@ export class RestaurantService {
   ) {
   }
 
-  get() {
+  getAll() {
     return from(this.restaurantModel.find());
   }
 }

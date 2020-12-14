@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { Model } from 'mongoose';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
+import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
@@ -17,6 +19,7 @@ export class UserService {
     private readonly roleService: RolesService,
     private readonly addressService: AddressService,
     private readonly phoneService: PhoneService,
+    private readonly cartService: CartService,
   ) {
   }
 
@@ -39,7 +42,11 @@ export class UserService {
             return from(newUser.save()).pipe(
               mergeMap((user) => this.phoneService.updatePhone({ _id: user.telephone }, { userId: user._id }).pipe(
                 mergeMap(() => this.addressService.updateAddress({ _id: user.addresses[0]._id }, { userId: user._id }).pipe(
-                  map((user) => user || null),
+                  mergeMap(() => this.cartService.generateCart({ userId: user._id }).pipe(
+                    mergeMap((cart) => this.updateUser({ _id: user._id }, { cart: cart._id }).pipe(
+                      map((user) => user || null),
+                      ),
+                    ))),
                 )),
               )),
             );
@@ -64,5 +71,19 @@ export class UserService {
     return from(this.userModel.updateOne( criteria, { ...data })).pipe(
       map((user) => user || null),
     );
+  }
+
+  getLovedRestaurants(userId: any): Observable<string[]> {
+    return from(this.userModel.findOne({ _id: userId })).pipe(
+      map((user) => {
+        return user && user.lovedRestaurant || new exceptionErrors.badRequestException('User not found')
+      })
+    )
+  }
+
+  setLovedRestaurant(userId: any, restaurantId: any): Observable<any> {
+    return from (this.getUser({ _id: userId })).pipe(
+      mergeMap((user) => this.updateUser({ _id: user._id }, { lovedRestaurant: [...user.lovedRestaurant, restaurantId] }))
+    )
   }
 }

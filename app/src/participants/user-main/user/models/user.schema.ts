@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
 import { Address } from '../../address/models/address.model';
+import { Cart } from '../../cart/models/cart.schema';
 import { Phone } from '../../phone/models/phone.schema';
 import { Role } from '../../roles/models/Roles';
 import { Meal } from '../../../../meals/meal/models/meals.schema';
@@ -45,8 +46,8 @@ export class User extends Document {
   @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Restaurant', default: [] })
   lovedRestaurant: [ Restaurant ];
 
-  @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Meal', default: [] })
-  cart: [ Meal ];
+  @Prop({ type:MongooseSchema.Types.ObjectId, ref: 'Cart' })
+  cart: Cart;
 
   @Prop({ type:[MongooseSchema.Types.ObjectId], ref: 'Address', default: [] })
   addresses: [ Address ];

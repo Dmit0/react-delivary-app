@@ -10,6 +10,6 @@ export class RestaurantController {
   @Get('findAll')
   //type for returning findAll
   findAll(): any {
-    return this.restaurantService.get();
+    return this.restaurantService.getAll();
   }
 }

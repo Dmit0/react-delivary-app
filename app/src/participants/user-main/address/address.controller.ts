@@ -1,5 +1,4 @@
-import { Controller, Post, UseGuards } from '@nestjs/common';
-import { Args } from '@nestjs/graphql';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
 import { IUser } from '../user/models/user.types';
@@ -12,7 +11,7 @@ export class AddressController {
   }
   @UseGuards(JwtAuthGuard)
   @Post('update')
-  updateUserAddress(@CurrentUser() user: IUser,@Args('updateAddress') updateAddress:  DataToUpdateAddress): any {
+  updateUserAddress(@CurrentUser() user: IUser, @Body('updateAddress') updateAddress:  DataToUpdateAddress): any {
     return this.addressService.updateAddress(user.id,updateAddress);
   }
 }

@@ -12,8 +12,7 @@ import '../css/cart.css'
 
 export const Cart =()=>{
 
-    const dispatch=useDispatch()
-
+  const dispatch=useDispatch()
     const {cart}=useSelector((state:RootState)=>{
         return{
           cart:state.cart.cart
