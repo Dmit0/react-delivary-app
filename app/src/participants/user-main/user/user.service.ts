@@ -53,7 +53,7 @@ export class UserService {
       const { country, region, street, streetNumber } = data
       return from(this.roleService.findRole({name: roles.VERIFIED})).pipe(
           mergeMap((role)=>this.addressService.updateAddress({_id: data.addressId},{country, region, street, streetNumber}).pipe(
-              mergeMap((address) => this.updateUser({ _id: data.userId }, { role: role._id, addresses: [address._id] }).pipe(
+              mergeMap(() => this.updateUser({ _id: data.userId }, { role: role._id }).pipe(
                   map((user) => user || null)
               ))
           ))

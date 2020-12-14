@@ -33,7 +33,6 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
 
   switch (action.type) {
     case AUTH_END:
-      console.log(action.data)
       return {...state, token: action.data.token, userId: action.data.id, userName: action.data.firstName, userPhone: action.data.phone, userRole: action.data.role, firstAddress: action.data.firstAddress }
     case AUTH_SET_ERRORS:
       return { ...state, AuthErrors:action.status };
@@ -48,7 +47,7 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
     case AUTH_STEP_SUCCESS:
       return { ...initialState, isStepSuccess: true }
     case AUTH_CLOSE:
-      return state
+      return initialState
     case AUTH_LAST_STEP_CLOSE:
       return {...state, isPopupClose: true}
     default:

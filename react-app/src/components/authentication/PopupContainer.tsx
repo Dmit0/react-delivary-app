@@ -8,7 +8,7 @@ import { RootState } from '../../redux/reducers/rootReducer';
 interface PopupProps{
     isOpen:boolean
     isLogin:boolean
-    onClose():void
+    onClose(isClose: boolean): void
 }
 
 export const PopupContainer: React.FC<PopupProps> = ({ isOpen, onClose, children, isLogin }) => {
@@ -19,14 +19,14 @@ export const PopupContainer: React.FC<PopupProps> = ({ isOpen, onClose, children
     });
     useEffect(() => {
         if (isClose) {
-            onClose();
+            onClose(isClose);
         }
     }, [ isClose ]);
     return (
       <>
           { isOpen
             ? <>
-                <div className="authWrapper" onClick={ onClose }></div>
+                <div className="authWrapper" onClick={() => onClose(false) }></div>
                 { isLogin
                   ? <div className="authPopup">{ children }</div>
                   : <div className="registrationPopup">{ children }</div>

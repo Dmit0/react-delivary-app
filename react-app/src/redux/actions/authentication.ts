@@ -84,7 +84,7 @@ export const verifyMail = (mail: string): ThunkType => {
   };
 };
 
-export const logIn = (data: loginData): ThunkType => {
+export const logIn = (data: loginData, isLogIn = false): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
@@ -93,6 +93,7 @@ export const logIn = (data: loginData): ThunkType => {
         dispatch(setAuthStepSuccess(!!response));
         const decodedToken = jwt.verify(response.token, env.JWT_SECRET_KEY);
         dispatch(setAuthSuccess(response.token, decodedToken));
+        isLogIn && dispatch(authLastStepClose())
       } else {
         dispatch(hideLoading());
         dispatch(setAuthFailed());

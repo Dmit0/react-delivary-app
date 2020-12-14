@@ -7,7 +7,7 @@ import { RootState } from '../../redux/reducers/rootReducer';
 interface LoginProps {
   registrationHeandler(): void
   verifyMail(mail:string): void
-  logIn(user:loginData):void
+  logIn(user:loginData, isEmailVerified: boolean):void
 }
 
 interface formData {
@@ -28,7 +28,7 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
     if (!isEmailVerified) {
       verifyMail(data.email);
     } else if (isEmailVerified) {
-      logIn(data);
+      logIn(data, isEmailVerified);
       //login check -> password
       //exit from popup into main menu and set state of this 0 or smth
       //initialize user-main bonuses(later task)

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import '../../css/header.css';
 import { Link } from 'react-router-dom';
 import { geoAPI } from '../../api/part_apis/geoApi';
@@ -9,9 +9,17 @@ import { RootState } from '../../redux/reducers/rootReducer';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
-import { addressDataStep, userForCreateAccount } from '../../interfaces/authentication';
+import { addressDataStep, loginData, userForCreateAccount } from '../../interfaces/authentication';
 import { useDispatch, useSelector } from 'react-redux';
-import { authClose, create_account, logIn, setStepCancel, setStepContinue, updateAddress, verifyMail } from '../../redux/actions/authentication';
+import {
+  authClose,
+  create_account,
+  logIn,
+  setStepCancel,
+  setStepContinue,
+  updateAddress,
+  verifyMail,
+} from '../../redux/actions/authentication';
 
 interface NavBarProps {
   cart_length: meals[]
@@ -38,7 +46,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
       <LoginPopup
         registrationHeandler={registrationHeandler}
         verifyMail = {(mail:string)=>dispatch(verifyMail(mail))}
-        logIn={(data)=>dispatch(logIn(data))}
+        logIn={(data: loginData, isLogIn)=>dispatch(logIn(data, isLogIn))}
       />);
   };
   const { selectCountries, countries } = useSelector((state: RootState) => {
@@ -74,9 +82,9 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   //   }
   // }
 
-  const handleClose = () => {
+  const handleClose = (isSuccessAuth = false) => {
     setIsPopupOpen(false);
-    dispatch(authClose())
+    !isSuccessAuth && dispatch(authClose())
   };
 
   //TO DO remove logic to another place
@@ -102,7 +110,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     />);
   };
 
-  const handleSelectCountry = async (value: string, needToFetch: boolean) => {
+  const handleSelectCountry = useCallback(async (value: string, needToFetch: boolean) => {
     const country = countries.find((country) => country.name === value);
     if (country) {
       dispatch(set_current_country(country));
@@ -113,7 +121,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
         }
       }
     }
-  };
+  },[countries]);
 
   const handleAuthStepStop = () => {
     dispatch(setStepCancel())
@@ -134,7 +142,6 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
     let num = cart_length.reduce((sum, current) => (
       sum + current.count
     ), 0);
-
     return num;
   };
   return (
