@@ -1,4 +1,4 @@
-import { restaurant, cuisen } from '../../interfaces/restaurant';
+import { restaurant, cuisen, restaurant as restaurantType } from '../../interfaces/restaurant';
 import { meals } from '../../interfaces/meals';
 import { http } from '../api';
 

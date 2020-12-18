@@ -85,12 +85,13 @@ export const RegistrationPopup: React.FC<RegistrationProps> = ({ countries,
   const onSubmit = (data: formData) => {
     if (country && data.name) {
       createAccount({ ...data, country });
-    }else if (country && currentRegion && userId && firstUserCountry?.addressId) {
+    } else if (country && currentRegion && userId && firstUserCountry?.addressId) {
       onAddFirstAddress({ userId,
         addressId:firstUserCountry?.addressId,
         countryCode: country.code,
         country: (country && country.name) || firstUserCountry.country,
-        currentRegion, street: data.street,
+        currentRegion,
+        street: data.street,
         streetNumber: data.streetNumber })
     }
   };

@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken';
-import { env } from '../../env';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../enums/errorEnum';
@@ -17,6 +15,7 @@ import {
   AUTH_STEP_START,
   AUTH_STEP_SUCCESS,
   AuthenticationActionTypes,
+  SET_TOKEN,
 } from '../types/authTypes';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -91,9 +90,14 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
       let response = await AuthenticationAPI.logIn(data);
       if (response) {
         dispatch(setAuthStepSuccess(!!response));
-        const decodedToken = jwt.verify(response.token, env.JWT_SECRET_KEY);
-        dispatch(setAuthSuccess(response.token, decodedToken));
-        isLogIn && dispatch(authLastStepClose())
+        dispatch(setAuthSuccess(response.token, {
+          userId: response.id,
+          email: response.email,
+          firstName: response.firstName,
+          phone: response.phone,
+          firstAddress: response.firstAddress,
+        }));
+        isLogIn && dispatch(authLastStepClose());
       } else {
         dispatch(hideLoading());
         dispatch(setAuthFailed());
@@ -166,5 +170,12 @@ export const setStepContinue = (): AuthenticationActionTypes => {
     type: AUTH_STEP_CONTINUE,
   };
 };
+
+export const setToken = (token: string): AuthenticationActionTypes => {
+  return {
+    type: SET_TOKEN,
+    token
+  }
+}
 
 

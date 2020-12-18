@@ -1,6 +1,6 @@
 import {restaurant,cuisen} from '../../interfaces/restaurant'
 
-export const Sorts={
+export const Sorts = {
     Opened(restaurants:restaurant[]){
         let date=new Date()
         let current_houres=date.getHours()

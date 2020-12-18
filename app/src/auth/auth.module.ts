@@ -8,6 +8,7 @@ import { UserModule } from '../participants/user-main/user/user.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { GoogleStrategy } from './strategies/google.stratage';
+import { JwtStrategy } from './strategies/jwt.stratage';
 import { LocalStrategy } from './strategies/local.stratage';
 
 //сделать все из конфига
@@ -25,7 +26,7 @@ import { LocalStrategy } from './strategies/local.stratage';
       }),
     }),
   ],
-  providers: [AuthService, LocalStrategy, GoogleStrategy],
+  providers: [AuthService, LocalStrategy, GoogleStrategy, JwtStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {

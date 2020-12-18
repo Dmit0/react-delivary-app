@@ -15,7 +15,7 @@ import { cartMealItem, CartMealItemSchema } from './models/cartMealItem.schema';
       { name: cartMealItem.name, schema: CartMealItemSchema },
     ]),
   ],
-  providers: [CartService, JwtStrategy],
+  providers: [CartService],
   controllers: [CartController],
   exports: [CartService]
 })

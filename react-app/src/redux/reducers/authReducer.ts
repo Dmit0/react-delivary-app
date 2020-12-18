@@ -1,4 +1,3 @@
-import { isBoolean } from 'util';
 import {
   AUTH_FAIL,
   AUTH_SET_ERRORS,
@@ -8,7 +7,7 @@ import {
   AUTH_STEP_SUCCESS,
   AUTH_END,
   AuthenticationActionTypes,
-  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE,
+  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE, SET_TOKEN,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
@@ -33,7 +32,13 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
 
   switch (action.type) {
     case AUTH_END:
-      return {...state, token: action.data.token, userId: action.data.id, userName: action.data.firstName, userPhone: action.data.phone, userRole: action.data.role, firstAddress: action.data.firstAddress }
+      return { ...state,
+        token: action.data.token,
+        userId: action.data.userId,
+        userName: action.data.firstName,
+        userPhone: action.data.phone,
+        userRole: action.data.role,
+        firstAddress: action.data.firstAddress }
     case AUTH_SET_ERRORS:
       return { ...state, AuthErrors:action.status };
     case AUTH_STEP_START:
@@ -50,6 +55,8 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
       return initialState
     case AUTH_LAST_STEP_CLOSE:
       return {...state, isPopupClose: true}
+    case SET_TOKEN:
+      return { ...state, token: action.token }
     default:
       return state;
   }

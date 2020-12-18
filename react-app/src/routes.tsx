@@ -1,16 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import {Switch,Route,Redirect} from 'react-router-dom';
 import {HomePage} from './pages/HomePage';
 import {MealsPage} from './pages/MealsPage';
 import {Cart} from './pages/CartPage'
 import { UserPage } from './pages/userPage';
- 
 
-//type management = 'admin' | 'subadmin' | 'customer' // сделать запрос в индексе на роли (можно санком) положить их в редакс потом здесь получить селектором распарсить и записать в типы 
-
-type Access= 'guest' | 'user' | 'management'
-
-export const useRoutes = (status: Access = 'guest') => {
+export const useRoutes = () => {
   return (
     <Switch>
       <Route path='/HomePage' exact>

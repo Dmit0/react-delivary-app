@@ -21,8 +21,8 @@ export class CartService {
       map((cart) => cart || null)
     )
   }
-  getCart(userId: any): Observable<Cart> {
-    return from(this.cartModel.findOne(userId)).pipe(
+  getCart(criteria: any): Observable<Cart> {
+    return from(this.cartModel.findOne(criteria)).pipe(
       map((cart) => cart || null),
     );
   }

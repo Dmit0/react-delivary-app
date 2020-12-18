@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { AuthenticationAPI } from '../api/part_apis/authenticationApi';
+import { restaurantAPI } from '../api/part_apis/ReastaurantApi';
 import { NavBar } from '../components/navbar/navbar';
 import { Banners } from '../components/content/banners';
 import { Restaurant } from '../components/content/restaurant';
@@ -25,16 +27,24 @@ export const HomePage: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const { fetched_restaurants, loverestaurant, cart, bunners, cuisenTypes, restaurants_to_show, FilteredList } = useSelector((state: RootState) => {
+  const { fetched_restaurants,
+    loverestaurant,
+    cart,
+    bunners,
+    cuisenTypes,
+    restaurants_to_show,
+    FilteredList,
+    token
+  } = useSelector((state: RootState) => {
     return {
       fetched_restaurants: state.restaurant.restaurants,
       restaurants_to_show: state.restaurant.filter_restaurants,
-      //loading:state.app.loading,
       loverestaurant: state.loved.loved_restaurants,
       cart: state.cart.cart,
       bunners: state.app.bunners,
       cuisenTypes: state.restaurant.cuisen,
       FilteredList: state.restaurant.inputFilter,
+      token: state.authentication.token
     };
   });
 
@@ -43,8 +53,6 @@ export const HomePage: React.FC = () => {
   const [currentCuisen, setCurrentCuisen] = useState<string>('');
 
   const sortTypeHeandler = useCallback((type: string) => {
-
-    //setCurrentFilterText('')
     setCurrentSortType(type);
     setCurrentCuisen('');
     if (type !== 'All' && type !== 'Opened' && type !== 'Loved') {
@@ -95,10 +103,10 @@ export const HomePage: React.FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (loverestaurant.length > 0) {
+    if (loverestaurant.length > 0 && !token) {
       localStorage.setItem('loved', JSON.stringify(loverestaurant));
     }
-  }, [loverestaurant]);
+  }, [loverestaurant, token]);
 
   useEffect(() => {
     dispatch(get_bunners());
@@ -116,10 +124,23 @@ export const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const restaurants = JSON.parse(localStorage.getItem('loved') || '[]') as restaurantType[];
-    dispatch(set_loved_restaurant_from_localeStorage(restaurants));
-    // eslint-disable-next-line
+    if(token) {
+      localStorage.setItem('token', JSON.stringify(token));
+    }
+  },[token])
+
+  useEffect(() => {
+      getRestaurant(token).then((response) => {
+      dispatch(set_loved_restaurant_from_localeStorage(response));
+    })
+    //eslint-disable-next-line
   }, []);
+
+  const getRestaurant = async(token: any) => {
+      return token
+        ? await AuthenticationAPI.getLoveUserRestaurants(token)
+        : JSON.parse(localStorage.getItem('loved') || '[]') as restaurantType[];
+  }
 
   useEffect(() => {
     const cart_items = JSON.parse(localStorage.getItem('cart') || '[]') as Mealtype[];

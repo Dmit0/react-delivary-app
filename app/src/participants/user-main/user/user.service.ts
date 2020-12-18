@@ -86,4 +86,23 @@ export class UserService {
       mergeMap((user) => this.updateUser({ _id: user._id }, { lovedRestaurant: [...user.lovedRestaurant, restaurantId] }))
     )
   }
+
+  getUserMongoDbFields(data) {
+    return from(this.userModel.findOne(data)).pipe(
+      mergeMap((user) => this.addressService.getAddressesByIds(user.addresses).pipe(
+        mergeMap((addresses) => this.phoneService.getPhone({ userId: user._id }).pipe(
+          mergeMap((phone) => this.cartService.getCart({ userId: user._id }).pipe(
+            map((cart) => {
+              return {
+                ...user,
+                addresses,
+                phone,
+                cart,
+              };
+            }),
+          )),
+        )),
+      )),
+    );
+  }
 }

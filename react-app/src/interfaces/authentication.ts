@@ -1,5 +1,3 @@
-import React from "react";
-
 export interface userForCreateAccount{
     email: string
     password: string
@@ -23,7 +21,7 @@ export interface userToStore {
     token: string,
     email: string
     firstName: string
-    id: string
+    userId: string
     phone: string
     role: string
     status: string

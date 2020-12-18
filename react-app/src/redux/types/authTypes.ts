@@ -31,6 +31,7 @@ export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
 export const AUTH_CLOSE = 'AUTH_CLOSE'
 export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE'
+export const SET_TOKEN = 'SET_TOKEN'
 
 
 export interface AuthenticationState {
@@ -95,6 +96,11 @@ interface STEP_CONTINUE {
   type: typeof AUTH_STEP_CONTINUE
 }
 
+interface SET_TOKEN {
+  type: typeof SET_TOKEN
+  token: string
+}
+
 export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_ERRORS
   | AUTH_END
@@ -105,4 +111,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_FAIL
   | AUTH_CLOSE
   | AUTH_LAST_STEP_CLOSE
+  | SET_TOKEN
 

@@ -11,14 +11,20 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('love')
-  getLovedRestaurants(@CurrentUser() user: any) {
+  @Get('getLoveRestaurant')
+  getLovedUserRestaurants(@CurrentUser() user: any) {
     return this.userService.getLovedRestaurants(user._id)
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('setLoved')
-  setLovedRestaurants(@CurrentUser() user: any, @Body() restaurantId: string) {
+  setLovedUserRestaurants(@CurrentUser() user: any, @Body() restaurantId: string) {
     return this.userService.setLovedRestaurant(user._id, restaurantId)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('getUser')
+  getUser(@CurrentUser() user: any) {
+    return this.userService.getUserMongoDbFields({ _id: user._id })
   }
 }

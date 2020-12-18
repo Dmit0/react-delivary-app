@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
 import { AddressService } from '../participants/user-main/address/address.service';
@@ -56,13 +56,15 @@ export class AuthService {
     const token = await this.jwtService.sign({
       id: data._id,
       email: data.email,
-      firstName: data.name,
-      status: data.status,
-      phone: data.phone,
-      role: data.role,
-      firstAddress: data.firstAddress
     });
-    return { token };
+    return {
+      token,
+      email: data.email,
+      firstName: data.name,
+      phone: data.phone,
+      firstAddress: data.firstAddress,
+      id: data._id,
+    };
   }
 
   verifyUser(verifyingData: UserSignInDto): Observable<any> {
@@ -84,8 +86,26 @@ export class AuthService {
   }
 
   validateTokenPayload(payload: any): Observable<User> {
-    return this.userService.getUser({ id: payload.id }).pipe(
+    return this.userService.getUser({ _id: payload.id }).pipe(
+      tap(console.log),
       map((user) => user || null));
+  }
+
+  refreshToken(token: string): Observable<any> {
+    const decodedToken = this.jwtService.decode(token);
+    return of(this.generateRefreshToken(decodedToken));
+  }
+
+  private async generateRefreshToken(data: any) {
+    const token = await this.jwtService.sign({
+      id: data.id,
+      email: data.email,
+    });
+    return {
+      token,
+      email: data.email,
+      firstName: data.name,
+    };
   }
 
   googleLogin(user: any) {

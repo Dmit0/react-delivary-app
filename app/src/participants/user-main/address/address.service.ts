@@ -36,7 +36,7 @@ export class AddressService {
     );
   }
 
-  getAddressesByIds(ids: []): Observable<any> {
+  getAddressesByIds(ids: any[]): Observable<any> {
     return from(this.addressModel.find().where('_id').in(ids)).pipe(
       map((addresses) => addresses || null)
     )
