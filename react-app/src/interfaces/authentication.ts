@@ -1,3 +1,5 @@
+import { meals } from './meals';
+
 export interface userForCreateAccount{
     email: string
     password: string
@@ -18,14 +20,15 @@ export interface loginData{
 }
 
 export interface userToStore {
-    token: string,
+    token: string
     email: string
     firstName: string
     userId: string
     phone: string
     role: string
     status: string
-    firstAddress: firstCountry,
+    firstAddress?: firstCountry,
+    cart?: meals[]
 }
 
 export interface firstCountry {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthenticationAPI } from '../api/part_apis/authenticationApi';
-import { restaurantAPI } from '../api/part_apis/ReastaurantApi';
+import { UserAPI } from '../api/part_apis/userApi';
 import { NavBar } from '../components/navbar/navbar';
 import { Banners } from '../components/content/banners';
 import { Restaurant } from '../components/content/restaurant';
@@ -80,17 +80,27 @@ export const HomePage: React.FC = () => {
   };
 
   const loveHeandler = (restaurant: restaurantType, value: boolean) => {
-    if (value) {
-      dispatch(add_restaurant_to_loved(restaurant));
-    } else {
-      dispatch(remove_restaurant_from_loved(restaurant));
-    }
+    token
+      ? userLoveAction(restaurant._id, value, token)
+      : value
+        ? dispatch(add_restaurant_to_loved(restaurant._id))
+        : dispatch(remove_restaurant_from_loved(restaurant._id))
   };
+
+  const userLoveAction = async(restaurantId: string, action: boolean, token: string) => {
+   const response = await UserAPI.loveRestaurantAction(token, { restaurantId, action } )
+    console.log(response)
+    if (response) {
+      action
+        ? dispatch(add_restaurant_to_loved(restaurantId))
+        : dispatch(remove_restaurant_from_loved(restaurantId))
+    }
+  }
 
   const check = useCallback((id: string) => {
     if (loverestaurant.length) {
       let checked = loverestaurant.find((item) => {
-        return item._id === id;
+        return item === id;
       });
       return !!checked;
     } else {
@@ -100,7 +110,7 @@ export const HomePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(set_restaurants());
-  }, [dispatch]);
+  }, []);
 
   useEffect(() => {
     if (loverestaurant.length > 0 && !token) {
@@ -124,22 +134,16 @@ export const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if(token) {
-      localStorage.setItem('token', JSON.stringify(token));
-    }
-  },[token])
-
-  useEffect(() => {
       getRestaurant(token).then((response) => {
-      dispatch(set_loved_restaurant_from_localeStorage(response));
+      response && dispatch(set_loved_restaurant_from_localeStorage(response));
     })
     //eslint-disable-next-line
-  }, []);
+  }, [token]);
 
   const getRestaurant = async(token: any) => {
       return token
         ? await AuthenticationAPI.getLoveUserRestaurants(token)
-        : JSON.parse(localStorage.getItem('loved') || '[]') as restaurantType[];
+        : JSON.parse(localStorage.getItem('loved') || '[]') as string[];
   }
 
   useEffect(() => {

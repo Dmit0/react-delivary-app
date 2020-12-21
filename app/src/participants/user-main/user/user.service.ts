@@ -8,7 +8,7 @@ import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
-import { forkJoin, from, Observable } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { IUserCreate } from './models/user.types';
 import { roles } from "../../../constants/enums/roles";
 
@@ -81,10 +81,15 @@ export class UserService {
     )
   }
 
-  setLovedRestaurant(userId: any, restaurantId: any): Observable<any> {
-    return from (this.getUser({ _id: userId })).pipe(
-      mergeMap((user) => this.updateUser({ _id: user._id }, { lovedRestaurant: [...user.lovedRestaurant, restaurantId] }))
-    )
+  setLovedRestaurant(userId: any, restaurantId: any, action: boolean): Observable<any> {
+    return this.getUser({ _id: userId }).pipe(
+      mergeMap((user) => this.updateUser({ _id: user._id }, {
+        lovedRestaurant: action
+          ? [ ...user.lovedRestaurant, restaurantId ]
+          : [ ...user.lovedRestaurant.filter(item => item != restaurantId) ],
+      })),
+      map(() => ({ status: true })),
+    );
   }
 
   getUserMongoDbFields(data) {

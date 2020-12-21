@@ -2,12 +2,12 @@ import {restaurant,cuisen} from '../../interfaces/restaurant'
 import {meals} from '../../interfaces/meals'
 
 //export const RESTAURANTS ={
-  export const SET_REASTAURANTS='SET_REASTAURANTS';
-  export const SET_CURRENT_RESTAURANT='SET_CURRENT_RESTAURANT';
-  export const SET_INTOSTORE_RESTAURANTS='SET_INTOSTORE_RESTAURANTS';
-  export const SET_MEALS='SET_MEALS'
-  export const SET_CUISENS='SET_CUISENS'
-  export const SET_FILTER_RESTAURANTS='SET_FILTER_RESTAURANTS'
+  export const SET_REASTAURANTS = 'SET_REASTAURANTS';
+  export const SET_CURRENT_RESTAURANT = 'SET_CURRENT_RESTAURANT';
+  export const SET_INTOSTORE_RESTAURANTS = 'SET_INTOSTORE_RESTAURANTS';
+  export const SET_MEALS = 'SET_MEALS'
+  export const SET_CUISENS = 'SET_CUISENS'
+  export const SET_FILTER_RESTAURANTS = 'SET_FILTER_RESTAURANTS'
   export const SET_INPUT_FILTER='SET_INPUT_FILTER'
   export const DELETE_CURRENT_RESTAURANT_AND_MEALS='DELETE_CURRENT_RESTAURANT_AND_MEALS'
 //}
@@ -31,8 +31,8 @@ interface SET_CUISENS{
     cuisenTypes:cuisen[]
 }
 interface SET_FILTER_RESTAURANTS{
-    type:typeof SET_FILTER_RESTAURANTS
-    filter:restaurant[]
+    type: typeof SET_FILTER_RESTAURANTS
+    filter: restaurant[]
 }
 interface SET_INPUT_FILTER{
     type:typeof SET_INPUT_FILTER

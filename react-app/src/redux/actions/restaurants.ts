@@ -74,26 +74,25 @@ export const get_meals_by_restaurant_id=(id:string):ThunkType=>{
     }
 }
 
-export const set_filtered_restaurants=(currentRestaurants:restaurant[],Filtertype:string | cuisen,loveRestaurants:restaurant[]=[]):restaurantActionTypes=>{
+export const set_filtered_restaurants=(currentRestaurants:restaurant[],Filtertype:string | cuisen,loveRestaurants: string[] = []):restaurantActionTypes=>{
     
     let sortedArray:restaurant[]=[]
 
     switch(Filtertype){
         case 'All':
-            sortedArray=currentRestaurants;break;
+            sortedArray = currentRestaurants;break;
         case 'Opened':
-            sortedArray=Sorts.Opened(currentRestaurants);break;
+            sortedArray = Sorts.Opened(currentRestaurants);break;
         case 'Loved':
-            sortedArray=loveRestaurants;break;//в зависимости от того зареган или нет пользователь
+            sortedArray = Sorts.GetLovedRestaurants(loveRestaurants, currentRestaurants); break;//в зависимости от того зареган или нет пользователь
         default:           
-            if(typeof Filtertype!=='string'){                 
+            if (typeof Filtertype !== 'string') {
                 sortedArray=Sorts.ByCuisen(currentRestaurants,Filtertype)
-                console.log(sortedArray)
-            };break;    
+            };break;
     }
     return{
-        type:SET_FILTER_RESTAURANTS,
-        filter:sortedArray
+        type: SET_FILTER_RESTAURANTS,
+        filter: sortedArray
     }
 }
 export const set_input_filter=(currentRestaurants:restaurant[],str:string)=>{

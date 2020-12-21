@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { tap } from 'rxjs/operators';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
 import { UserService } from './user.service';
@@ -17,14 +18,14 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('setLoved')
-  setLovedUserRestaurants(@CurrentUser() user: any, @Body() restaurantId: string) {
-    return this.userService.setLovedRestaurant(user._id, restaurantId)
+  @Post('setLovedAction')
+  setLovedUserRestaurants(@CurrentUser() user: any, @Body() data: { restaurantId: string, action: boolean }) {
+    return this.userService.setLovedRestaurant(user._id, data.restaurantId, data.action);
   }
 
   @UseGuards(JwtAuthGuard)
   @Get('getUser')
   getUser(@CurrentUser() user: any) {
-    return this.userService.getUserMongoDbFields({ _id: user._id })
+    return this.userService.getUserMongoDbFields({ _id: user._id });
   }
 }

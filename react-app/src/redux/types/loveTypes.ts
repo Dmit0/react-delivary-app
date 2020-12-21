@@ -10,7 +10,7 @@ export const SET_LOVED_RESTAURANT_FROM_LOCALESTORAGE='SET_LOVED_RESTAURANT_FROM_
 // export const MEAL_REMOVE_FROM_LOVED='REMOVE_RESTAURANT_TO_LOVED'
 
 export interface LovedState{
-    loved_restaurants:restaurant[],
+    loved_restaurants: string[],
    // loved_meals:meals[]
 }
 
@@ -28,16 +28,16 @@ export interface LovedState{
 
 interface add_restaurant_to_loved{
     type:typeof RESTAURANT_ADD_TO_LOVED,
-    add_loved_restaurant:restaurant
+    add_loved_restaurant: string
 }
 
 interface remove_restaurant_from_loved{
     type:typeof RESTAURANT_REMOVE_FROM_LOVED,
-    remove_loved_restaurant:restaurant
+    remove_loved_restaurant: string
 }
 interface set_loved_restaurant_from_localeStorage{
     type:typeof SET_LOVED_RESTAURANT_FROM_LOCALESTORAGE,
-    lc_restaurants:restaurant[]
+    lc_restaurants: string[]
 }
 
 export type lovedActionTypes = add_restaurant_to_loved | remove_restaurant_from_loved | set_loved_restaurant_from_localeStorage// |add_meal_to_loved | remove_meal_from_loved 

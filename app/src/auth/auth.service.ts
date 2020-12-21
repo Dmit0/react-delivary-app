@@ -87,7 +87,6 @@ export class AuthService {
 
   validateTokenPayload(payload: any): Observable<User> {
     return this.userService.getUser({ _id: payload.id }).pipe(
-      tap(console.log),
       map((user) => user || null));
   }
 

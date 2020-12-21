@@ -1,7 +1,6 @@
 import { addressDataStep, loginData } from '../../interfaces/authentication';
-import { restaurant as restaurantType } from '../../interfaces/restaurant';
 import {http} from '../api'
-import { Code } from '../utils/fetchUtils';
+import { Code, FetchUtils } from '../utils/fetchUtils';
 
 export const AuthenticationAPI = {
     async createAccount(user: any) {
@@ -50,14 +49,13 @@ export const AuthenticationAPI = {
         }
     },
 
-    async getLoveUserRestaurants(token: any) {
+    async getLoveUserRestaurants(token: any): Promise<any>{
         try {
-           return await http<restaurantType[]>('user/getLoveRestaurant','GET', null, {
+           return await http<string[]>('user/getLoveRestaurant','GET', null, {
                 Authorization: `Bearer ${token}`
             })
         } catch (e) {
-            console.log(e)
-            return e
+            return false
        }
     },
 
@@ -68,21 +66,18 @@ export const AuthenticationAPI = {
             });
             return tokenStatus.status && token
         } catch (e) {
-            if (e == Code.Unauthorized) {
-                return AuthenticationAPI.refreshToken(token);
-            } else {
-                throw new Error('invalid token');
-            }
+            return await FetchUtils.catchFetchErrors(e, token)
         }
     },
 
     async refreshToken(token: string) {
         try {
-            return await http<{ token: string }>('/authentication/refreshToken', 'POST', JSON.stringify({ token }), {
+            const response =  await http<{ token: string }>('/authentication/refreshToken', 'POST', JSON.stringify({ token }), {
                 'Content-Type': 'application/json;charset=utf-8',
             });
+            return response.token
         } catch (e) {
             return false;
         }
-    }
+    },
 };

@@ -15,7 +15,7 @@ import {
   AUTH_STEP_START,
   AUTH_STEP_SUCCESS,
   AuthenticationActionTypes,
-  SET_TOKEN,
+  SET_TOKEN, SET_USER,
 } from '../types/authTypes';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -175,6 +175,13 @@ export const setToken = (token: string): AuthenticationActionTypes => {
   return {
     type: SET_TOKEN,
     token
+  }
+}
+
+export const setUser = (user: userToStore): AuthenticationActionTypes => {
+  return {
+    type: SET_USER,
+    user
   }
 }
 

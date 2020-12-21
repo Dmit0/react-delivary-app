@@ -7,7 +7,10 @@ import {
   AUTH_STEP_SUCCESS,
   AUTH_END,
   AuthenticationActionTypes,
-  AuthenticationState, AUTH_CLOSE, AUTH_LAST_STEP_CLOSE, SET_TOKEN,
+  AuthenticationState,
+  AUTH_CLOSE,
+  AUTH_LAST_STEP_CLOSE,
+  SET_TOKEN, SET_USER,
 } from '../types/authTypes';
 
 const initialState: AuthenticationState = {
@@ -17,6 +20,7 @@ const initialState: AuthenticationState = {
   userRole: null,
   userPhone: null,
   firstAddress: null,
+  addresses: [],
   AuthErrors: null,
   isAuthSuccess: null,
   isAuthFail: false,
@@ -38,7 +42,7 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
         userName: action.data.firstName,
         userPhone: action.data.phone,
         userRole: action.data.role,
-        firstAddress: action.data.firstAddress }
+        firstAddress: action.data.firstAddress ? action.data.firstAddress : null }
     case AUTH_SET_ERRORS:
       return { ...state, AuthErrors:action.status };
     case AUTH_STEP_START:
@@ -57,6 +61,14 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
       return {...state, isPopupClose: true}
     case SET_TOKEN:
       return { ...state, token: action.token }
+    case SET_USER:
+      return { ...state,
+        token: action.user.token,
+        userId: action.user.userId,
+        userName: action.user.firstName,
+        userRole: action.user.role,
+        userPhone: action.user.phone,
+      }
     default:
       return state;
   }

@@ -9,7 +9,7 @@ export async function http<T>(request: RequestInfo, method: string = 'GET', body
         }
         return data;
     } catch (e) {
-        throw e.toString().split(':').pop();
+        throw e.message
     }
 }
 

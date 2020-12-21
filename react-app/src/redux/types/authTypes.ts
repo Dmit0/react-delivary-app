@@ -29,9 +29,10 @@ export const AUTH_END = 'AUTH_END';
 export const AUTH_FAIL = 'AUTH_FAIL';
 export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
-export const AUTH_CLOSE = 'AUTH_CLOSE'
-export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE'
-export const SET_TOKEN = 'SET_TOKEN'
+export const AUTH_CLOSE = 'AUTH_CLOSE';
+export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE';
+export const SET_TOKEN = 'SET_TOKEN';
+export const SET_USER = 'SET_USER';
 
 
 export interface AuthenticationState {
@@ -41,6 +42,7 @@ export interface AuthenticationState {
   userRole: string | null
   userPhone: string | null
   firstAddress: firstCountry | null
+  addresses: firstCountry[]
   AuthErrors: string | null
   isAuthSuccess: boolean | null
   isAuthFail: boolean
@@ -101,6 +103,11 @@ interface SET_TOKEN {
   token: string
 }
 
+interface SET_USER {
+  type: typeof SET_USER
+  user: userToStore
+}
+
 export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_ERRORS
   | AUTH_END
@@ -112,4 +119,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_CLOSE
   | AUTH_LAST_STEP_CLOSE
   | SET_TOKEN
+  | SET_USER
 
