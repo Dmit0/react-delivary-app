@@ -11,6 +11,9 @@ export class Cart extends Document {
   @Prop({ require: true, default: 0 })
   price: string;
 
+  @Prop({ require: true, default: 0 })
+  countOfItems: number;
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', required: true })
   userId: User;
 }

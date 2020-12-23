@@ -89,7 +89,6 @@ export const HomePage: React.FC = () => {
 
   const userLoveAction = async(restaurantId: string, action: boolean, token: string) => {
    const response = await UserAPI.loveRestaurantAction(token, { restaurantId, action } )
-    console.log(response)
     if (response) {
       action
         ? dispatch(add_restaurant_to_loved(restaurantId))
@@ -137,7 +136,6 @@ export const HomePage: React.FC = () => {
       getRestaurant(token).then((response) => {
       response && dispatch(set_loved_restaurant_from_localeStorage(response));
     })
-    //eslint-disable-next-line
   }, [token]);
 
   const getRestaurant = async(token: any) => {
@@ -154,7 +152,6 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="App">
-      <NavBar cart_length={cart}/>
       <div className="App__content">
         <Banners bunners={bunners}/>
         <div className="App_content_part">

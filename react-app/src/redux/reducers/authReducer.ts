@@ -19,6 +19,7 @@ const initialState: AuthenticationState = {
   userName: null,
   userRole: null,
   userPhone: null,
+  cartMealId: null,
   firstAddress: null,
   addresses: [],
   AuthErrors: null,
@@ -42,7 +43,9 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
         userName: action.data.firstName,
         userPhone: action.data.phone,
         userRole: action.data.role,
-        firstAddress: action.data.firstAddress ? action.data.firstAddress : null }
+        firstAddress: action.data.firstAddress ? action.data.firstAddress : null,
+        cartMealId: action.data.cartMealId
+      }
     case AUTH_SET_ERRORS:
       return { ...state, AuthErrors:action.status };
     case AUTH_STEP_START:
@@ -68,6 +71,7 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
         userName: action.user.firstName,
         userRole: action.user.role,
         userPhone: action.user.phone,
+        cartMealId: action.user.cartMealId
       }
     default:
       return state;

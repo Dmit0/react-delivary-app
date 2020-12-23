@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   validate(payload: { id: string, name: string, email: string, role: string; }) {//check
     return this.authService.validateTokenPayload(payload).pipe(
-      map((user) => user || new exceptionErrors.throwForbiddenError('not aftorizate')),
+      map((user) => user || exceptionErrors.throwForbiddenError('not aftorizate')),
     ).toPromise();
   }
 }

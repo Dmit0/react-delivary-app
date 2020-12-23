@@ -1,6 +1,5 @@
 import { http } from '../api';
-import { Code, FetchUtils } from '../utils/fetchUtils';
-import { AuthenticationAPI } from './authenticationApi';
+import { FetchUtils } from '../utils/fetchUtils';
 
 export const UserAPI = {
 
@@ -16,11 +15,10 @@ export const UserAPI = {
 
   async loveRestaurantAction(token: string, data: { restaurantId: string, action: boolean }): Promise<any> {
     try {
-      const res = await http<{ status: boolean }>('/user/setLovedAction', 'POST', JSON.stringify(data), {
+      return await http<{ status: boolean }>('/user/setLovedAction', 'POST', JSON.stringify(data), {
         Authorization: `Bearer ${ token }`,
         'Content-Type': 'application/json;charset=utf-8',
       });
-      return res;
     } catch (e) {
       return await FetchUtils.catchFetchErrors(e, token, this.loveRestaurantAction, data)
     }

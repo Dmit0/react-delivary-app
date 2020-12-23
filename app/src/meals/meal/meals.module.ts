@@ -12,6 +12,7 @@ import { Meal, MealSchema } from './models/meals.schema';
   ],
   controllers: [MealController],
   providers: [MealService],
+  exports: [MealService]
 })
 export class MealModule {
 }

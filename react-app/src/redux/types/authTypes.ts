@@ -43,6 +43,7 @@ export interface AuthenticationState {
   userPhone: string | null
   firstAddress: firstCountry | null
   addresses: firstCountry[]
+  cartMealId: string[] | null
   AuthErrors: string | null
   isAuthSuccess: boolean | null
   isAuthFail: boolean

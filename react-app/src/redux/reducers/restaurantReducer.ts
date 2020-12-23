@@ -1,9 +1,9 @@
 import {SET_REASTAURANTS,SET_CURRENT_RESTAURANT,restaurantActionTypes,RestaurantState,SET_MEALS,SET_CUISENS,SET_FILTER_RESTAURANTS,SET_INPUT_FILTER,DELETE_CURRENT_RESTAURANT_AND_MEALS} from '../types/restaurantsTypes'
 
 
-const initialState:RestaurantState={
+const initialState: RestaurantState={
     restaurants:[],
-    current_restaurant:null,
+    current_restaurant: null,
     current_meals:[],
     cuisen:[],
     filter_restaurants:[],

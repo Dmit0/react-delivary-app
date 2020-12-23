@@ -4,6 +4,7 @@ import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
 import { AddressService } from '../participants/user-main/address/address.service';
+import { CartService } from '../participants/user-main/cart/cart.service';
 import { PhoneService } from '../participants/user-main/phone/phone.service';
 import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly phoneService: PhoneService,
     private readonly roleService: RolesService,
     private readonly addressService: AddressService,
+    private readonly cartService: CartService
   ) {
   }
 
@@ -39,14 +41,17 @@ export class AuthService {
     return this.phoneService.getPhone({ _id: userData.telephone }).pipe(
       mergeMap((phone) => this.roleService.findRole({ _id: userData.role }).pipe(
         mergeMap((role) => this.addressService.getAddressesByIds(userData.addresses).pipe(
-          map((addresses) => {
-            return this.createAccessToken({
-              ...userData._doc,
-              role: role.name,
-              phone: `${ phone.code }${ phone.phoneNumber }`,
-              firstAddress: { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode },
-            });
-          }),
+          mergeMap((addresses) => this.cartService.getCart({ _id: userData._doc.cart }).pipe(
+            map((cart) => {
+              return this.createAccessToken({
+                ...userData._doc,
+                cart: cart.countOfItems,
+                role: role.name,
+                phone: `${ phone.code }${ phone.phoneNumber }`,
+                firstAddress: { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode },
+              });
+            })
+          ))
         )),
       )),
     );
@@ -59,6 +64,7 @@ export class AuthService {
     });
     return {
       token,
+      cart: data.cart,
       email: data.email,
       firstName: data.name,
       phone: data.phone,
@@ -92,10 +98,13 @@ export class AuthService {
 
   refreshToken(token: string): Observable<any> {
     const decodedToken = this.jwtService.decode(token);
+    //console.log(decodedToken)
+      // return this.userService.getUser({_id: decodedToken && decodedToken?.id})
     return of(this.generateRefreshToken(decodedToken));
   }
 
   private async generateRefreshToken(data: any) {
+
     const token = await this.jwtService.sign({
       id: data.id,
       email: data.email,

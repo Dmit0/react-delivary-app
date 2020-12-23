@@ -30,7 +30,8 @@ export const AuthenticationAPI = {
                 firstName: string,
                 phone: string,
                 firstAddress: string,
-                id: string
+                id: string,
+                cart: any
             }>('/authentication/signIn', 'POST', JSON.stringify(data), {
                 'Content-Type': 'application/json;charset=utf-8',
             });

@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AddressModule } from '../participants/user-main/address/address.module';
+import { CartModule } from '../participants/user-main/cart/cart.module';
 import { PhoneModule } from '../participants/user-main/phone/phone.module';
 import { RolesModule } from '../participants/user-main/roles/roles.module';
 import { UserModule } from '../participants/user-main/user/user.module';
@@ -19,6 +20,7 @@ import { LocalStrategy } from './strategies/local.stratage';
     RolesModule,
     PhoneModule,
     AddressModule,
+    CartModule,
     JwtModule.registerAsync({
       useFactory: () => ({
         secret: process.env.JWT_SECRET_KEY,

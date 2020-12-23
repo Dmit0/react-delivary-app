@@ -16,9 +16,6 @@ export class Meal extends Document {
   @Prop({ require: true })
   price: string;
 
-  @Prop({ default: 1 })//переделать
-  count: number;
-
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Restaurant' })
   restaurant: Restaurant;
 

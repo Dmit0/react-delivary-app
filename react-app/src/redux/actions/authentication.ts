@@ -96,6 +96,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
           firstName: response.firstName,
           phone: response.phone,
           firstAddress: response.firstAddress,
+          cartCount: response.cart // check pls field
         }));
         isLogIn && dispatch(authLastStepClose());
       } else {

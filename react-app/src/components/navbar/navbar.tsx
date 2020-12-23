@@ -22,7 +22,7 @@ import {
 } from '../../redux/actions/authentication';
 
 interface NavBarProps {
-  cart_length: meals[]
+  cart_length?: meals[]
 }
 
 export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
@@ -139,10 +139,10 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
 
 
   const count = (): Number => {
-    let num = cart_length.reduce((sum, current) => (
+    let num = cart_length && cart_length.reduce((sum, current) => (
       sum + current.count
     ), 0);
-    return num;
+    return num || 0;
   };
   return (
     <>

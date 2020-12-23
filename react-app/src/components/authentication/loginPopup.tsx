@@ -29,11 +29,6 @@ export const LoginPopup: React.FC<LoginProps> = ({ registrationHeandler, verifyM
       verifyMail(data.email);
     } else if (isEmailVerified) {
       logIn(data, isEmailVerified);
-      //login check -> password
-      //exit from popup into main menu and set state of this 0 or smth
-      //initialize user-main bonuses(later task)
-      //добавить изменить мыло
-      //добавить забыл пароль
     }
   };
   return (
