@@ -4,6 +4,7 @@ import { cartApi } from '../api/part_apis/cartApi';
 import { UserAPI } from '../api/part_apis/userApi';
 import { meals as MealType } from '../interfaces/meals';
 import { setToken, setUser } from '../redux/actions/authentication';
+import { set_cart_length } from '../redux/actions/cartActions';
 
 export const useAppUtils = () => {
   const dispatch = useDispatch()
@@ -28,8 +29,8 @@ export const useAppUtils = () => {
         phone: phone.code + phone.phoneNumber,
         role: _doc.role,
         status: _doc.status,
-        cartMealId: cart.countOfItems
       }));
+      dispatch(set_cart_length(cart.countOfItems))
     }
   };
 

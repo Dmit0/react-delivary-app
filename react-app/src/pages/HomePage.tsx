@@ -29,7 +29,6 @@ export const HomePage: React.FC = () => {
 
   const { fetched_restaurants,
     loverestaurant,
-    cart,
     bunners,
     cuisenTypes,
     restaurants_to_show,
@@ -143,12 +142,6 @@ export const HomePage: React.FC = () => {
         ? await AuthenticationAPI.getLoveUserRestaurants(token)
         : JSON.parse(localStorage.getItem('loved') || '[]') as string[];
   }
-
-  useEffect(() => {
-    const cart_items = JSON.parse(localStorage.getItem('cart') || '[]') as Mealtype[];
-    dispatch(set_meal_from_localestorage_to_cart(cart_items));
-    // eslint-disable-next-line
-  }, []);
 
   return (
     <div className="App">

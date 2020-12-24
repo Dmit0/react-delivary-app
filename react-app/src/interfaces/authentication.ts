@@ -28,7 +28,6 @@ export interface userToStore {
     role: string
     status: string
     firstAddress?: firstCountry,
-    cartMealId: string[]
 }
 
 export interface firstCountry {

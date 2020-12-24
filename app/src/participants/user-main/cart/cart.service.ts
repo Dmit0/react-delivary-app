@@ -2,11 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { Action } from '../../../constants/enums/cart';
-import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { MealService } from '../../../meals/meal/meals.service';
-import { UserService } from '../user/user.service';
 import { Cart } from './models/cart.schema';
 import { cartMealItem } from './models/cartMealItem.schema';
 
@@ -59,12 +57,9 @@ export class CartService {
               if (cartMealItem.count === 1 && action === Action.DECREMENT) {
                 return this.deleteMealFromCart(userId, mealId);
               }
-              return this.updateCartMealItem({ _id: cartMealItem._id },
-                {
-                  count: action === Action.INCREMENT
-                    ? cartMealItem.count + 1
-                    : cartMealItem.count - 1
-                });
+              return this.updateCart({ _id: cart._id }, { countOfItems: cart.countOfItems + CartService.getAction(action) }).pipe(
+                mergeMap(() => this.updateCartMealItem({ _id: cartMealItem._id }, { count: cartMealItem.count + CartService.getAction(action) }),
+                ));
             },
           ),
         );
@@ -72,10 +67,24 @@ export class CartService {
     );
   }
 
+  private static getAction (action: Action): number {
+    switch (action) {
+      case Action.DECREMENT:
+        return -1
+      case Action.INCREMENT:
+        return 1
+    }
+  }
+
   deleteMealFromCart(userId, mealId) {
     return this.getCart({ userId }).pipe(
-      mergeMap((cart) => this.updateCart({ _id: cart._id }, { meals: cart.meals.filter((item) => item !== mealId) }).pipe(
-        mergeMap(() => this.deleteMealItem(mealId))
+      mergeMap((cart) => this.getCartMealItem(mealId, cart._id).pipe(
+        mergeMap((mealItem) => this.updateCart({ _id: cart._id }, {
+          meals: cart.meals.filter((item) => item !== mealId),
+          countOfItems: cart.countOfItems - mealItem.count,
+        }).pipe(
+          mergeMap(() => this.deleteMealItem(mealId)),
+        )),
       )),
     );
   }
@@ -90,7 +99,7 @@ export class CartService {
 
   cleanCart(userId) {
     return this.getCart({ userId }).pipe(
-      mergeMap((cart) => this.updateCart({ _id: cart._id }, { meals: [] }).pipe(
+      mergeMap((cart) => this.updateCart({ _id: cart._id }, { meals: [], countOfItems: 0 }).pipe(
           mergeMap(() => this.deleteManyMealItems(cart._id))
       )),
     );

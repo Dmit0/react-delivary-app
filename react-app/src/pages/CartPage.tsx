@@ -25,7 +25,7 @@ export const Cart = () => {
     getMeals(token).then((response) => {
       response && dispatch(set_meal_from_localestorage_to_cart(response));
     });
-  }, [ token ]);
+  }, [ token, dispatch ]);
 
   const getMeals = async (token: string | null) => {
     return token
@@ -35,45 +35,7 @@ export const Cart = () => {
 
   useEffect(() => {
     !token && localStorage.setItem('cart', JSON.stringify(cart));
-  }, [ cart ]);
-
-  const deleteOneItem = useCallback((meal: MealType) => (
-    token
-      ? changeItemInCart(token, { action: Action.DECREMENT, mealId: meal._id }, meal)
-      : dispatch(remove_one_meal_from_cart(meal))
-  ), [ token ]);
-
-  const deleteMealFromCart = useCallback((meal: MealType) => (
-    token
-      ? deleteItemFromCart(token, meal)
-      : dispatch(remove_item_from_cart(meal))
-  ), [ token ]);
-
-  const addMeal = useCallback((meal: MealType) => (
-    token
-      ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
-      : dispatch(set_meal_to_cart(meal))
-  ), [ token ]);
-
-  const clear_cart_Handler = useCallback(() => (
-    token
-      ? cleanUserCart(token)
-      : dispatch(clean_cart())
-  ), [token]);
-
-  const count_items = useCallback((): Number => {
-    let num = cart.reduce((sum, current) => (
-      sum + current.count
-    ), 0);
-    return num;
-  }, [ cart ]);
-
-  const count_total_price = useCallback((): Number => {
-    let num = cart.reduce((sum, current) => (
-      sum + current.price * current.count
-    ), 0);
-    return num;
-  }, [ cart ]);
+  }, [ cart, token ]);
 
   const changeItemInCart = async (token: string, data: { action: Action, mealId: string }, meal: MealType) => {
     const response = cartApi.changeItemInCart(token, data);
@@ -95,6 +57,42 @@ export const Cart = () => {
     return response && dispatch(clean_cart());
   };
 
+  const deleteOneItem = useCallback((meal: MealType) => (
+    token
+      ? changeItemInCart(token, { action: Action.DECREMENT, mealId: meal._id }, meal)
+      : dispatch(remove_one_meal_from_cart(meal))
+  ), [ token, changeItemInCart, dispatch ]);
+
+  const deleteMealFromCart = useCallback((meal: MealType) => (
+    token
+      ? deleteItemFromCart(token, meal)
+      : dispatch(remove_item_from_cart(meal))
+  ), [ token, deleteItemFromCart, dispatch ]);
+
+  const addMeal = useCallback((meal: MealType) => (
+    token
+      ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
+      : dispatch(set_meal_to_cart(meal))
+  ), [ token, changeItemInCart, dispatch ]);
+
+  const clear_cart_Handler = useCallback(() => (
+    token
+      ? cleanUserCart(token)
+      : dispatch(clean_cart())
+  ), [token, cleanUserCart, dispatch]);
+
+  const count_items = useCallback((): Number => {
+    return cart.reduce((sum, current) => (
+      sum + current.count
+    ), 0);
+  }, [ cart ]);
+
+  const count_total_price = useCallback((): Number => {
+    return cart.reduce((sum, current) => (
+      sum + current.price * current.count
+    ), 0);
+  }, [ cart ]);
+
   return (
     <>
       <div className="App">
@@ -103,10 +101,10 @@ export const Cart = () => {
             <div className='cart-header'>
               <div className='cart-description'>
                 <svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-cart-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fill-rule="evenodd"
+                  <path fillRule="evenodd"
                         d="M11.354 5.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708 0z"/>
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
                 </svg>
                 <span className='car-item-description'>Cart</span>

@@ -6,6 +6,8 @@ import { meals } from '../../interfaces/meals';
 import { set_current_country } from '../../redux/actions/countriesActions';
 import { setCities, setRegions } from '../../redux/actions/geoAction';
 import { RootState } from '../../redux/reducers/rootReducer';
+import { getToken, getUserName } from '../../redux/selectors/auth.selectors';
+import { getCartLength } from '../../redux/selectors/cart.selector';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';
 import { RegistrationPopup } from '../authentication/registrationPopup';
@@ -21,24 +23,18 @@ import {
   verifyMail,
 } from '../../redux/actions/authentication';
 
-interface NavBarProps {
-  cart_length?: meals[]
-}
-
-export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
-
+export const NavBar: React.FC = () => {
+  const dispatch = useDispatch();
   const [isPopupOpen, setIsPopupOpen] = React.useState(false);
   const [popuBody, setPopupBody] = React.useState<any>(null);//найти тип для html el
   const [isLogin, setisLogin] = React.useState<boolean>(true);
 
-  const { token, userName } = useSelector((state: RootState) => {
-    return {
-      token: state.authentication.token,
-      userName:state.authentication.userName
-    };
-  });
+  const cartLength = useSelector(getCartLength)
+  const token = useSelector(getToken)
+  const userName = useSelector(getUserName)
 
-  const dispatch = useDispatch();
+  console.log(cartLength)
+
   const handleAuthOpen = () => {
     setIsPopupOpen(true);
     setisLogin(true);
@@ -136,14 +132,6 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
   const userPageRedirect = () => {
 
   }
-
-
-  const count = (): Number => {
-    let num = cart_length && cart_length.reduce((sum, current) => (
-      sum + current.count
-    ), 0);
-    return num || 0;
-  };
   return (
     <>
       <PopupContainer isOpen={isPopupOpen} onClose={handleClose} isLogin={isLogin}>{popuBody}</PopupContainer>
@@ -163,9 +151,7 @@ export const NavBar: React.FC<NavBarProps> = ({ cart_length }) => {
                 <Link to={'/cart'}>
                   <button type="button" className="btn btn-warning App_header__secondary-button">
                     Cart
-                    <span className="App_header__secondary-cart">
-                          {count()}
-                          </span>
+                    <span className="App_header__secondary-cart">{ cartLength }</span>
                   </button>
                 </Link>
               </div>
