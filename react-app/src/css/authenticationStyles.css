@@ -1,0 +1,223 @@
+.authPopup{
+  position: fixed;
+  left: 25%;
+  top: 25%;
+  bottom:25%;
+  right:25%;
+  width:500px;
+  height:600px;
+  margin: auto;
+  background: white;
+  border-radius:25px;
+  z-index:1100;
+}
+.registrationPopup{
+    position: fixed;
+    left: 25%;
+    top: 25%;
+    bottom:25%;
+    right:25%;
+    width:500px;
+    height:750px;
+    
+    margin: auto;
+    background: white;
+    border-radius:25px;
+    z-index:1100;
+}
+.authWrapper{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    background-color: rgba(0,0,0, 0.5);
+    z-index:1100;
+}
+.main-auth-popup{
+    display:flex;
+    flex-direction: column;
+}
+
+.auth-title-header{
+    font-size: 50px;
+    font-weight: 500;
+    margin-left: 15px;
+}
+.reg-sub-title{
+    font-size: 25px;
+    margin:20px 100px 0 85px;
+    font-weight: 600;
+    color: rgb(33, 49, 60);
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+.reg-step-title{
+    font-size: 25px;
+    margin: 90px 100px 0 100px;
+    font-weight: 600;
+    color: rgb(33, 49, 60);
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+.auth-sub-title{
+    font-size: 25px;
+    margin:50px 100px 0 85px;
+    font-weight: 600;
+    color: rgb(33, 49, 60);
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+.auth-body{
+    align-self: center;
+    margin-left: 14%;
+}
+.google-button {
+    display:flex;
+    height: 40px;
+    border-width: 1px;
+    border-style: solid;
+    background-color: rgb(66, 133, 244);
+    width: 350px;
+    color: #fff;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+    transition-property: background-color, box-shadow;
+    transition-duration: 150ms;
+    transition-timing-function: ease-in-out;
+    padding:0px 2px 0px 0px;
+  }
+  .google-button:focus:hover{
+    box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
+  }
+  .google-button:active{
+    background-color: rgb(40, 85, 158);
+    box-shadow: none;
+    transition-duration: 10ms;
+  }
+      
+  .google-button__icon {
+    display: inline-block;
+    vertical-align: middle;
+    
+    width: 36px;
+    height:38px;
+    box-sizing: border-box;
+    background-color: white;
+    
+  }
+  .google-button__text{
+      align-self: center;
+      margin-left: 65px;
+      font-size: 20px;
+      font-weight: 400;
+  }
+  .auth-body_Google_auth{
+      margin-top: 30px;
+      margin-bottom: 30px;
+  }
+  .line{
+      width:350px;
+      position: relative;
+      text-align: center;  
+  }
+  .line span{
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 16px;
+    color: rgb(93, 108, 116);
+    text-align: center;
+    background: rgb(255, 255, 255);
+    padding: 0px 10px;
+  }
+  .line::before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    height: 0px;
+    top: 50%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+    transform: translateY(-50%);
+    width: 350px;
+    border-top: 1px solid rgb(184, 196, 194);
+    margin: 0px auto;
+}
+.auth-body_Mail_auth{
+    margin-top: 30px;
+}
+.auth-body_Mail_auth input{
+    display:flex;
+    width:350px;
+    padding:7px;
+}
+.Authentication-Label{
+    font-size: 14px;
+    color: rgb(61, 79, 88);
+    position: relative;
+    height: 16px;
+    width: 36px;
+    font-weight: bold;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+}
+.auth-futer{
+    display:flex;
+    margin:50px 70px;
+}
+.auth-next-step-button{
+    padding:7px 30px;
+    margin-right:15px;
+}
+.auth-continue-step-button {
+    padding:12px 35px;
+    margin:0 25px;
+}
+.auth-redirect-to-Registration{
+    align-self: center;
+    font-size: 17px;
+}
+.auth-redirect-to-Registration span{
+    margin-left: 1px;
+    color: rgb(0, 124, 173);
+    cursor: pointer;
+}
+
+.main-registration-popup{
+    height: 800px;
+}
+.auth-reg-futer{
+    display:flex;
+    margin:70px 0 50px 0;
+    justify-content: space-between;
+}
+.auth-step-futer {
+    display:flex;
+    margin:170px 0 50px 0;
+    justify-content: space-between;
+}
+.auth-prev-button{
+    padding:7px 30px;
+}
+.auth-step-button {
+    display:flex;
+    justify-content: space-between;
+    margin-top: 70px;
+}
+.reg-next-step-button{
+    padding:7px 27px;
+}
+.Authentication_Form{
+    align-self: center;
+    margin-left: 10px;
+}
+.phone_part-number{
+    width:400px;
+    background: grey;
+}
