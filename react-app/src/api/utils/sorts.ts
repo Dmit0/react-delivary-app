@@ -1,3 +1,4 @@
+import { meals as MealType } from '../../interfaces/meals';
 import { restaurant, cuisen } from '../../interfaces/restaurant';
 
 export const Sorts = {
@@ -43,4 +44,10 @@ export const Sorts = {
   GetLovedRestaurants(loved: string[], all: restaurant[]) {
     return all.filter((item) => loved.includes(item._id));
   },
+
+  getMealCount(meals: MealType[]) {
+    return meals.reduce((sum, current) => (
+      sum + current.count
+    ), 0);
+  }
 };

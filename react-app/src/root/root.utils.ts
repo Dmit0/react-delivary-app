@@ -30,9 +30,13 @@ export const useAppUtils = () => {
         role: _doc.role,
         status: _doc.status,
       }));
-      dispatch(set_cart_length(cart.countOfItems))
+      setCartLength(cart.countOfItems)
     }
   };
 
-  return { getUser, validateToken }
+  const setCartLength = (length: any) => {
+    dispatch(set_cart_length(length))
+  }
+
+  return { getUser, validateToken, setCartLength }
 }

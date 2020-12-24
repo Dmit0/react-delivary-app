@@ -15,7 +15,10 @@ export interface CartState {
 
 interface set_meal_to_cart {
   type: typeof SET_MEAL_TO_CART,
-  set_cart_meal: meals
+  set_cart_meal: {
+    meal: meals,
+    token: boolean
+  }
 }
 
 interface remove_one_meal_from_cart {

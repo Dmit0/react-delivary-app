@@ -1,5 +1,5 @@
 export const ENV_VAR = {
-  appPort:process.env.PORT || '7000',
+  appPort:process.env.PORT || '7001',
   jwt:{
     jwtSecret:process.env.JWT_SECRET_KEY,
     jwtExpireTime:process.env.JWT_LOGIN_TOKEN_TIME

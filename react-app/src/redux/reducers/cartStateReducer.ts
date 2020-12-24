@@ -19,13 +19,13 @@ export const cartReducer = (state = initialState, action: cartActionTypes): Cart
   switch (action.type) {
     case SET_MEAL_TO_CART:
       let Item = state.cart.find(item => (
-        item._id === action.set_cart_meal._id
+        item._id === action.set_cart_meal.meal._id
       ));
       if (Item === undefined) {
-        return { ...state, cart: [ ...state.cart, action.set_cart_meal ], cartLength: state.cartLength + 1 };
+        return { ...state, cart: [ ...state.cart, { ...action.set_cart_meal.meal, count: 1 } ], cartLength: state.cartLength + 1 };
       }
       let newItems = state.cart.map(item => {
-        if (item._id === action.set_cart_meal._id) {
+        if (item._id === action.set_cart_meal.meal._id) {
           item.count += 1;
         }
         return item;

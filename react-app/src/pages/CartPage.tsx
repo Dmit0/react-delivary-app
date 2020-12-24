@@ -43,7 +43,7 @@ export const Cart = () => {
       case Action.DECREMENT:
         return response && dispatch(remove_one_meal_from_cart(meal));
       case Action.INCREMENT:
-        return response && dispatch(set_meal_to_cart(meal));
+        return response && dispatch(set_meal_to_cart(meal, !!token));
     }
   };
 
@@ -72,7 +72,7 @@ export const Cart = () => {
   const addMeal = useCallback((meal: MealType) => (
     token
       ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
-      : dispatch(set_meal_to_cart(meal))
+      : dispatch(set_meal_to_cart(meal, false))
   ), [ token, changeItemInCart, dispatch ]);
 
   const clear_cart_Handler = useCallback(() => (

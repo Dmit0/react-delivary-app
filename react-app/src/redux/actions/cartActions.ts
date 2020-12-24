@@ -8,10 +8,13 @@ import {
 } from '../types/cartTypes';
 import { meals } from '../../interfaces/meals';
 
-export const set_meal_to_cart = (meal: meals): cartActionTypes => {
+export const set_meal_to_cart = (meal: meals, token: boolean): cartActionTypes => {
   return {
     type: SET_MEAL_TO_CART,
-    set_cart_meal: meal,
+    set_cart_meal: {
+      meal,
+      token
+    },
   };
 };
 

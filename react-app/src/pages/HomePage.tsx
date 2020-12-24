@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthenticationAPI } from '../api/part_apis/authenticationApi';
 import { UserAPI } from '../api/part_apis/userApi';
-import { NavBar } from '../components/navbar/navbar';
 import { Banners } from '../components/content/banners';
 import { Restaurant } from '../components/content/restaurant';
 import { get_countries } from '../redux/actions/countriesActions';
@@ -15,10 +14,8 @@ import {
 } from '../redux/actions/restaurants';
 import { add_restaurant_to_loved, remove_restaurant_from_loved, set_loved_restaurant_from_localeStorage } from '../redux/actions/loveActions';
 import { get_bunners } from '../redux/actions/appActions';
-import { set_meal_from_localestorage_to_cart } from '../redux/actions/cartActions';
 import { RootState } from '../redux/reducers/rootReducer';
 import { restaurant as restaurantType } from '../interfaces/restaurant';
-import { meals as Mealtype } from '../interfaces/meals';
 import { SecondNavbar } from '../components/navbar/secondNavbar';
 import '../css/content.css';
 import '../css/styles.css';

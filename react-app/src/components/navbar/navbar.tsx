@@ -33,8 +33,6 @@ export const NavBar: React.FC = () => {
   const token = useSelector(getToken)
   const userName = useSelector(getUserName)
 
-  console.log(cartLength)
-
   const handleAuthOpen = () => {
     setIsPopupOpen(true);
     setisLogin(true);
