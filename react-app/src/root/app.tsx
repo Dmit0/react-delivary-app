@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Sorts } from '../api/utils/sorts';
-import { NavBar } from '../components/navbar/navbar';
-import { meals as MealType } from '../interfaces/meals';
-import { getToken } from '../redux/selectors/auth.selectors';
-import { useRoutes } from '../routes';
+import { getToken } from '../core/redux/auth/selectors';
+import { meals } from '../core/types';
+import { Sorts } from '../core/utils/sorts';
+import { NavBar } from '../core/components/navbar/navbar';
+import { useRoutes } from '../core/router/routes';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
@@ -22,7 +22,7 @@ export const App = () => {
   //get user logic
   useEffect(() => {
     tokenFromStore && getUser(tokenFromStore);
-  }, [ tokenFromStore ]);
+  }, [ tokenFromStore, getUser ]);
 
   //set token to store logic
   useEffect(() => {
@@ -31,10 +31,10 @@ export const App = () => {
 
   useEffect(() => {
     if (!tokenFromStore) {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]') as MealType[];
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
       setCartLength(Sorts.getMealCount(cart));
     }
-  }, [ tokenFromStore, setCartLength ]);
+  }, [ tokenFromStore, setCartLength ]); // TODO: `Create solution for issue about 1st render it always true`
 
   return (
     <Router>

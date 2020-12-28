@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider} from 'react-redux';
-import {createStore,applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import './css/content.css';
+import './core/css/content.css';
 import * as serviceWorker from './serviceWorker';
-import {rootReducer} from './redux/reducers/rootReducer';
-import {App} from './root/app';
+import { rootReducer } from './core/redux/rootReducer';
+import { App } from './root/app';
 
 const store = createStore(
   rootReducer,
   composeWithDevTools(
-    applyMiddleware(thunk)
-  )
+    applyMiddleware(thunk),
+  ),
 );
 
 ReactDOM.render(
