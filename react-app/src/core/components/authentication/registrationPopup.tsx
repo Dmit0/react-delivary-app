@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
-import { getFirstAddress, getIsStepContinue, getIsStepSuccess, getUserId } from '../../redux/auth/selectors';
+import { getIsStepContinue, getIsStepSuccess } from '../../redux/auth/selectors';
 import { getCountry } from '../../redux/countries/selectors';
 import { getSelectRegions } from '../../redux/geo/selectors';
-import { RootState } from '../../redux/rootReducer';
-import { fetchGeoModel, userForCreateAccount } from '../../types';
+import { getFirstAddress, getUserId } from '../../redux/user/selectors';
+import { userForCreateAccount } from '../../types';
 import '../../css/phone.css';
 
 interface RegistrationProps {

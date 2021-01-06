@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { geoAPI } from '../../api/apis/geoApi';
-import { getToken, getUserName } from '../../redux/auth/selectors';
 import { getCartLength } from '../../redux/cart/selectors';
 import { set_current_country } from '../../redux/countries/actions';
 import { setRegions } from '../../redux/geo/actions';
 import { RootState } from '../../redux/rootReducer';
+import { getToken, getUserName } from '../../redux/user/selectors';
 import { addressDataStep, loginData, userForCreateAccount } from '../../types';
 import { PopupContainer } from '../authentication/PopupContainer';
 import { LoginPopup } from '../authentication/loginPopup';

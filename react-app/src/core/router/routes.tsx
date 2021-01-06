@@ -1,24 +1,25 @@
 import React from 'react';
 import {Switch,Route,Redirect} from 'react-router-dom';
-import {HomePage} from '../../modules/home/HomePage';
-import {MealsPage} from '../../modules/meal-page/MealsPage';
-import {Cart} from '../../modules/cart/CartPage'
-import { UserPage } from '../../modules/user-page/userPage';
+import Cart from '../../pages/cart';
+import Home from '../../pages/home';
+import Meal from '../../pages/meal-page';
+import User from '../../pages/user-page';
+
 
 export const useRoutes = () => {
   return (
     <Switch>
       <Route path='/HomePage' exact>
-        <HomePage/>
+        <Home/>
       </Route>
       <Route path='/cart' exact>
         <Cart/>
       </Route>
       <Route path='/MealsPage/:id'>
-        <MealsPage/>
+        <Meal/>
       </Route>
       <Route path='/userPage'>
-        <UserPage/>
+        <User/>
       </Route>
       <Redirect to="/HomePage"/>
     </Switch>

@@ -5,7 +5,6 @@ import { cartApi } from '../../core/api/apis/cartApi';
 import { Cart_item } from '../../core/components/content/cart_item';
 import '../../core/css/cart.css';
 import { Action } from '../../core/enums';
-import { getToken } from '../../core/redux/auth/selectors';
 import {
   clean_cart,
   remove_item_from_cart,
@@ -14,9 +13,10 @@ import {
   set_meal_to_cart,
 } from '../../core/redux/cart/actions/cart.actions';
 import { getCart } from '../../core/redux/cart/selectors';
+import { getToken } from '../../core/redux/user/selectors';
 import { meals } from '../../core/types';
 
-export const Cart = () => {
+  const CartPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
@@ -139,8 +139,9 @@ export const Cart = () => {
             </div>
           </div>
         </div>
-        <div className="App__footer"></div>
       </div>
     </>
   );
 };
+
+  export default CartPage

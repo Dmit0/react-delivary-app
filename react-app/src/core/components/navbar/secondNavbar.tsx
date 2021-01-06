@@ -39,8 +39,14 @@ export const SecondNavbar: React.FC<SecondNavBarProps> = ({
               currentCuisine={ currentCuisine }
             />
             <div>
-              <input className="form-control  App_header__secondary-input" value={ value } type="search" placeholder="Search" aria-label="Search"
-                     onChange={ (event: React.ChangeEvent<HTMLInputElement>) => onFilterTextChange(event.target.value) }/>
+              <input
+                className="form-control  App_header__secondary-input"
+                value={ value }
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                onChange={ (event: React.ChangeEvent<HTMLInputElement>) => onFilterTextChange(event.target.value) }
+              />
               <div className="list-group">
                 <List filterRestaurants={ FilteredList } deleteFilterInput={ onFilterTextChange }/>
               </div>

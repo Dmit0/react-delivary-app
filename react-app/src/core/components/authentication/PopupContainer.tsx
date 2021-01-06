@@ -16,7 +16,7 @@ export const PopupContainer: React.FC<PopupProps> = ({ isOpen, onClose, children
     if (isClose) {
       onClose(isClose);
     }
-  }, [ isClose, onClose ]);
+  }, [isClose]);
   return (
     <>
       { isOpen

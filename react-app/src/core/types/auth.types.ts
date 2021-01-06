@@ -17,7 +17,7 @@ export interface userToStore {
   token?: string,
   email: string,
   firstName: string,
-  firstAddress?: string,
+  firstAddress?: Address,
   userId: string,
 }
 

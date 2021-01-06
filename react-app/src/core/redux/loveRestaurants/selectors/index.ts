@@ -1,4 +1,4 @@
-import { RootState } from '../../../rootReducer';
+import { RootState } from '../../rootReducer';
 import { LovedState } from '../actions';
 
 const getRestaurantState = (state: RootState): LovedState => state.loved;

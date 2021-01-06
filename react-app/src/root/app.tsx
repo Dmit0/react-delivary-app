@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { getToken } from '../core/redux/auth/selectors';
+import { get_countries } from '../core/redux/countries/actions';
+import { getToken } from '../core/redux/user/selectors';
 import { meals } from '../core/types';
 import { Sorts } from '../core/utils/sorts';
 import { NavBar } from '../core/components/navbar/navbar';
@@ -9,14 +10,16 @@ import { useRoutes } from '../core/router/routes';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
-  const { getUser, validateToken, setCartLength } = useAppUtils()
+  const dispatch = useDispatch()
   const routes = useRoutes()
   const tokenFromStore = useSelector(getToken)
+  const { getUser, validateToken, setCartLength } = useAppUtils()
 
   //token && refreshToken logic
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem('token') || '""');
     token && validateToken(token);
+    dispatch(get_countries());
   },[]);
 
   //get user logic
@@ -40,6 +43,7 @@ export const App = () => {
     <Router>
       <NavBar />
       { routes }
+      <div className="App__footer"></div>
     </Router>
   )
 }

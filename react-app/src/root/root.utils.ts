@@ -24,9 +24,6 @@ export const useAppUtils = () => {
         email: _doc.email,
         firstName: _doc.name,
         userId: _doc._id,
-        phone: phone.code + phone.phoneNumber,
-        role: _doc.role,
-        status: _doc.status,
       }));
       setCartLength(cart.countOfItems)
     }

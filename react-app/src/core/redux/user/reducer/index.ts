@@ -12,7 +12,7 @@ const initialState: userState = {
     status: null,
   }
 };
-export const authReducer = (state = initialState, action: UserActionTypes): userState => {
+export const userReducer = (state = initialState, action: UserActionTypes): userState => {
 
   switch (action.type) {
     case SET_TOKEN:
@@ -35,6 +35,7 @@ export const authReducer = (state = initialState, action: UserActionTypes): user
           userId: action.data.user.userId,
           userName: action.data.user.firstName,
           email: action.data.user.email,
+          firstAddress: action.data.user.firstAddress || null
         },
         token: action.data.token
       }

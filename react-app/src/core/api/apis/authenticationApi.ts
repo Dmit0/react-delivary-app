@@ -29,7 +29,7 @@ export const AuthenticationAPI = {
                 email: string,
                 firstName: string,
                 phone: string,
-                firstAddress: string,
+                firstAddress: Address,
                 id: string,
             }>('/authentication/signIn', 'POST', JSON.stringify(data), {
                 'Content-Type': 'application/json;charset=utf-8',
