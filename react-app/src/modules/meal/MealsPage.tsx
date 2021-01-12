@@ -9,7 +9,7 @@ import { getToken } from '../../core/redux/user/selectors';
 import { meals } from '../../core/types';
 import { set_meal_to_cart } from '../../core/redux/cart/actions/cart.actions';
 import { get_meals_by_restaurant_id } from '../../core/redux/restaurant/actions/restaurants.actions';
-import { Meal } from '../../core/components/content/meal';
+import { Meal } from './meal';
 
 
   const MealsPage: React.FC = () => {

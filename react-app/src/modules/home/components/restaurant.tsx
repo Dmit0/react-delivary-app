@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { restaurant } from '../../types';
-import '../../css/content.css';
+import '../../../core/css/content.css';
+import { restaurant } from '../../../core/types';
 
 interface RestaurantProps {
   restaurant: restaurant
@@ -11,15 +11,12 @@ interface RestaurantProps {
 }
 
 export const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onRestaurantClick, toggleLoved, checked }) => {
-
   const onToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
     toggleLoved(restaurant, e.target.checked);
   };
-
   return (
     <>
       <div className="card-inline">
-
         <label className="check option">
           <input checked={ checked } type="checkbox" className="myCheckbox__input" onChange={ onToggle }/>
           <span className="check__box"></span>

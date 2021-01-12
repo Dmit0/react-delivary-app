@@ -70,6 +70,7 @@ export class AuthService {
       phone: data.phone,
       firstAddress: data.firstAddress,
       id: data._id,
+      loveRestaurants: data.lovedRestaurant
     };
   }
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Banners } from '../banner/banners';
-import { Restaurant } from '../../core/components/content/restaurant';
 import { getBanners } from '../../core/redux/app/selectors';
 import { getLovedRestaurants } from '../../core/redux/loveRestaurants/selectors';
 import {
@@ -15,11 +14,12 @@ import {
   set_loved_restaurant_from_localeStorage,
 } from '../../core/redux/loveRestaurants/actions';
 import { getCuisines, getFilteredList, getFilteredRestaurants, getRestaurants } from '../../core/redux/restaurant/selectors';
-import { SecondNavbar } from '../../core/components/navbar/secondNavbar';
 import '../../core/css/content.css';
 import '../../core/css/styles.css';
 import { getToken } from '../../core/redux/user/selectors';
-import { restaurant } from '../../core/types';
+import { cuisine, restaurant } from '../../core/types';
+import { ToolBar } from '../tool-bar/toolBar';
+import { Restaurant } from './components/restaurant';
 import { useHomeUtils } from './utils/home.utils';
 
 const HomePage: React.FC = () => {
@@ -101,14 +101,11 @@ const HomePage: React.FC = () => {
       <div className="App__content">
         <Banners banners={ banners }/>
         <div className="App_content_part">
-          <SecondNavbar
-            onFilterTextChange={ handleFilterTextChange }
+          <ToolBar
             filterType={ currentSortType }
-            value={ currentFilterText }
             onSetSortType={ sortTypeHandler }
             cuisineTypes={ cuisineTypes }
             currentCuisine={ currentCuisine }
-            FilteredList={ searchedRestaurants }
             fetched_restaurants={ fetchedRestaurants }
           />
           <div className="App_content_part_main">

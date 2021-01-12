@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../core/api/apis/cartApi';
-import { Cart_item } from '../../core/components/content/cart_item';
+import { Cart_item } from './cart_item';
 import '../../core/css/cart.css';
 import { Action } from '../../core/enums';
 import {

@@ -1,6 +1,6 @@
 import React from 'react';
-import '../../css/meals-content.css';
-import { meals } from '../../types';
+import '../../core/css/meals-content.css';
+import { meals } from '../../core/types';
 
 interface MealProps {
   meal: meals,

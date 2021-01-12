@@ -4,24 +4,25 @@ import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
 import User from '../../pages/user-page';
+import { Links } from '../enums/links.enum';
 
 
 export const useRoutes = () => {
   return (
     <Switch>
-      <Route path='/HomePage' exact>
+      <Route path={ Links.HOME } exact>
         <Home/>
       </Route>
-      <Route path='/cart' exact>
+      <Route path={ Links.CART } exact>
         <Cart/>
       </Route>
-      <Route path='/MealsPage/:id'>
+      <Route path={ Links.MEALS }>
         <Meal/>
       </Route>
-      <Route path='/userPage'>
+      <Route path={ Links.USER }>
         <User/>
       </Route>
-      <Redirect to="/HomePage"/>
+      <Redirect to={ Links.HOME }/>
     </Switch>
   );
 };

@@ -2,6 +2,7 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
 import { addressDataStep, loginData, userForCreateAccount, userToStore } from '../../../types';
+import { set_cart_length } from '../../cart/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { AuthenticationAPI } from '../../../api/apis/authenticationApi';
@@ -95,6 +96,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
           firstName: response.firstName,
           firstAddress: response.firstAddress,
         }));
+        dispatch(set_cart_length(response.cart))
         isLogIn && dispatch(authLastStepClose());
       } else {
         dispatch(hideLoading());

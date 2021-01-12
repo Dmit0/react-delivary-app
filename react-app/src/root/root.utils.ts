@@ -10,15 +10,15 @@ export const useAppUtils = () => {
   const validateToken = async(token: string) => {
     const validateToken = await AuthenticationAPI.validateToken(token)
     if (validateToken) {
-      localStorage.setItem('token', JSON.stringify(validateToken));
       dispatch(setToken(validateToken));
+      await getUser(validateToken)
     }
   }
 
   const getUser = async (token: string) => {
     const user = await UserAPI.getUser(token);
     if (user) {
-      const { phone, cart, _doc } = user;
+      const { cart, _doc } = user;
       dispatch(setUser({
         token,
         email: _doc.email,
@@ -33,5 +33,5 @@ export const useAppUtils = () => {
     dispatch(set_cart_length(length))
   }
 
-  return { getUser, validateToken, setCartLength }
+  return { validateToken, setCartLength }
 }

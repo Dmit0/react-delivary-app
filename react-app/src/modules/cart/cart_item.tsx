@@ -1,5 +1,5 @@
 import React from 'react';
-import { meals } from '../../types';
+import { meals } from '../../core/types';
 
 interface CartProps {
   meal: meals
