@@ -1,8 +1,9 @@
-import { ADD_CITIES, ADD_REGIONS, GeoActionTypes, GeoState } from '../actions';
+import { ADD_CITIES, ADD_REGIONS, GeoActionTypes, GeoState, SET_CURRENT_REGION } from '../actions';
 
 const initialState: GeoState = {
   regions: [],
-  cities: []
+  cities: [],
+  region: null
 };
 
 export const geoReducer = (state = initialState, action: GeoActionTypes): GeoState => {
@@ -12,6 +13,8 @@ export const geoReducer = (state = initialState, action: GeoActionTypes): GeoSta
       return {...state, regions: action.regions }
     case ADD_CITIES:
       return {...state, cities: action.cities }
+    case SET_CURRENT_REGION:
+      return {...state, region: action.region}
     default:
       return state;
   }

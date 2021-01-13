@@ -2,21 +2,22 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../core/api/apis/cartApi';
+import { TrashIcon, CartIcon } from '../../core/components/icons';
 import { Cart_item } from './cart_item';
 import '../../core/css/cart.css';
-import { Action } from '../../core/enums';
+import { Action, Links } from '../../core/enums';
 import {
   clean_cart,
   remove_item_from_cart,
   remove_one_meal_from_cart,
   set_meal_from_localestorage_to_cart,
   set_meal_to_cart,
-} from '../../core/redux/cart/actions/cart.actions';
+} from '../../core/redux/cart/actions';
 import { getCart } from '../../core/redux/cart/selectors';
 import { getToken } from '../../core/redux/user/selectors';
 import { meals } from '../../core/types';
 
-  const CartPage = () => {
+const CartPage = () => {
   const dispatch = useDispatch();
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
@@ -61,25 +62,25 @@ import { meals } from '../../core/types';
     token
       ? changeItemInCart(token, { action: Action.DECREMENT, mealId: meal._id }, meal)
       : dispatch(remove_one_meal_from_cart(meal))
-  ), [ token, changeItemInCart, dispatch ]);
+  ), [ token, dispatch ]);
 
   const deleteMealFromCart = useCallback((meal: meals) => (
     token
       ? deleteItemFromCart(token, meal)
       : dispatch(remove_item_from_cart(meal))
-  ), [ token, deleteItemFromCart, dispatch ]);
+  ), [ token, dispatch ]);
 
   const addMeal = useCallback((meal: meals) => (
     token
       ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
       : dispatch(set_meal_to_cart(meal, false))
-  ), [ token, changeItemInCart, dispatch ]);
+  ), [ token, dispatch ]);
 
   const clear_cart_Handler = useCallback(() => (
     token
       ? cleanUserCart(token)
       : dispatch(clean_cart())
-  ), [token, cleanUserCart, dispatch]);
+  ), [ token, dispatch ]);
 
   const count_items = useCallback((): Number => {
     return cart.reduce((sum, current) => (
@@ -100,31 +101,22 @@ import { meals } from '../../core/types';
           <div className="cart">
             <div className='cart-header'>
               <div className='cart-description'>
-                <svg width="2em" height="2em" viewBox="0 0 16 16" className="bi bi-cart-check" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path fillRule="evenodd"
-                        d="M11.354 5.646a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L8 8.293l2.646-2.647a.5.5 0 0 1 .708 0z"/>
-                  <path
-                    fillRule="evenodd"
-                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-                </svg>
+                <CartIcon/>
                 <span className='car-item-description'>Cart</span>
               </div>
               <div className='delete-butoon-controller' onClick={ clear_cart_Handler }>
-                <svg width="1em" height="1em" viewBox="0 0 16 16" className="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                  <path fillRule="evenodd"
-                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                </svg>
+                <TrashIcon/>
                 <span className='delete-block-name'>Clean cart</span>
-
               </div>
             </div>
             <div className='cart-body'>
               { cart.map(item => (
-                <Cart_item key={ item._id + Date.now() } meal={ item } onDeleteOneItem={ deleteOneItem } onDeleteMeal={ deleteMealFromCart }
-                           onAddMeal={ addMeal }/>
-
+                <Cart_item
+                  key={ item._id + Date.now() }
+                  meal={ item }
+                  onDeleteOneItem={ deleteOneItem }
+                  onDeleteMeal={ deleteMealFromCart }
+                  onAddMeal={ addMeal }/>
               )) }
               <div className='info'>
                 <span>Total Items : { count_items() }</span>
@@ -132,7 +124,7 @@ import { meals } from '../../core/types';
               </div>
             </div>
             <div className='cart-footer'>
-              <Link to={ '/HomePage' }>
+              <Link to={ Links.HOME }>
                 <button type="button" className="btn btn-outline-warning return_button">Return</button>
               </Link>
               <button type="button" className="btn btn-outline-warning pay_button">Pay now</button>
@@ -144,4 +136,4 @@ import { meals } from '../../core/types';
   );
 };
 
-  export default CartPage
+export default CartPage;

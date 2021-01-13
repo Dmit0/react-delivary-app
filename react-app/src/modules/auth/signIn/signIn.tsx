@@ -7,7 +7,7 @@ import { logIn, verifyMail } from '../../../core/redux/auth/actions';
 import { getIsStepSuccess } from '../../../core/redux/auth/selectors';
 import { closePopup, openPopup } from '../../../core/redux/popup/actions';
 import { loginData } from '../../../core/types';
-import { SignUp } from '../signUp/signUp';
+import { SignUpPersonalForm } from '../signUp/components/signUpAddPersonalInfo';
 
 interface formData {
   email: string,
@@ -20,7 +20,7 @@ export const LogIn: React.FC = () => {
   const isEmailVerified = useSelector(getIsStepSuccess);
 
   const registrationHandler = () => {
-    dispatch(openPopup(<SignUp/>));
+    dispatch(openPopup(<SignUpPersonalForm/>));
   };
   const verifyEMail = useCallback((mail: string) => {
     dispatch(verifyMail(mail));

@@ -4,7 +4,7 @@ export const GET_COUNTRIES = 'GET_COUNTRIES';
 
 export const SET_COUNTRIES = 'SET_COUNTRIES';
 
-export const SET_CURRENT_COUNTRY = 'SET_CURRENT_COUNTRY'
+export const SET_CURRENT_COUNTRY = 'SET_CURRENT_COUNTRY';
 
 export interface CountryState {
   countries: country[]

@@ -20,7 +20,6 @@ export interface AuthenticationState {
   isStepCancel: boolean
   isStepContinue: boolean
   authRedirectPath: string
-  isPopupClose: boolean
 }
 interface CREATE_ACCOUNT {
   type: typeof CREATE_ACCOUNT

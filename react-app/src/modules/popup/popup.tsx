@@ -10,7 +10,6 @@ export const PopupContainer: React.FC = () => {
   const popup = useSelector(getPopup);
 
   const onClose = useCallback(()=> dispatch(closePopup()),[dispatch])
-
   return (
     <>
       { isOpen

@@ -20,7 +20,6 @@ const initialState: AuthenticationState = {
   isStepCancel: false,
   isStepContinue: false,
   authRedirectPath: "/",
-  isPopupClose: false,
 };
 
 export const authReducer = (state = initialState, action: AuthenticationActionTypes): AuthenticationState => {
@@ -41,7 +40,7 @@ export const authReducer = (state = initialState, action: AuthenticationActionTy
     case AUTH_CLOSE:
       return initialState
     case AUTH_LAST_STEP_CLOSE:
-      return {...state, isPopupClose: true}
+      return {...state }
     default:
       return state;
   }

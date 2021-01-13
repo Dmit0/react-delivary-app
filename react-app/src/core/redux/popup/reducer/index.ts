@@ -9,7 +9,7 @@ export const popupReducer = (state = initialState, action: PopupActionTypes): Po
 
   switch (action.type) {
     case OPEN_POPUP:
-      return {...state, isOpen: true, popup: action.popup }
+      return {...initialState, isOpen: true, popup: action.popup }
     case CLOSE_POPUP:
       return initialState
     default:
