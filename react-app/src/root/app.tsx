@@ -1,28 +1,31 @@
 import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { NavBar } from '../components/navbar/navbar';
-import { getToken } from '../redux/selectors/auth.selectors';
-import { getCart } from '../redux/selectors/cart.selector';
-import { useRoutes } from '../routes';
+import { get_countries } from '../core/redux/countries/actions';
+import { getToken } from '../core/redux/user/selectors';
+import { meals } from '../core/types';
+import { Sorts } from '../core/utils/sorts';
+import { useRoutes } from '../core/router/routes';
+import { NavBar } from '../modules/navbar/navbar';
+import { PopupContainer } from '../modules/popup/popup';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
-  const { getUser, validateToken } = useAppUtils()
+  const dispatch = useDispatch()
   const routes = useRoutes()
   const tokenFromStore = useSelector(getToken)
-  //const cart = useSelector(getCart)
+  const { validateToken, setCartLength } = useAppUtils()
 
   //token && refreshToken logic
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem('token') || '""');
     token && validateToken(token);
-  },[]);
-
-  //get user logic
-  useEffect(() => {
-    tokenFromStore && getUser(tokenFromStore);
-  }, [ tokenFromStore ]);
+    dispatch(get_countries());
+    if (!token) {
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
+      setCartLength(Sorts.getMealCount(cart));
+    }
+  }, []);
 
   //set token to store logic
   useEffect(() => {
@@ -32,7 +35,9 @@ export const App = () => {
   return (
     <Router>
       <NavBar />
+      <PopupContainer/>
       { routes }
+      <div className="App__footer"/>
     </Router>
   )
 }

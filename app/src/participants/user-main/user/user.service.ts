@@ -8,7 +8,7 @@ import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { IUserCreate } from './models/user.types';
 import { roles } from "../../../constants/enums/roles";
 
