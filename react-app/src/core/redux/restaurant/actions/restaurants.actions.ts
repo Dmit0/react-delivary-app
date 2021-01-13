@@ -1,4 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
+import { ToolBarSearchTypes } from '../../../enums';
 import { cuisine, restaurant } from '../../../types';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
@@ -90,15 +91,15 @@ export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filte
   let sortedArray: restaurant[] = [];
 
   switch (Filtertype) {
-    case 'All':
+    case ToolBarSearchTypes.ALL:
       sortedArray = currentRestaurants;
       break;
-    case 'Opened':
+    case ToolBarSearchTypes.OPENED:
       sortedArray = Sorts.Opened(currentRestaurants);
       break;
-    case 'Loved':
+    case ToolBarSearchTypes.LOVED:
       sortedArray = Sorts.GetLovedRestaurants(loveRestaurants, currentRestaurants);
-      break;//в зависимости от того зареган или нет пользователь
+      break;
     default:
       if (typeof Filtertype !== 'string') {
         sortedArray = Sorts.ByCuisen(currentRestaurants, Filtertype);

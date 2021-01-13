@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '../../core/css/authenticationStyles.css';
+import { authClose } from '../../core/redux/auth/actions';
 import { closePopup } from '../../core/redux/popup/actions';
 import { getIsPopupOpen, getPopup } from '../../core/redux/popup/selectors';
 
@@ -9,7 +10,10 @@ export const PopupContainer: React.FC = () => {
   const isOpen = useSelector(getIsPopupOpen);
   const popup = useSelector(getPopup);
 
-  const onClose = useCallback(()=> dispatch(closePopup()),[dispatch])
+  const onClose = useCallback(() => {
+    dispatch(closePopup())
+    dispatch(authClose())
+  },[dispatch])
   return (
     <>
       { isOpen

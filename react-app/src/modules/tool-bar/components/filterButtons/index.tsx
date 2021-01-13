@@ -13,7 +13,6 @@ interface CategoriesProps {
 }
 
 export const FilterButtons: React.FC<CategoriesProps> = ({ main_categories, Type, currentCuisine, cuisineTypes, onSetType, fetched_restaurants }) => {
-
   return (
     <div className="App_header__secondary-action">
       <span
@@ -23,6 +22,7 @@ export const FilterButtons: React.FC<CategoriesProps> = ({ main_categories, Type
       </span>
       { main_categories.map(category =>
         <ToolBarItem
+          key={category}
           onSetType={ onSetType }
           category={ category }
           Type={ Type }

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCartLength } from '../../../core/redux/cart/selectors';
 import { getToken, getUserName } from '../../../core/redux/user/selectors';
+import { DropMenu } from './dropNavbarMenu';
 
 interface NanBarButtonsProps {
   userPageRedirect(): void
@@ -16,12 +17,15 @@ export const NavBarButtons: React.FC<NanBarButtonsProps> = ({ userPageRedirect, 
 
   return (
     <div className="button-controller">
-      <button
-        type="button"
-        onClick={ isAuth ? userPageRedirect : handleAuthOpen }
-        className="btn btn-outline-info App_header__main-button">
-        { isAuth ? userName : 'LogIn' }
-      </button>
+      { isAuth
+        ? <DropMenu/>
+        : <button
+          type="button"
+          onClick={ handleAuthOpen }
+          className="btn btn-outline-info App_header__main-button">
+          LogIn
+        </button>
+      }
       <Link to={ '/cart' }>
         <button
           type="button"

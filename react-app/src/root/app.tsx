@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { toKey } from 'react-select/src/utils';
 import { get_countries } from '../core/redux/countries/actions';
 import { getToken } from '../core/redux/user/selectors';
 import { meals } from '../core/types';
@@ -13,7 +14,6 @@ import { useAppUtils } from './root.utils';
 export const App = () => {
   const dispatch = useDispatch()
   const routes = useRoutes()
-  const tokenFromStore = useSelector(getToken)
   const { validateToken, setCartLength } = useAppUtils()
 
   //token && refreshToken logic
@@ -26,11 +26,6 @@ export const App = () => {
       setCartLength(Sorts.getMealCount(cart));
     }
   }, []);
-
-  //set token to store logic
-  useEffect(() => {
-    tokenFromStore && localStorage.setItem('token', JSON.stringify(tokenFromStore));
-  }, [ tokenFromStore ])
 
   return (
     <Router>

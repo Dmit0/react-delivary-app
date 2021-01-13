@@ -16,6 +16,7 @@ export const setUser = (user: userToStore): UserActionTypes => {
 }
 
 export const setAuthUser = (token: string, user: userToStore) => {
+  localStorage.setItem('token', JSON.stringify(token))
   return {
     type: SET_AUTH_USER,
     data: {
