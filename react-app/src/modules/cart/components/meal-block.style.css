@@ -1,0 +1,17 @@
+.meal_block_sum {
+    display:flex;
+    flex-direction: row-reverse;
+}
+.meal_block {
+    margin-top: 10px;
+}
+.meal_block_item{
+    font-weight: 500;
+    font-size: 18px;
+}
+.notEnough{
+    color: #fa000d;
+}
+.Enough {
+    color:#f90;
+}

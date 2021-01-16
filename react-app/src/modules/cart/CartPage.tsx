@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../core/api/apis/cartApi';
@@ -26,6 +26,7 @@ const CartPage = () => {
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
+  const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
   useEffect(() => {
     getMeals(token).then((response) => {
       if (token && response) {
@@ -113,8 +114,27 @@ const CartPage = () => {
   }, [ cart ]);
 
   const orderItems = async() => {
-    const response = token && await OrderAPI.order(token, {})
+    const isNotOk = restaurantBlockSum.some((restaurantToCheck: any) => {
+      const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
+      return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
+    })
+    if(!isNotOk && token) await OrderAPI.order(token, {})
   }
+  const setBlockSum = useCallback((restaurant: string, sum: number) => {
+    setRestaurantBlockSum(((prev: any) => {
+      const res = prev && prev.find((item: any) => item.restaurant === restaurant);
+      if (res) {
+        return [ ...prev.map((item: any) => {
+          if (item.restaurant === restaurant) {
+            return { restaurant: item.restaurant, sum };
+          }
+          return item;
+        }) ];
+      }
+      return [ ...prev, { restaurant, sum } ]
+    }))
+  }, [ setRestaurantBlockSum ])
+
   return (
     <>
       <div className="App">
@@ -135,6 +155,7 @@ const CartPage = () => {
                 const restaurantBlock = cart.filter(meal => meal.restaurant === restaurant._id);
                 return (
                   <RestaurantMealBlock
+                    setBlockSum={setBlockSum}
                     restaurant={restaurant}
                     restaurantBlock={ restaurantBlock }
                     onDeleteOneItem={ deleteOneItem }
@@ -145,7 +166,7 @@ const CartPage = () => {
               })}
               <div className='info'>
                 <span>Total Items : { count_items() }</span>
-                <span>Order amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
+                <span>Total amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
               </div>
             </div>
             <div className='cart-footer'>
