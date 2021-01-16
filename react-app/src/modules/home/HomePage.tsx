@@ -20,6 +20,7 @@ import { getToken } from '../../core/redux/user/selectors';
 import { restaurant } from '../../core/types';
 import { ToolBar } from '../tool-bar/toolBar';
 import { Restaurant } from './components/restaurant';
+import { rerender } from './utils/home.rerender';
 import { useHomeUtils } from './utils/home.utils';
 
 const HomePage: React.FC = () => {
@@ -101,17 +102,11 @@ const HomePage: React.FC = () => {
           />
           <div className="App_content_part_main">
             <div className="App__content-main">
-              {
-                filteredRestaurants.map(item => (
-                  <Restaurant
-                    key={ item._id }
-                    restaurant={ item }
-                    onRestaurantClick={ restaurantHandler }
-                    toggleLoved={ loveHandler }
-                    checked={ check(item._id) }
-                  />
-                ))
-              }
+              { rerender.restaurant(
+                filteredRestaurants,
+                restaurantHandler,
+                loveHandler,
+                check) }
             </div>
           </div>
         </div>

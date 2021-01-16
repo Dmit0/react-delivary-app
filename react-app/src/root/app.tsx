@@ -9,6 +9,7 @@ import { Sorts } from '../core/utils/sorts';
 import { useRoutes } from '../core/router/routes';
 import { NavBar } from '../modules/navbar/navbar';
 import { PopupContainer } from '../modules/popup/popup';
+import { Toast } from '../modules/toast/toast';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
@@ -29,6 +30,7 @@ export const App = () => {
 
   return (
     <Router>
+      <Toast/>
       <NavBar />
       <PopupContainer/>
       { routes }

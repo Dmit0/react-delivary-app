@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { meals, restaurant } from '../../../core/types';
+import { rerender } from '../utils/cart.rerender';
 import { CartItem } from './cartItem';
 import './meal-block.style.css'
 
@@ -37,14 +38,14 @@ export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
   return (
       <div className='meal_block'>
         <div>{restaurant.name}</div>
-        {restaurantBlock.map(meal => (
-          <CartItem
-            key={meal._id + Date.now()}
-            meal={meal}
-            onDeleteOneItem={onDeleteOneItem}
-            onDeleteMeal={onDeleteMeal}
-            onAddMeal={onAddMeal}/>
-        ))}
+        {
+          rerender.cartItem(
+            restaurantBlock,
+            onDeleteOneItem,
+            onDeleteMeal,
+            onAddMeal
+          )
+        }
         <div className='meal_block_sum'>
           <span className='meal_block_item'>
             Order amount : <span className={ blockSum > restaurant.minSumOfDelivery ? "Enough" : "notEnough"}>{blockSum} bun</span>

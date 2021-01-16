@@ -19,6 +19,7 @@ import {
 import { getCart } from '../../core/redux/cart/selectors';
 import { getToken } from '../../core/redux/user/selectors';
 import { meals, restaurant } from '../../core/types';
+import { rerender } from './utils/cart.rerender';
 import { RestaurantMealBlock } from './components/restaurantMealBlock';
 
 const CartPage = () => {
@@ -26,6 +27,7 @@ const CartPage = () => {
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
+  console.log('render')
   const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
   useEffect(() => {
     getMeals(token).then((response) => {
@@ -114,11 +116,11 @@ const CartPage = () => {
   }, [ cart ]);
 
   const orderItems = async() => {
-    const isNotOk = restaurantBlockSum.some((restaurantToCheck: any) => {
+    const isNotMinAmount = restaurantBlockSum.some((restaurantToCheck: any) => {
       const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
       return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
     })
-    if(!isNotOk && token) await OrderAPI.order(token, {})
+    if(!isNotMinAmount && token) await OrderAPI.order(token, {})
   }
   const setBlockSum = useCallback((restaurant: string, sum: number) => {
     setRestaurantBlockSum(((prev: any) => {
@@ -151,19 +153,14 @@ const CartPage = () => {
               </div>
             </div>
             <div className='cart-body'>
-              {cartRestaurants.map(restaurant => {
-                const restaurantBlock = cart.filter(meal => meal.restaurant === restaurant._id);
-                return (
-                  <RestaurantMealBlock
-                    setBlockSum={setBlockSum}
-                    restaurant={restaurant}
-                    restaurantBlock={ restaurantBlock }
-                    onDeleteOneItem={ deleteOneItem }
-                    onDeleteMeal={ deleteMealFromCart }
-                    onAddMeal={ addMeal }
-                  />
-                );
-              })}
+              { rerender.mealsBlock(
+                cartRestaurants,
+                cart,
+                setBlockSum,
+                deleteOneItem,
+                deleteMealFromCart,
+                addMeal
+              )}
               <div className='info'>
                 <span>Total Items : { count_items() }</span>
                 <span>Total amount : <span className='total_sum'>{ count_total_price() } bun</span></span>

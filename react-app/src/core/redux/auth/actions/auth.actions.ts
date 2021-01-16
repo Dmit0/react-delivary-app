@@ -1,4 +1,5 @@
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
 import { addressDataStep, loginData, userForCreateAccount, userToStore } from '../../../types';
@@ -31,12 +32,14 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
         await dispatch(logIn({ email: user.email, password: user.password }));
       } else {
         dispatch(setAuthFailed());
+        toast.warn('auth error')
       }
       dispatch(hideLoading());
     } catch (e) {
       console.log(e);
       dispatch(hideLoading());
       dispatch(setAuthFailed());
+      toast.warn('auth error')
     }
   };
 };
@@ -67,9 +70,11 @@ export const verifyMail = (mail: string): ThunkType => {
     try {
       let response = await AuthenticationApi.verifyMail(mail);
       if (response) {
+        toast.success('emil verified')
         dispatch(setAuthStepSuccess(response));
       } else {
         const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+        toast.warn(errorEnum.ERROR_DUE_VERIFY_EMAIL)
         dispatch(setAuthErrors(message));
         dispatch(setAuthFailed());
       }
@@ -78,6 +83,7 @@ export const verifyMail = (mail: string): ThunkType => {
       console.log(e);
       dispatch(hideLoading());
       const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+      toast.warn(message)
       dispatch(setAuthErrors(message)); //TO DO REMOVE LOGIC OF ERROR INTO ANOTHER METHOD
       dispatch(setAuthFailed());//TO DO REMOVE LOGIC OF FAIL AUTH INTO ANOTHER METHOD
     }
@@ -90,6 +96,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
     try {
       let response = await AuthenticationApi.logIn(data);
       if (response) {
+        toast.success('auth success')
         dispatch(setAuthStepSuccess(!!response));
         dispatch(setAuthUser(response.token, {
           userId: response.id,
@@ -100,11 +107,13 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
         dispatch(set_cart_length(response.cart))
         isLogIn && dispatch(authLastStepClose());
       } else {
+        toast.warn('auth fail')
         dispatch(hideLoading());
         dispatch(setAuthFailed());
       }
     } catch (e) {
       console.log(e);
+      toast.warn('auth fail')
       dispatch(hideLoading());
       dispatch(setAuthFailed());
     }

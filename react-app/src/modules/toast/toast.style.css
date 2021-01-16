@@ -1,0 +1,10 @@
+.Toastify__toast-container--top-right {
+    margin-top: 90px;
+    margin-right: 20px;
+}
+.Toastify__toast--warning {
+    border-radius: 5px;
+}
+.Toastify__toast--success {
+    border-radius: 5px;
+}

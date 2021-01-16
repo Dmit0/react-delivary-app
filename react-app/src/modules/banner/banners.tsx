@@ -1,8 +1,9 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper } from 'swiper/react';
 import { banner } from '../../core/types';
 import 'swiper/swiper.scss';
 import '../../core/css/content.css';
+import { rerender } from './utils/banner.rerender';
 
 interface BannersProps {
   banners: banner[]
@@ -11,14 +12,8 @@ interface BannersProps {
 export const Banners: React.FC<BannersProps> = ({ banners }) => {
   return (
     <div className="App__content-Banners">
-      <Swiper tag = 'section'>
-        { banners.map(banner => {
-          return (
-            <SwiperSlide key={ banner._id }>
-              <img src={ banner.picture } width="1600px" height='450px' className="App__content-banner" alt=""/>
-            </SwiperSlide>
-          );
-        }) }
+      <Swiper tag='section'>
+        { rerender.banner(banners) }
       </Swiper>
     </div>
   );
