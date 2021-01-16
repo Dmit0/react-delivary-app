@@ -1,11 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
+import { MealAPI } from '../../../api/apis/meal.api';
 import { ToolBarSearchTypes } from '../../../enums';
 import { cuisine, restaurant } from '../../../types';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { Sorts } from '../../../utils/sorts';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
-import { restaurantAPI, MealAPI } from '../../../api/apis/ReastaurantApi';
+import { restaurantAPI } from '../../../api/apis/reastaurant.api';
 import {
   SET_CURRENT_RESTAURANT,
   SET_REASTAURANTS,

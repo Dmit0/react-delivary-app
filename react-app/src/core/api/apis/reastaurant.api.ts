@@ -14,9 +14,3 @@ export const restaurantAPI = {
       })
   }
 };
-
-export const MealAPI = {
-  async get(_id: string, isRequestFromMealsPage = false) {
-    return await http<MealsResponseType>(isRequestFromMealsPage ? `/meal/getMeals/${_id}` : `meal/getMeals/${_id}`);
-  },
-};

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../core/css/meals-content.css';
-import { cartApi } from '../../core/api/apis/cartApi';
+import { cartApi } from '../../core/api/apis/cart.api';
 import { getCart } from '../../core/redux/cart/selectors';
 import { getMeals } from '../../core/redux/restaurant/selectors';
 import { getToken } from '../../core/redux/user/selectors';

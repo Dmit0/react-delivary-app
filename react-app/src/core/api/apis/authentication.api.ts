@@ -2,7 +2,7 @@ import { Address, addressDataStep, loginData } from '../../types';
 import {http} from '../api'
 import { FetchUtils } from '../../utils/fetchUtils';
 
-export const AuthenticationAPI = {
+export const AuthenticationApi = {
     async createAccount(user: any) {
         try {
             return await http<boolean>('/authentication/SignUp', 'POST', JSON.stringify(user), {

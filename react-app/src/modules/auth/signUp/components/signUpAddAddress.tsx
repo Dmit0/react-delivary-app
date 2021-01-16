@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
-import { geoAPI } from '../../../../core/api/apis/geoApi';
+import { geoApi } from '../../../../core/api/apis/geo.api';
 import { DeliveryIcon } from '../../../../core/components/icons';
 import { Locality } from '../../../../core/enums/locality.enum';
 import { authClose, setStepCancel, updateAddress } from '../../../../core/redux/auth/actions';
@@ -45,7 +45,7 @@ export const SignUpAddressStep: React.FC = () => {
   const fetchGeo = async (localityName: string, code: string) => {
     switch (localityName) {
       case(Locality.REGION):
-        const regions = await geoAPI.fetchRegions(code);
+        const regions = await geoApi.fetchRegions(code);
         regions && dispatch(setRegions(regions.data));break;
       default: return null
     }

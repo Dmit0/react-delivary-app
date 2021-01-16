@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { cartApi } from '../../core/api/apis/cartApi';
+import { cartApi } from '../../core/api/apis/cart.api';
 import { OrderAPI } from '../../core/api/apis/order.api';
-import { restaurantAPI } from '../../core/api/apis/ReastaurantApi';
+import { restaurantAPI } from '../../core/api/apis/reastaurant.api';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
 import { set_cart_restaurants } from '../../core/redux/restaurant/actions';
 import { getCartRestaurants } from '../../core/redux/restaurant/selectors';

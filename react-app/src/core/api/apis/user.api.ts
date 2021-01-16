@@ -1,7 +1,7 @@
 import { http } from '../api';
 import { FetchUtils } from '../../utils/fetchUtils';
 
-export const UserAPI = {
+export const UserApi = {
 
   async getUser(token: string): Promise<any> {
     try {

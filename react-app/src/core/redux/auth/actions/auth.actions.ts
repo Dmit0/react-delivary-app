@@ -6,7 +6,7 @@ import { set_cart_length } from '../../cart/actions';
 import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
-import { AuthenticationAPI } from '../../../api/apis/authenticationApi';
+import { AuthenticationApi } from '../../../api/apis/authentication.api';
 import { setAuthUser } from '../../user/actions/user.actions';
 import {
   AUTH_CLOSE,
@@ -26,7 +26,7 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
     dispatch(showLoading());
     dispatch(setAuthStepStart());
     try {
-      let response = await AuthenticationAPI.createAccount(user);
+      let response = await AuthenticationApi.createAccount(user);
       if (response) {
         await dispatch(logIn({ email: user.email, password: user.password }));
       } else {
@@ -45,7 +45,7 @@ export const updateAddress = (address: addressDataStep): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.addAddressStep(address);
+      let response = await AuthenticationApi.addAddressStep(address);
       if (response) {
         dispatch(closePopup());
       } else {
@@ -65,7 +65,7 @@ export const verifyMail = (mail: string): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.verifyMail(mail);
+      let response = await AuthenticationApi.verifyMail(mail);
       if (response) {
         dispatch(setAuthStepSuccess(response));
       } else {
@@ -88,7 +88,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.logIn(data);
+      let response = await AuthenticationApi.logIn(data);
       if (response) {
         dispatch(setAuthStepSuccess(!!response));
         dispatch(setAuthUser(response.token, {
