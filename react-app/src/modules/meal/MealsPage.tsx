@@ -28,7 +28,7 @@ const MealsPage: React.FC = () => {
     token
       ? addMealToUserCart(token, meal)
       : dispatch(set_meal_to_cart(meal, false));
-  }, [ addMealToUserCart, dispatch, token ]);
+  }, [ dispatch, token ]);
 
   return (
     <>

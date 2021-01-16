@@ -9,6 +9,7 @@ export const SET_CUISENS = 'SET_CUISENS';
 export const SET_FILTER_RESTAURANTS = 'SET_FILTER_RESTAURANTS';
 export const SET_INPUT_FILTER = 'SET_INPUT_FILTER';
 export const DELETE_CURRENT_RESTAURANT_AND_MEALS = 'DELETE_CURRENT_RESTAURANT_AND_MEALS';
+export const SET_CART_RESTAURANTS = 'SET_CART_RESTAURANTS';
 
 //}
 
@@ -20,6 +21,11 @@ interface SET_REASTAURANTS {
 interface SET_CURRENT_RESTAURANT {
   type: typeof SET_CURRENT_RESTAURANT
   restaurant: restaurant | null
+}
+
+interface SET_CART_RESTAURANTS {
+  type: typeof SET_CART_RESTAURANTS,
+  restaurants: restaurant[]
 }
 
 interface SET_MEALS {
@@ -57,6 +63,7 @@ export interface RestaurantState {
   cuisine: cuisine[]
   filter_restaurants: restaurant[]
   inputFilter: restaurant[]
+  cartRestaurants: restaurant[]
 }
 
 export type restaurantActionTypes =
@@ -67,5 +74,6 @@ export type restaurantActionTypes =
   | SET_FILTER_RESTAURANTS
   | SET_INPUT_FILTER
   | DELETE_CURRENT_RESTAURANT_AND_MEALS
+  | SET_CART_RESTAURANTS
 
 

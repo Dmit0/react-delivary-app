@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { from, Observable, of } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { Opportunities } from '../constants/enums/opportunity.enum';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
 import { AddressService } from '../participants/user-main/address/address.service';
 import { CartService } from '../participants/user-main/cart/cart.service';
+import { OpportunitiesService } from '../participants/user-main/opportunities/opportunities.service';
 import { PhoneService } from '../participants/user-main/phone/phone.service';
 import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
@@ -20,9 +22,12 @@ export class AuthService {
     private readonly phoneService: PhoneService,
     private readonly roleService: RolesService,
     private readonly addressService: AddressService,
-    private readonly cartService: CartService
+    private readonly cartService: CartService,
+    private readonly opportunityService: OpportunitiesService
   ) {
   }
+
+  private readonly buyOpportunity: Observable<any> = this.opportunityService.findOpportunity({ name: Opportunities.BUY });
 
   SignUp(userData: UserRegistrationDto) {
     return this.userService.getUser({ email: userData.email }).pipe(
@@ -97,10 +102,17 @@ export class AuthService {
       map((user) => user || null));
   }
 
+  validateVerifiedUserTokenPayload(payload: any): Observable<User> {
+    return this.buyOpportunity.pipe(
+      mergeMap(buy => this.userService.getUserByOpportunity({ _id: payload.id, opportunityId: buy._id }).pipe(
+        tap(console.log),
+        map(user => user),
+      )),
+    );
+  }
+
   refreshToken(token: string): Observable<any> {
     const decodedToken = this.jwtService.decode(token);
-    //console.log(decodedToken)
-      // return this.userService.getUser({_id: decodedToken && decodedToken?.id})
     return of(this.generateRefreshToken(decodedToken));
   }
 

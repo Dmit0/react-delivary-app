@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Types, Schema as MongooseSchema } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Meal } from '../../meals/meal/models/meals.schema';
 import { User } from '../../participants/user-main/user/models/user.schema';
 
@@ -17,6 +17,9 @@ export class Restaurant extends Document {
   @Prop({ require: true })
   picture: string;
 
+  @Prop({default: 0})
+  minSumOfDelivery: number
+
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   owner: User;
 
@@ -25,9 +28,6 @@ export class Restaurant extends Document {
 
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
   saved: [User];
-
-  // @Prop({ type: MongooseSchema.Types.ObjectId, ref: User.name })
-  // selItems: [{ type: Types.ObjectId, ref: 'SelItems' }];
 
 }
 

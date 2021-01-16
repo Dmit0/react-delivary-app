@@ -2,8 +2,11 @@ import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../core/api/apis/cartApi';
+import { OrderAPI } from '../../core/api/apis/order.api';
+import { restaurantAPI } from '../../core/api/apis/ReastaurantApi';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
-import { Cart_item } from './cart_item';
+import { set_cart_restaurants } from '../../core/redux/restaurant/actions';
+import { getCartRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/cart.css';
 import { Action, Links } from '../../core/enums';
 import {
@@ -15,23 +18,38 @@ import {
 } from '../../core/redux/cart/actions';
 import { getCart } from '../../core/redux/cart/selectors';
 import { getToken } from '../../core/redux/user/selectors';
-import { meals } from '../../core/types';
+import { meals, restaurant } from '../../core/types';
+import { RestaurantMealBlock } from './components/restaurantMealBlock';
 
 const CartPage = () => {
   const dispatch = useDispatch();
+  const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
-
   useEffect(() => {
     getMeals(token).then((response) => {
-      response && dispatch(set_meal_from_localestorage_to_cart(response));
+      if (token && response) {
+        dispatch(set_meal_from_localestorage_to_cart(response.meals));
+        dispatch(set_cart_restaurants(response.restaurants))
+      } else if (!token && response) {
+        response && dispatch(set_meal_from_localestorage_to_cart(response));
+      }
     });
   }, [ token, dispatch ]);
 
-  const getMeals = async (token: string | null) => {
-    return token
-      ? await cartApi.getUserCart(token)
-      : JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
+  const getRestaurants = async(ids: string[]): Promise<restaurant[]> => {
+    return await restaurantAPI.getRestaurants(ids)
+  }
+
+  const getMeals = async (token: string | null): Promise<any> => {
+    if (token) {
+      return await cartApi.getUserCart(token);
+    } else {
+      const meals = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
+      const restaurants = await getRestaurants(meals.map(meal => meal.restaurant));
+      dispatch(set_cart_restaurants(restaurants));
+      return meals;
+    }
   };
 
   useEffect(() => {
@@ -94,6 +112,9 @@ const CartPage = () => {
     ), 0);
   }, [ cart ]);
 
+  const orderItems = async() => {
+    const response = token && await OrderAPI.order(token, {})
+  }
   return (
     <>
       <div className="App">
@@ -110,14 +131,18 @@ const CartPage = () => {
               </div>
             </div>
             <div className='cart-body'>
-              { cart.map(item => (
-                <Cart_item
-                  key={ item._id + Date.now() }
-                  meal={ item }
-                  onDeleteOneItem={ deleteOneItem }
-                  onDeleteMeal={ deleteMealFromCart }
-                  onAddMeal={ addMeal }/>
-              )) }
+              {cartRestaurants.map(restaurant => {
+                const restaurantBlock = cart.filter(meal => meal.restaurant === restaurant._id);
+                return (
+                  <RestaurantMealBlock
+                    restaurant={restaurant}
+                    restaurantBlock={ restaurantBlock }
+                    onDeleteOneItem={ deleteOneItem }
+                    onDeleteMeal={ deleteMealFromCart }
+                    onAddMeal={ addMeal }
+                  />
+                );
+              })}
               <div className='info'>
                 <span>Total Items : { count_items() }</span>
                 <span>Order amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
@@ -127,7 +152,7 @@ const CartPage = () => {
               <Link to={ Links.HOME }>
                 <button type="button" className="btn btn-outline-warning return_button">Return</button>
               </Link>
-              <button type="button" className="btn btn-outline-warning pay_button">Pay now</button>
+              <button onClick={orderItems} type="button" className="btn btn-outline-warning pay_button">Pay now</button>
             </div>
           </div>
         </div>

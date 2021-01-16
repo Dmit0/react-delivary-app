@@ -14,7 +14,7 @@ interface DropMenu {
 }
 
 export const DropMenu: React.FC<DropMenu> = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const userName = useSelector(getUserName);
 
   const createMenuItem = useCallback((text: string, type: DropMenuType, action?: () => void) => {
@@ -22,44 +22,44 @@ export const DropMenu: React.FC<DropMenu> = () => {
       if (action) {
         action();
       }
-    }
+    };
     switch (type) {
       case(DropMenuType.USER_PAGE_LINK):
-        return (<Link to={ Links.USER }>
+        return (<Link to={ Links.USER } key={ text }>
           <li>
-            <span key={ text } className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
+            <span className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
           </li>
         </Link>);
       case(DropMenuType.LOG_OUT):
         return (
-          <li>
-            <span key={ text } className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
+          <li key={ text }>
+            <span  className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
           </li>
         );
     }
   }, []);
 
   const logOut = () => {
-    dispatch(cleanUserData())
-    localStorage.removeItem('token')
+    dispatch(cleanUserData());
+    localStorage.removeItem('token');
     const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
     dispatch(set_cart_length(Sorts.getMealCount(cart)));
     const lovedRestaurants = JSON.parse(localStorage.getItem('loved') || '[]') as string[];
-    dispatch(set_loved_restaurant(lovedRestaurants))
-  }
+    dispatch(set_loved_restaurant(lovedRestaurants));
+  };
 
   const menuItems = useMemo(() => {
     const menuItems = [
-      createMenuItem('Home Page',DropMenuType.USER_PAGE_LINK),
-      createMenuItem('Log Out', DropMenuType.LOG_OUT, logOut)
-    ]
-    return menuItems
-  },[])
+      createMenuItem('Home Page', DropMenuType.USER_PAGE_LINK),
+      createMenuItem('Log Out', DropMenuType.LOG_OUT, logOut),
+    ];
+    return menuItems;
+  }, [createMenuItem, logOut]);
 
   return (
     <div className="dropdown navbar-brand-menu-switcher">
       <button
-        className={ `dropdown-toggle btn btn-outline-info App_header__main-button `}
+        className={`dropdown-toggle btn btn-outline-info App_header__main-button`}
         type="button"
         id="dropdownMenuButton"
         data-toggle="dropdown"

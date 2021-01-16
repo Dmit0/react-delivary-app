@@ -2,13 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { map, mergeMap, tap } from 'rxjs/operators';
+import { Opportunities } from '../../../constants/enums/opportunity.enum';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
 import { User } from './models/user.schema';
-import { from, Observable } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { IUserCreate } from './models/user.types';
 import { roles } from "../../../constants/enums/roles";
 
@@ -27,6 +28,18 @@ export class UserService {
     return from(this.userModel.findOne(property)).pipe(
       map((user) => user || null),
     );
+  }
+
+  getUserByOpportunity(property: {_id: string, opportunityId: any}): Observable<User> {
+    const { _id, opportunityId } = property
+    return this.getUser({ _id }).pipe(
+      mergeMap(user => this.roleService.findRole({_id: user.role}).pipe(
+        mergeMap(userRole => {
+          if (userRole.opportunities.find(opportunity => opportunity.equals(opportunityId))) return of(user)
+          return of(null)
+        })
+      ))
+    )
   }
 
   createUser(user: IUserCreate): Observable<any> {

@@ -9,6 +9,7 @@ import { MealModule } from './meals/meal/meals.module';
 import { AddressModule } from './participants/user-main/address/address.module';
 import { CountryModule } from './participants/user-main/country/country.module';
 import { OpportunitiesModule } from './participants/user-main/opportunities/opportunities.module';
+import { OrderModule } from './participants/user-main/order/order.module';
 import { PhoneModule } from './participants/user-main/phone/phone.module';
 import { RolesModule } from './participants/user-main/roles/roles.module';
 import { UserModule } from './participants/user-main/user/user.module';
@@ -30,6 +31,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     RolesModule,
     OpportunitiesModule,
     CountryModule,
+    OrderModule,
     ConfigService,// how to use it?
     ConfigModule.forRoot({
       load: [config],

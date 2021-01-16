@@ -14,7 +14,7 @@ import {
   SET_CUISENS,
   SET_FILTER_RESTAURANTS,
   SET_INPUT_FILTER,
-  DELETE_CURRENT_RESTAURANT_AND_MEALS,
+  DELETE_CURRENT_RESTAURANT_AND_MEALS, SET_CART_RESTAURANTS,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -120,3 +120,10 @@ export const set_input_filter = (currentRestaurants: restaurant[], str: string) 
     filteredRestaurants: sortedArray,
   };
 };
+
+export const set_cart_restaurants = (restaurants: restaurant[]): restaurantActionTypes => {
+  return {
+    type: SET_CART_RESTAURANTS,
+    restaurants
+  }
+}

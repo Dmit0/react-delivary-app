@@ -5,4 +5,5 @@ export interface restaurant {
   working_time: string
   selItems: string[]
   _id: string
+  minSumOfDelivery: number
 }

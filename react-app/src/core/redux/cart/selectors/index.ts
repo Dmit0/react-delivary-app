@@ -1,3 +1,4 @@
+import { getRestaurants } from '../../restaurant/selectors';
 import { RootState } from '../../rootReducer';
 import { CartState } from '../actions';
 

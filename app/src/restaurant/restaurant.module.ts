@@ -11,6 +11,7 @@ import { RestaurantService } from './restaurant.service';
       { name: Restaurant.name, schema: RestaurantSchema },
     ]),
   ],
+  exports: [RestaurantService],
   controllers: [RestaurantController],
   providers: [RestaurantService],
 })
