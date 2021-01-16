@@ -105,7 +105,6 @@ export class AuthService {
   validateVerifiedUserTokenPayload(payload: any): Observable<User> {
     return this.buyOpportunity.pipe(
       mergeMap(buy => this.userService.getUserByOpportunity({ _id: payload.id, opportunityId: buy._id }).pipe(
-        tap(console.log),
         map(user => user),
       )),
     );

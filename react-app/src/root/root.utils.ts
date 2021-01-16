@@ -11,6 +11,7 @@ export const useAppUtils = () => {
     const validateToken = await AuthenticationApi.validateToken(token)
     if (validateToken) {
       dispatch(setToken(validateToken));
+      localStorage.setItem('token', JSON.stringify(validateToken))
       await getUser(validateToken)
     }
   }

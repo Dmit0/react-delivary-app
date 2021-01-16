@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { map, tap } from 'rxjs/operators';
+import { Injectable } from '@nestjs/common';
+import { map } from 'rxjs/operators';
 import { exceptionErrors } from '../../constants/errors/exeptionsErrors';
 import { AuthService } from '../auth.service';
 
@@ -17,9 +17,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: { id: string, name: string, email: string, role: string; }) {//check
+  validate(payload: { id: string, email: string }) {//check
     return this.authService.validateTokenPayload(payload).pipe(
-      map((user) => user || exceptionErrors.throwForbiddenError('not aftorizate')),
+      map((user) => user || exceptionErrors.throwForbiddenError('Unauthorized')),
     ).toPromise();
   }
 }
