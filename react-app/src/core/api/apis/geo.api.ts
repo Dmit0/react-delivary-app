@@ -1,7 +1,7 @@
 import { fetchGeoModel } from '../../types';
 import { http } from '../api';
 
-export const geoAPI = {
+export const geoApi = {
   async fetchRegions(code: any) {
     try {
       return await http<{ data: fetchGeoModel[] }>(`https://wft-geo-db.p.rapidapi.com/v1/geo/countries/${code}/regions?limit=10`, 'GET', null, {

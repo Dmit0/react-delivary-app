@@ -1,0 +1,7 @@
+export enum Opportunities {
+  RANK_UP = 'RANK_UP',
+  CREATE_MARKET = 'CREATE_MARKET',
+  CREATE_ADMINS = 'CREATE_ADMINS',
+  DELETE_USER = 'DELETE_USER',
+  BUY = 'BUY'
+}

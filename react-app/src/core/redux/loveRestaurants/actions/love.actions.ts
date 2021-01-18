@@ -17,7 +17,7 @@ export const remove_restaurant_from_loved = (restaurant: string): lovedActionTyp
     remove_loved_restaurant: restaurant,
   };
 };
-export const set_loved_restaurant_from_localeStorage = (restaurants: string[]): lovedActionTypes => {
+export const set_loved_restaurant = (restaurants: string[]): lovedActionTypes => {
   return {
     type: SET_LOVED_RESTAURANT_FROM_LOCALESTORAGE,
     lc_restaurants: restaurants,

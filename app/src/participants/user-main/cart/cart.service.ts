@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { from, Observable, of } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { Action } from '../../../constants/enums/cart';
 import { MealService } from '../../../meals/meal/meals.service';
+import { RestaurantService } from '../../../restaurant/restaurant.service';
 import { Cart } from './models/cart.schema';
 import { cartMealItem } from './models/cartMealItem.schema';
 
@@ -12,6 +13,7 @@ import { cartMealItem } from './models/cartMealItem.schema';
 export class CartService {
   constructor(
     private readonly mealService: MealService,
+    private readonly restaurantService: RestaurantService,
     @InjectModel(Cart.name) private cartModel: Model<Cart>,
     @InjectModel(cartMealItem.name) private cartMealItemModel: Model<cartMealItem>,
   ) {
@@ -31,22 +33,23 @@ export class CartService {
   }
 
   setItemInCart(userId: any, mealId: any) {
-    return this.getCart({ userId }).pipe(
-      mergeMap((cart) => this.getCartMealItem(mealId, cart._id).pipe(
-        mergeMap((mealItem) => {
-          if (mealItem && mealId == mealItem.mealId) {
-            return this.updateCartMealItem({ _id: mealItem._id }, { count: mealItem.count + 1 }).pipe(
-              mergeMap(() => this.updateCart({ _id: cart._id }, { countOfItems: cart.countOfItems + 1})),
+    return this.mealService.getMeal({ _id: mealId }).pipe(
+      mergeMap(meal => this.getCart({ userId }).pipe(
+        mergeMap((cart) => this.getCartMealItem(mealId, cart._id).pipe(
+          mergeMap((mealItem) => {
+            if (mealItem && mealId == mealItem.mealId) {
+              return this.updateCartMealItem({ _id: mealItem._id }, { count: mealItem.count + 1 }).pipe(
+                mergeMap(() => this.updateCart({ _id: cart._id }, { countOfItems: cart.countOfItems + 1 })),
+              );
+            }
+            return this.generateCartMealItem(mealId, cart._id, meal.restaurant).pipe(
+              mergeMap((item) => this.updateCart({ _id: cart._id }, {
+                meals: [ ...cart.meals, item._id ],
+                countOfItems: cart.countOfItems + 1,
+              })),
             );
-          }
-          return this.generateCartMealItem(mealId, cart._id).pipe(
-            mergeMap((item) => this.updateCart({ _id: cart._id }, {
-              meals: [ ...cart.meals, item._id ],
-              countOfItems: cart.countOfItems + 1,
-            })),
-          );
-        }),
-      )));
+          }),
+        )))));
   }
 
   changeItemInCart(userId, mealId, action: Action) {
@@ -107,25 +110,31 @@ export class CartService {
 
   getCartUserItems(userId) {
     return this.getCart({ userId }).pipe(
-      mergeMap((cart) => this.getUserMealsByIds(cart._id)));
+      mergeMap((cart) => this.getUserMealsByIds(cart._id, userId)));
   }
 
-  private getUserMealsByIds(cartId: any) {
+  private getUserMealsByIds(cartId: any, userId: string) {
     return from(this.cartMealItemModel.find({ cartId })).pipe(
       mergeMap((mealItems) => {
-        const ids = mealItems.map((item) => item.mealId);
-        return this.mealService.getMealsByIds(ids).pipe(
-          mergeMap((meals) => {
-            const userMeals = meals.map((meal) => {
-              const userMeal = mealItems.find((item) => item.mealId.equals(meal._id));
-              if (userMeal) {
-                return { ...meal._doc, count: userMeal.count };
-              }
-              throw new Error('no such meal');
-            });
-            return of(userMeals);
-          }),
-        );
+        const restaurantIds = mealItems.map(item => item.restaurantId)
+        const mealIds = mealItems.map((item) => item.mealId);
+        return this.restaurantService.getRestaurantByIds(restaurantIds).pipe(
+          mergeMap(restaurants => this.mealService.getMealsByIds(mealIds).pipe(
+            mergeMap(meals => {
+              return of({
+                meals: meals.map(meal => {
+                  const userMeal = mealItems.find(mealCart => mealCart.mealId.equals(meal._id));
+                  return {
+                    meal,
+                    count: userMeal.count,
+                    restaurant: userMeal.restaurantId
+                  }
+                }),
+                restaurants
+              })
+            })
+          ))
+        )
       }),
     );
   }
@@ -148,8 +157,8 @@ export class CartService {
     );
   }
 
-  private generateCartMealItem(mealId: any, cartId: any): Observable<cartMealItem> {
-    const newItem = new this.cartMealItemModel({ mealId, cartId });
+  private generateCartMealItem(mealId: any, cartId: any, restaurantId): Observable<cartMealItem> {
+    const newItem = new this.cartMealItemModel({ mealId, cartId, restaurantId });
     return from(newItem.save()).pipe(
       map((item) => item || null),
     );

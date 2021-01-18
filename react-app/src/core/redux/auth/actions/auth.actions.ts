@@ -1,4 +1,5 @@
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
 import { addressDataStep, loginData, userForCreateAccount, userToStore } from '../../../types';
@@ -6,7 +7,7 @@ import { set_cart_length } from '../../cart/actions';
 import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
-import { AuthenticationAPI } from '../../../api/apis/authenticationApi';
+import { AuthenticationApi } from '../../../api/apis/authentication.api';
 import { setAuthUser } from '../../user/actions/user.actions';
 import {
   AUTH_CLOSE,
@@ -26,17 +27,19 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
     dispatch(showLoading());
     dispatch(setAuthStepStart());
     try {
-      let response = await AuthenticationAPI.createAccount(user);
+      let response = await AuthenticationApi.createAccount(user);
       if (response) {
         await dispatch(logIn({ email: user.email, password: user.password }));
       } else {
         dispatch(setAuthFailed());
+        toast.warn('auth error')
       }
       dispatch(hideLoading());
     } catch (e) {
       console.log(e);
       dispatch(hideLoading());
       dispatch(setAuthFailed());
+      toast.warn('auth error')
     }
   };
 };
@@ -45,7 +48,7 @@ export const updateAddress = (address: addressDataStep): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.addAddressStep(address);
+      let response = await AuthenticationApi.addAddressStep(address);
       if (response) {
         dispatch(closePopup());
       } else {
@@ -65,11 +68,13 @@ export const verifyMail = (mail: string): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.verifyMail(mail);
+      let response = await AuthenticationApi.verifyMail(mail);
       if (response) {
+        toast.success('emil verified')
         dispatch(setAuthStepSuccess(response));
       } else {
         const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+        toast.warn(errorEnum.ERROR_DUE_VERIFY_EMAIL)
         dispatch(setAuthErrors(message));
         dispatch(setAuthFailed());
       }
@@ -78,6 +83,7 @@ export const verifyMail = (mail: string): ThunkType => {
       console.log(e);
       dispatch(hideLoading());
       const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
+      toast.warn(message)
       dispatch(setAuthErrors(message)); //TO DO REMOVE LOGIC OF ERROR INTO ANOTHER METHOD
       dispatch(setAuthFailed());//TO DO REMOVE LOGIC OF FAIL AUTH INTO ANOTHER METHOD
     }
@@ -88,8 +94,9 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationAPI.logIn(data);
+      let response = await AuthenticationApi.logIn(data);
       if (response) {
+        toast.success('auth success')
         dispatch(setAuthStepSuccess(!!response));
         dispatch(setAuthUser(response.token, {
           userId: response.id,
@@ -100,11 +107,13 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
         dispatch(set_cart_length(response.cart))
         isLogIn && dispatch(authLastStepClose());
       } else {
+        toast.warn('auth fail')
         dispatch(hideLoading());
         dispatch(setAuthFailed());
       }
     } catch (e) {
       console.log(e);
+      toast.warn('auth fail')
       dispatch(hideLoading());
       dispatch(setAuthFailed());
     }

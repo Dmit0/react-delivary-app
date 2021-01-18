@@ -2,9 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
 import { forkJoin, from, Observable, of } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { Role } from '../roles/models/Roles';
-import { User } from '../user/models/user.schema';
+import { map, mergeMap } from 'rxjs/operators';
 import { Opportunity } from './models/Opportunities';
 
 @Injectable()

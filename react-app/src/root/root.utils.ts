@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
-import { AuthenticationAPI } from '../core/api/apis/authenticationApi';
-import { UserAPI } from '../core/api/apis/userApi';
+import { AuthenticationApi } from '../core/api/apis/authentication.api';
+import { UserApi } from '../core/api/apis/user.api';
 import { set_cart_length } from '../core/redux/cart/actions/cart.actions';
 import { setToken, setUser } from '../core/redux/user/actions/user.actions';
 
@@ -8,15 +8,16 @@ export const useAppUtils = () => {
   const dispatch = useDispatch()
 
   const validateToken = async(token: string) => {
-    const validateToken = await AuthenticationAPI.validateToken(token)
+    const validateToken = await AuthenticationApi.validateToken(token)
     if (validateToken) {
       dispatch(setToken(validateToken));
+      localStorage.setItem('token', JSON.stringify(validateToken))
       await getUser(validateToken)
     }
   }
 
   const getUser = async (token: string) => {
-    const user = await UserAPI.getUser(token);
+    const user = await UserApi.getUser(token);
     if (user) {
       const { cart, _doc } = user;
       dispatch(setUser({

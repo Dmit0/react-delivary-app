@@ -1,10 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
+import { MealAPI } from '../../../api/apis/meal.api';
+import { ToolBarSearchTypes } from '../../../enums';
 import { cuisine, restaurant } from '../../../types';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { Sorts } from '../../../utils/sorts';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
-import { restaurantAPI, MealAPI } from '../../../api/apis/ReastaurantApi';
+import { restaurantAPI } from '../../../api/apis/reastaurant.api';
 import {
   SET_CURRENT_RESTAURANT,
   SET_REASTAURANTS,
@@ -13,7 +15,7 @@ import {
   SET_CUISENS,
   SET_FILTER_RESTAURANTS,
   SET_INPUT_FILTER,
-  DELETE_CURRENT_RESTAURANT_AND_MEALS,
+  DELETE_CURRENT_RESTAURANT_AND_MEALS, SET_CART_RESTAURANTS,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -90,15 +92,15 @@ export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filte
   let sortedArray: restaurant[] = [];
 
   switch (Filtertype) {
-    case 'All':
+    case ToolBarSearchTypes.ALL:
       sortedArray = currentRestaurants;
       break;
-    case 'Opened':
+    case ToolBarSearchTypes.OPENED:
       sortedArray = Sorts.Opened(currentRestaurants);
       break;
-    case 'Loved':
+    case ToolBarSearchTypes.LOVED:
       sortedArray = Sorts.GetLovedRestaurants(loveRestaurants, currentRestaurants);
-      break;//в зависимости от того зареган или нет пользователь
+      break;
     default:
       if (typeof Filtertype !== 'string') {
         sortedArray = Sorts.ByCuisen(currentRestaurants, Filtertype);
@@ -119,3 +121,10 @@ export const set_input_filter = (currentRestaurants: restaurant[], str: string) 
     filteredRestaurants: sortedArray,
   };
 };
+
+export const set_cart_restaurants = (restaurants: restaurant[]): restaurantActionTypes => {
+  return {
+    type: SET_CART_RESTAURANTS,
+    restaurants
+  }
+}

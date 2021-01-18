@@ -8,7 +8,7 @@ export const CLEAN_CART = 'CLEAN_CART';
 export const SET_CART_LENGTH = 'SET_CART_LENGTH';
 
 export interface CartState {
-  cart: meals[],
+  cart: meals[]
   cartLength: number,
   cartCost: number,
 }

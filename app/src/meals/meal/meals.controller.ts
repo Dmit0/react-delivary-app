@@ -11,6 +11,6 @@ export class MealController {
   //type for returning getMeal
   //type fot input
   getMeals(@Param('id')id): any {
-    return this.mealService.getMeal(id);
+    return this.mealService.getMealsByRestaurantId(id);
   }
 }

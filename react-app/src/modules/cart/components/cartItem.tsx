@@ -1,6 +1,6 @@
 import React from 'react';
-import { DeleteIcon, MinusIcon, PlusIcon } from '../../core/components/icons';
-import { meals } from '../../core/types';
+import { DeleteIcon, MinusIcon, PlusIcon } from '../../../core/components/icons';
+import { meals } from '../../../core/types';
 
 interface CartProps {
   meal: meals
@@ -9,7 +9,7 @@ interface CartProps {
   onAddMeal(meal: meals): void
 }
 
-export const Cart_item: React.FC<CartProps> = ({ meal, onDeleteOneItem, onDeleteMeal, onAddMeal }) => {
+export const CartItem: React.FC<CartProps> = ({ meal, onDeleteOneItem, onDeleteMeal, onAddMeal }) => {
   const countPrice = (): Number => {
     let totalPrice = meal.count * meal.price;
     return totalPrice;

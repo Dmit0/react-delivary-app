@@ -7,7 +7,7 @@ import {
   SET_CUISENS,
   SET_FILTER_RESTAURANTS,
   SET_INPUT_FILTER,
-  DELETE_CURRENT_RESTAURANT_AND_MEALS,
+  DELETE_CURRENT_RESTAURANT_AND_MEALS, SET_CART_RESTAURANTS,
 } from '../actions';
 
 const initialState: RestaurantState = {
@@ -17,6 +17,7 @@ const initialState: RestaurantState = {
   cuisine: [],
   filter_restaurants: [],
   inputFilter: [],
+  cartRestaurants: []
 };
 
 export const restaurantReducer = (state = initialState, action: restaurantActionTypes): RestaurantState => {
@@ -36,6 +37,8 @@ export const restaurantReducer = (state = initialState, action: restaurantAction
       return { ...state, inputFilter: action.filteredRestaurants };
     case DELETE_CURRENT_RESTAURANT_AND_MEALS:
       return { ...state, current_restaurant: null, current_meals: [] };
+    case SET_CART_RESTAURANTS:
+      return {...state, cartRestaurants: action.restaurants}
     default:
       return state;
   }

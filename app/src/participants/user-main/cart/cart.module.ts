@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtStrategy } from '../../../auth/strategies/jwt.stratage';
 import { MealModule } from '../../../meals/meal/meals.module';
+import { RestaurantModule } from '../../../restaurant/restaurant.module';
 import { Address, AddressSchema } from '../address/models/address.model';
 import { CountryModule } from '../country/country.module';
 import { UserModule } from '../user/user.module';
@@ -16,7 +17,8 @@ import { cartMealItem, CartMealItemSchema } from './models/cartMealItem.schema';
       { name: Cart.name, schema: CartSchema },
       { name: cartMealItem.name, schema: CartMealItemSchema },
     ]),
-    MealModule
+    MealModule,
+    RestaurantModule
   ],
   providers: [CartService],
   controllers: [CartController],
