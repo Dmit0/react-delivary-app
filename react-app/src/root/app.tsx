@@ -1,9 +1,7 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { toKey } from 'react-select/src/utils';
 import { get_countries } from '../core/redux/countries/actions';
-import { getToken } from '../core/redux/user/selectors';
 import { meals } from '../core/types';
 import { Sorts } from '../core/utils/sorts';
 import { useRoutes } from '../core/router/routes';

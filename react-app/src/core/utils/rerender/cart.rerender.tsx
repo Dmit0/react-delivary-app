@@ -1,7 +1,7 @@
-import React, { ReactNode } from 'react';
-import { meals, restaurant } from '../../../core/types';
-import { CartItem } from '../components/cartItem';
-import { RestaurantMealBlock } from '../components/restaurantMealBlock';
+import React from 'react';
+import { meals, restaurant } from '../../types';
+import { CartItem } from '../../../modules/cart/components/cartItem';
+import { RestaurantMealBlock } from '../../../modules/cart/components/restaurantMealBlock';
 
 export const rerender = {
   mealsBlock(

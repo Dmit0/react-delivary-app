@@ -5,7 +5,8 @@ import {
   REMOVE_ITEM_FROM_CART,
   SET_MEAL_FROM_LOALESTORAGE_TO_CART,
   CLEAN_CART,
-  cartActionTypes, SET_CART_LENGTH,
+  cartActionTypes,
+  SET_CART_LENGTH,
 } from '../actions';
 
 export const set_meal_to_cart = (meal: meals, token: boolean): cartActionTypes => {

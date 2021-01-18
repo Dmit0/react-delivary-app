@@ -3,7 +3,7 @@ import { Swiper } from 'swiper/react';
 import { banner } from '../../core/types';
 import 'swiper/swiper.scss';
 import '../../core/css/content.css';
-import { rerender } from './utils/banner.rerender';
+import { rerender } from '../../core/utils/rerender/banner.rerender';
 
 interface BannersProps {
   banners: banner[]

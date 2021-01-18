@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 
 export const SearchInput = ({ currentFilterText, handleFilterTextChange }: any) => {
   return (

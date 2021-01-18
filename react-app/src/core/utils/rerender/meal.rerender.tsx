@@ -1,6 +1,6 @@
 import React from 'react'
-import { meals } from '../../../core/types';
-import { Meal } from '../components/meal';
+import { meals } from '../../types';
+import { Meal } from '../../../modules/meal/components/meal';
 
 export const rerender = {
   meals(meals: meals[], addHandler: (meal: meals) => void) {

@@ -2,17 +2,15 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCartLength } from '../../../core/redux/cart/selectors';
-import { getToken, getUserName } from '../../../core/redux/user/selectors';
+import { getToken } from '../../../core/redux/user/selectors';
 import { DropMenu } from './dropNavbarMenu';
 
 interface NanBarButtonsProps {
-  userPageRedirect(): void
   handleAuthOpen(): void
 }
 
-export const NavBarButtons: React.FC<NanBarButtonsProps> = ({ userPageRedirect, handleAuthOpen }) => {
+export const NavBarButtons: React.FC<NanBarButtonsProps> = ({ handleAuthOpen }) => {
   const cartLength = useSelector(getCartLength);
-  const userName = useSelector(getUserName);
   const isAuth = useSelector(getToken)
 
   return (

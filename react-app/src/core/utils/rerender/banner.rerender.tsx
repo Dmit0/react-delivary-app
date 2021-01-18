@@ -1,6 +1,6 @@
  import React from 'react'
  import { SwiperSlide } from 'swiper/react';
- import { banner } from '../../../core/types';
+ import { banner } from '../../types';
 
  export const rerender = {
    banner(banners: banner[]) {

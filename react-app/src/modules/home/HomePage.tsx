@@ -19,8 +19,7 @@ import '../../core/css/styles.css';
 import { getToken } from '../../core/redux/user/selectors';
 import { restaurant } from '../../core/types';
 import { ToolBar } from '../tool-bar/toolBar';
-import { Restaurant } from './components/restaurant';
-import { rerender } from './utils/home.rerender';
+import { rerender } from '../../core/utils/rerender/home.rerender';
 import { useHomeUtils } from './utils/home.utils';
 
 const HomePage: React.FC = () => {
