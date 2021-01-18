@@ -7,8 +7,7 @@ import { getMeals } from '../../core/redux/restaurant/selectors';
 import { getToken } from '../../core/redux/user/selectors';
 import { meals } from '../../core/types';
 import { set_meal_to_cart } from '../../core/redux/cart/actions';
-import { Meal } from './components/meal';
-import { rerender } from './utils/meal.rerender';
+import { rerender } from '../../core/utils/rerender/meal.rerender';
 
 const MealsPage: React.FC = () => {
   const dispatch = useDispatch();

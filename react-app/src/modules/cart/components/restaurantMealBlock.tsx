@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { meals, restaurant } from '../../../core/types';
-import { rerender } from '../utils/cart.rerender';
+import { rerender } from '../../../core/utils/rerender/cart.rerender';
 import { CartItem } from './cartItem';
 import './meal-block.style.css'
 

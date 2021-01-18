@@ -10,10 +10,7 @@ interface CartProps {
 }
 
 export const CartItem: React.FC<CartProps> = ({ meal, onDeleteOneItem, onDeleteMeal, onAddMeal }) => {
-  const countPrice = (): Number => {
-    let totalPrice = meal.count * meal.price;
-    return totalPrice;
-  };
+  const countPrice = (): Number => (meal.count * meal.price);
   return (
     <>
       <div className='cart-item'>

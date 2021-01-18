@@ -1,6 +1,6 @@
 import React from 'react'
-import { meals, restaurant } from '../../../core/types';
-import { Restaurant } from '../components/restaurant';
+import { restaurant } from '../../types';
+import { Restaurant } from '../../../modules/home/components/restaurant';
 
 
 export const rerender = {

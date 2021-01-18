@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { cartApi } from '../../core/api/apis/cart.api';
 import { OrderAPI } from '../../core/api/apis/order.api';
 import { restaurantAPI } from '../../core/api/apis/reastaurant.api';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
-import { set_cart_restaurants } from '../../core/redux/restaurant/actions';
+import { remove_all_cart_restaurants, remove_cart_restaurant, set_cart_restaurants } from '../../core/redux/restaurant/actions';
 import { getCartRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/cart.css';
 import { Action, Links } from '../../core/enums';
@@ -19,15 +19,13 @@ import {
 import { getCart } from '../../core/redux/cart/selectors';
 import { getToken } from '../../core/redux/user/selectors';
 import { meals, restaurant } from '../../core/types';
-import { rerender } from './utils/cart.rerender';
-import { RestaurantMealBlock } from './components/restaurantMealBlock';
+import { rerender } from '../../core/utils/rerender/cart.rerender';
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const token = useSelector(getToken);
-  console.log('render')
   const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
   useEffect(() => {
     getMeals(token).then((response) => {
@@ -79,17 +77,28 @@ const CartPage = () => {
     return response && dispatch(clean_cart());
   };
 
-  const deleteOneItem = useCallback((meal: meals) => (
+  const deleteRestaurantIfNeed = (meal: meals, cart: meals[], deleteFullItem = false) => {
+    console.log(meal.count)
+    console.log(cart?.filter(item => item.restaurant === meal.restaurant))
+    if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
+      console.log('delete restaurant')
+      dispatch(remove_cart_restaurant(meal.restaurant));
+    }
+  }
+
+  const deleteOneItem = useCallback((meal: meals) => {
+    deleteRestaurantIfNeed(meal, cart)
     token
       ? changeItemInCart(token, { action: Action.DECREMENT, mealId: meal._id }, meal)
-      : dispatch(remove_one_meal_from_cart(meal))
-  ), [ token, dispatch ]);
+      : dispatch(remove_one_meal_from_cart(meal));
+  }, [ token, dispatch, cart ]);
 
-  const deleteMealFromCart = useCallback((meal: meals) => (
+  const deleteMealFromCart = useCallback((meal: meals) => {
+    deleteRestaurantIfNeed(meal, cart, true)
     token
       ? deleteItemFromCart(token, meal)
       : dispatch(remove_item_from_cart(meal))
-  ), [ token, dispatch ]);
+  }, [ token, dispatch, cart ]);
 
   const addMeal = useCallback((meal: meals) => (
     token
@@ -97,11 +106,12 @@ const CartPage = () => {
       : dispatch(set_meal_to_cart(meal, false))
   ), [ token, dispatch ]);
 
-  const clear_cart_Handler = useCallback(() => (
+  const clear_cart_Handler = useCallback(() => {
+    dispatch(remove_all_cart_restaurants())
     token
       ? cleanUserCart(token)
       : dispatch(clean_cart())
-  ), [ token, dispatch ]);
+  }, [ token, dispatch ]);
 
   const count_items = useCallback((): Number => {
     return cart.reduce((sum, current) => (
@@ -136,7 +146,6 @@ const CartPage = () => {
       return [ ...prev, { restaurant, sum } ]
     }))
   }, [ setRestaurantBlockSum ])
-
   return (
     <>
       <div className="App">

@@ -8,14 +8,17 @@ import { Sorts } from '../../../utils/sorts';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { restaurantAPI } from '../../../api/apis/reastaurant.api';
 import {
+  restaurantActionTypes,
   SET_CURRENT_RESTAURANT,
   SET_REASTAURANTS,
   SET_MEALS,
-  restaurantActionTypes,
   SET_CUISENS,
   SET_FILTER_RESTAURANTS,
   SET_INPUT_FILTER,
-  DELETE_CURRENT_RESTAURANT_AND_MEALS, SET_CART_RESTAURANTS,
+  DELETE_CURRENT_RESTAURANT_AND_MEALS,
+  SET_CART_RESTAURANTS,
+  REMOVE_CART_RESTAURANT,
+  REMOVE_ALL_CART_RESTAURANTS,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -105,7 +108,6 @@ export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filte
       if (typeof Filtertype !== 'string') {
         sortedArray = Sorts.ByCuisen(currentRestaurants, Filtertype);
       }
-      ;
       break;
   }
   return {
@@ -125,6 +127,19 @@ export const set_input_filter = (currentRestaurants: restaurant[], str: string) 
 export const set_cart_restaurants = (restaurants: restaurant[]): restaurantActionTypes => {
   return {
     type: SET_CART_RESTAURANTS,
-    restaurants
-  }
-}
+    restaurants,
+  };
+};
+
+export const remove_cart_restaurant = (restaurantId: string): restaurantActionTypes => {
+  return {
+    type: REMOVE_CART_RESTAURANT,
+    restaurantId,
+  };
+};
+
+export const remove_all_cart_restaurants = (): restaurantActionTypes => {
+  return {
+    type: REMOVE_ALL_CART_RESTAURANTS,
+  };
+};

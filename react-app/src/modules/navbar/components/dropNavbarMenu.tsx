@@ -25,11 +25,12 @@ export const DropMenu: React.FC<DropMenu> = () => {
     };
     switch (type) {
       case(DropMenuType.USER_PAGE_LINK):
-        return (<Link to={ Links.USER } key={ text }>
-          <li>
-            <span className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
-          </li>
-        </Link>);
+        return (
+          <Link to={ Links.USER } key={ text }>
+            <li>
+              <span className="dropdown-item dropdown-menu-item" onClick={ onClick }>{ text }</span>
+            </li>
+          </Link>);
       case(DropMenuType.LOG_OUT):
         return (
           <li key={ text }>
