@@ -11,6 +11,7 @@ import { PopupContainer } from '../modules/popup/popup';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
+  console.log('hi');
   const dispatch = useDispatch()
   const routes = useRoutes()
   const tokenFromStore = useSelector(getToken)
