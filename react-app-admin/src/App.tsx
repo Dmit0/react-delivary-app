@@ -1,10 +1,15 @@
 import React from 'react';
+import './styles/app.scss';
+import {BrowserRouter} from "react-router-dom";
+import { useRoutes } from './root/routes';
 
-function App() {
+const App: React.FC = () => {
+    const route = useRoutes();
+
   return (
-    <div className="App">
-
-    </div>
+      <BrowserRouter>
+          {route}
+      </BrowserRouter>
   );
 }
 
