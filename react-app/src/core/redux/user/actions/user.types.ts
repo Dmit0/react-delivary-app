@@ -1,4 +1,4 @@
-import { Address, userToStore } from '../../../types';
+import { UserRedux, userToStore } from '../../../types';
 
 export const SET_TOKEN = 'SET_TOKEN';
 export const SET_USER = 'SET_USER';
@@ -7,15 +7,7 @@ export const INITIAL_STATE = 'INITIAL_STATE'
 
 export interface userState {
   token: string | null
-  user: {
-    userId: string | null
-    userName: string | null
-    email: string | null,
-    userPhone: string | null
-    firstAddress: Address | null
-    addresses: Address[]
-    status: string | null
-  }
+  user: UserRedux
 }
 
 interface INITIAL_STATE {

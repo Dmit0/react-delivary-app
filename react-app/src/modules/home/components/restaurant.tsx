@@ -19,7 +19,7 @@ export const Restaurant: React.FC<RestaurantProps> = ({ restaurant, onRestaurant
       <div className="card-inline">
         <label className="check option">
           <input checked={ checked } type="checkbox" className="myCheckbox__input" onChange={ onToggle }/>
-          <span className="check__box"></span>
+          <span className="check__box"/>
         </label>
         <Link to={ `/MealsPage/${ restaurant._id }` }>
           <div onClick={ () => onRestaurantClick(restaurant) }>

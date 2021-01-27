@@ -2,13 +2,13 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
-import { addressDataStep, loginData, userForCreateAccount, userToStore } from '../../../types';
+import { addressDataStep, loginData, userForCreateAccount } from '../../../types';
 import { set_cart_length } from '../../cart/actions';
 import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { AuthenticationApi } from '../../../api/apis/authentication.api';
-import { setAuthUser } from '../../user/actions/user.actions';
+import { setAuthUser } from '../../user/actions';
 import {
   AUTH_CLOSE,
   AUTH_FAIL, AUTH_LAST_STEP_CLOSE,

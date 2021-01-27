@@ -6,7 +6,7 @@
    banner(banners: banner[]) {
      if (banners.length !== 0) return banners.map(banner => (
          <SwiperSlide key={ banner._id }>
-           <img src={ banner.picture } width="1600px" height='450px' className="App__content-banner" alt=""/>
+           <img src={ banner.picture } width="1700px" height='450px' className="App__content-banner" alt=""/>
          </SwiperSlide>
        ))
    }

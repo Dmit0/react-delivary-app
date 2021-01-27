@@ -1,7 +1,7 @@
 export const opportunity = [
-  { name: 'RANK_UP', representative: ['BASE'] },
-  { name: 'CREATE_MARKET', representative: ['CUSTOMER'] },
-  { name: 'CREATE_ADMINS', representative: ['SUB_ADMIN', 'ADMIN'] },
-  { name: 'DELETE_USER', representative: ['ADMIN'] },
-  { name: 'BUY', representative: ['VERIFIED'] },
+  { name: 'RANK_UP' },
+  { name: 'CREATE_MARKET' },
+  { name: 'CREATE_ADMINS' },
+  { name: 'DELETE_USER' },
+  { name: 'BUY' },
 ];

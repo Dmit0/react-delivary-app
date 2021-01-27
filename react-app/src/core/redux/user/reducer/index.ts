@@ -6,10 +6,12 @@ const initialState: userState = {
     userId: null,
     userName: null,
     email: null,
-    userPhone: null,
     firstAddress: null,
     addresses: [],
+    createdAt: null,
     status: null,
+    phone: null,
+    role: null
   }
 };
 export const userReducer = (state = initialState, action: UserActionTypes): userState => {
@@ -25,6 +27,10 @@ export const userReducer = (state = initialState, action: UserActionTypes): user
           userId: action.user.userId,
           userName: action.user.firstName,
           email: action.user.email,
+          createdAt: action.user.createdAt || null,
+          addresses: action.user.addresses || [],
+          phone: action.user.phone || null,
+          role: action.user.role || null
         },
       };
     case SET_AUTH_USER:

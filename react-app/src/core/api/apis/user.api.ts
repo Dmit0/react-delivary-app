@@ -5,7 +5,7 @@ export const UserApi = {
 
   async getUser(token: string): Promise<any> {
     try {
-      return await http<{ phone: any, addresses: any, _doc: any }>('/user/getUser', 'GET', null, {
+      return await http<{ phone: any, addresses: any, user: any, role: any }>('/user/getUser', 'GET', null, {
         Authorization: `Bearer ${ token }`,
       });
     } catch (e) {
