@@ -1,5 +1,5 @@
 import React from 'react'
-import { AddressCard } from '../../../modules/user/components/address-block/components/addressCard';
+import { AddressCard } from '../../../modules/user/user-page/components/address-block/components/addressCard';
 import { HoleAddress } from '../../types';
 
 

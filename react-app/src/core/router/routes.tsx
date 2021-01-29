@@ -1,68 +1,44 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
 import User from '../../pages/user-page';
+import UpdateUser from '../../pages/user-page/update-user-pages/update-user-page';
 import { Links } from '../enums';
-import { getToken } from '../redux/user/selectors';
 
-export const useRoutes = () => {
-  const token = useSelector(getToken);
+export const useRoutes = (token: string | null) => {
   return <Switch>
     <Route path={ Links.HOME } exact>
       <Home/>
     </Route>
-    <Route path={ Links.CART } exact>
+    <Route path={ Links.CART }>
       <Cart/>
     </Route>
     <Route path={ Links.MEALS }>
       <Meal/>
     </Route>
-    { token && (
-      <Route path={ Links.USER }>
-        <User/>
-      </Route>
-    ) }
+    { token && ValidatedRoutes()}
     <Redirect to={ Links.HOME }/>
   </Switch>;
 
 };
 
-const defaultRoutes = () => {
+const ValidatedRoutes = () => {
   return (
     <Switch>
-      <Route path={ Links.HOME } exact>
-        <Home/>
-      </Route>
-      <Route path={ Links.CART } exact>
-        <Cart/>
-      </Route>
-      <Route path={ Links.MEALS }>
-        <Meal/>
-      </Route>
-      <Redirect to={ Links.HOME }/>
-    </Switch>
-  );
-};
-
-const userRoutes = () => {
-  return (
-    <switch>
-      <Route path={ Links.HOME } exact>
-        <Home/>
-      </Route>
-      <Route path={ Links.CART } exact>
-        <Cart/>
-      </Route>
       <Route path={ Links.USER } exact>
         <User/>
       </Route>
-      <Route path={ Links.MEALS }>
-        <Meal/>
+      <Route path={`${Links.USER}${Links.ADDRESS_ADD}`}>
+        <Cart/>
       </Route>
-      <Redirect to={ Links.HOME }/>
-    </switch>
+      <Route path={`${Links.USER}${Links.ADDRESS_UPDATE}`}>
+        <Cart/>
+      </Route>
+      <Route path={`${Links.USER}${Links.USER_UPDATE}`}>
+        <UpdateUser/>
+      </Route>
+    </Switch>
   );
 };

@@ -1,7 +1,9 @@
 import React from 'react';
 import '../../user.style.css';
-import { UserRedux } from '../../../../core/types';
-import { formatDate } from '../../../../core/utils/date.utils';
+import { Link } from 'react-router-dom';
+import { Links } from '../../../../../core/enums';
+import { UserRedux } from '../../../../../core/types';
+import { formatDate } from '../../../../../core/utils/date.utils';
 
 interface UserCardProps {
   user: UserRedux
@@ -20,11 +22,13 @@ export const UserCard: React.FC<UserCardProps> = ({ user }) => {
             <span className="user-info-body-item">since from { user.createdAt && formatDate(user.createdAt, 'DD.MM.YYYY') }</span>
           </div>
           <div className="user_info_footer">
-            <button
-              type="button"
-              className="btn btn-warning user-info-footer-item">
-              Update
-            </button>
+            <Link to={`${Links.USER}${Links.USER_UPDATE}`}>
+              <button
+                type="button"
+                className="btn btn-warning user-info-footer-item">
+                Update
+              </button>
+            </Link>
           </div>
         </div>
   );

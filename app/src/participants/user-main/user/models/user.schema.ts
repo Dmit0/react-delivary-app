@@ -1,17 +1,15 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema, Types } from 'mongoose';
+import { Document, Schema as MongooseSchema } from 'mongoose';
 import { Address } from '../../address/models/address.model';
 import { Cart } from '../../cart/models/cart.schema';
 import { Phone } from '../../phone/models/phone.schema';
 import { Role } from '../../roles/models/Roles';
-import { Meal } from '../../../../meals/meal/models/meals.schema';
 import { Restaurant } from '../../../../restaurant/models/restaurant.schema';
 
 export const UserStatuses = [
   'BRONZE',
   'SILVER',
   'GOLD',
-  'ADMIN',
 ];
 
 @Schema()

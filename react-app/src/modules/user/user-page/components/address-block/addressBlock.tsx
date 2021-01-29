@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../user.style.css';
-import { HoleAddress } from '../../../../core/types';
-import { rerender } from '../../../../core/utils/rerender/address.rerender';
+import { HoleAddress } from '../../../../../core/types';
+import { rerender } from '../../../../../core/utils/rerender/address.rerender';
 
 interface UserAddressBlock {
   userAddresses: HoleAddress[]

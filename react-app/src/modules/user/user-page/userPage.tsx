@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import './user.style.css'
-import '../../core/css/styles.css';
-import '../../core/css/content.css';
+import '../../../core/css/styles.css';
+import '../../../core/css/content.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserApi } from '../../core/api/apis/user.api';
-import { setUser } from '../../core/redux/user/actions';
-import { getToken, getUser } from '../../core/redux/user/selectors';
+import { UserApi } from '../../../core/api/apis/user.api';
+import { setUser } from '../../../core/redux/user/actions';
+import { getToken, getUser } from '../../../core/redux/user/selectors';
 import { AddressBlock } from './components/address-block/addressBlock';
 import { UserCard } from './components/user-block/userData';
 

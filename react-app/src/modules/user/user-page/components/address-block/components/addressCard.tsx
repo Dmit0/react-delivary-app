@@ -1,7 +1,7 @@
 import React from 'react';
 import '../../../user.style.css';
-import { DeleteIcon } from '../../../../../core/components/icons';
-import { HoleAddress } from '../../../../../core/types';
+import { DeleteIcon } from '../../../../../../core/components/icons';
+import { HoleAddress } from '../../../../../../core/types';
 
 interface UserAddressCard {
   address: HoleAddress
