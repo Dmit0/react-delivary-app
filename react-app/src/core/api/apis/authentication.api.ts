@@ -18,7 +18,7 @@ export const AuthenticationApi = {
                 'Content-Type': 'application/json;charset=utf-8',
             });
         } catch (e) {
-            return false;
+            return true;
         }
     },
 

@@ -7,6 +7,7 @@ import { AddressService } from '../address/address.service';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
+import { UpdateUserDto } from './models/user.dto';
 import { User } from './models/user.schema';
 import { forkJoin, from, Observable, of } from 'rxjs';
 import { IUserCreate } from './models/user.types';
@@ -88,6 +89,19 @@ export class UserService {
           map((user) => user || null),
         )),
       )),
+    );
+  }
+
+  prepareToUpdateUser(userId: string, data: UpdateUserDto) {
+    if (data.telephone) {
+      return this.phoneService.updatePhone({ userId }, { ...data.telephone }).pipe(
+        mergeMap(phone => this.updateUser({ _id: userId }, { ...data, telephone: phone._id }).pipe(
+          map((user) => user && true || false),
+        )),
+      );
+    }
+    return this.updateUser({ _id: userId }, { ...data }).pipe(
+      map((user) => user && true || false),
     );
   }
 

@@ -39,6 +39,7 @@ const ValidatedRoutes = () => {
       <Route path={`${Links.USER}${Links.USER_UPDATE}`}>
         <UpdateUser/>
       </Route>
+      <Redirect to={ Links.HOME }/>
     </Switch>
   );
 };

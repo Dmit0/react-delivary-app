@@ -114,9 +114,9 @@ export const SignUpPersonalForm: React.FC = () => {
                 <input type="password" name='password'
                        ref={ register({ required: true, minLength: 8, maxLength: 30, pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/ }) }/>
                 { errors.password && errors.password.type === 'required' && <span>This field is required</span> }
-                { errors.password && errors.password.type === 'minLength' && <span>The minimal length of password should be more than 8</span> }
-                { errors.password && errors.password.type === 'maxLength' && <span>The minimal length of password should less than 30</span> }
-                { errors.password && errors.password.type === 'pattern' && <span>The password should contain letters Upper and Lower case</span> }
+                { errors.password && errors.password.type === 'minLength' && <span>Required len more then 8</span> }
+                { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
+                { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
               </div>
             </div>
             <div className="auth-reg-futer">

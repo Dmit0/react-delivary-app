@@ -1,3 +1,4 @@
+import { IUpdateUser } from '../../types';
 import { http } from '../api';
 import { FetchUtils } from '../../utils/fetchUtils';
 
@@ -21,6 +22,27 @@ export const UserApi = {
       });
     } catch (e) {
       return await FetchUtils.catchFetchErrors(e, token, this.loveRestaurantAction, data)
+    }
+  },
+
+  async updateUser(token: string, updateUser: IUpdateUser): Promise<any> {
+    try {
+      return await http<{ status: boolean }>('/user/updateUser', "POST", JSON.stringify(updateUser), {
+        Authorization: `Bearer ${ token }`,
+        'Content-Type': 'application/json;charset=utf-8',
+      })
+    }catch(e) {
+      return await FetchUtils.catchFetchErrors(e, token, this.updateUser, updateUser)
+    }
+  },
+
+  async verifyMailKey(email: string): Promise<any> {
+    try {
+      return await http<{ status: boolean }>('/authentication/verifyMail', "POST", JSON.stringify({ email }), {
+        'Content-Type': 'application/json'
+      } )
+    }catch(e) {
+      return false
     }
   },
 };

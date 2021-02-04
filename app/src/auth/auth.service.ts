@@ -89,7 +89,7 @@ export class AuthService {
 
   verifyMail(email: string) {
     return this.userService.getUser(email).pipe(
-      map((user) => user && true || exceptionErrors.badRequestException('bad request')),
+      map((user) => user && true || false),
     );
   }
 
