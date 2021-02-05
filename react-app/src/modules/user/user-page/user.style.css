@@ -71,6 +71,7 @@
 
 .user-address-footer-item {
     border-radius: 15px;
+    margin-right: 20px;
     padding: 4px 12px 3px 10px;
 }
 
@@ -86,8 +87,7 @@
 
 .user-address_block_title {
     margin-top: 25px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e0dede;
+    padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
 }
@@ -117,19 +117,19 @@
 }
 .user-address-card-delete {
     align-self: center;
+    cursor: pointer;
 }
 .user-address-card-update {
     margin-top: 25px;
     align-self: center;
 }
 .user-address-block-footer {
-    padding: 10px;
+    padding: 20px 10px;
     display: flex;
     justify-content: space-between;
     margin: 0 35px;
 }
 .user-address-card {
-    border-bottom: 1px solid #e0dede;
 }
 .paging-item {
     padding: 0 5px;

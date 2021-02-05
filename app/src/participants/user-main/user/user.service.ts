@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
+import { AddAddressDto, DeleteAddressDto } from '../address/models/address.types';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
@@ -89,6 +90,47 @@ export class UserService {
           map((user) => user || null),
         )),
       )),
+    );
+  }
+
+  addAddress(userId: string, data: AddAddressDto): Observable<any> {
+    return this.addressService.generateAddress({ ...data, userId }).pipe(
+      mergeMap((address) => forkJoin([
+        this.getUser({ _id: userId }),
+        this.roleService.findRole({ name: roles.VERIFIED }),
+      ]).pipe(
+        mergeMap(([ user, verifyRole ]) => {
+          if (user.role.equals(verifyRole._id)) {
+            return this.updateUser({ _id: userId }, { addresses: [ ...user.addresses, address._id ] });
+          }
+          return forkJoin([
+            this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
+            user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
+          ]).pipe(
+            map(([user]) => ({user}))
+          );
+        }),
+      )),
+    );
+  }
+
+  deleteAddress(userId: string, addressId: any) {
+    return this.getUser({ _id: userId }).pipe(
+      mergeMap((user) => {
+        if (user.addresses.length === 1) {
+          return this.roleService.findRole({ name: roles.BASE }).pipe(
+            mergeMap((role) => this.updateUser({ _id: userId }, { role: role._id }).pipe(
+              map((user) => user || null),
+            )),
+          );
+        }
+        return of(user);
+      }),
+      mergeMap((user) => forkJoin([
+        this.updateUser({ _id: userId }, {
+          addresses: user.addresses && user.addresses.filter((address) => !address.equals(addressId)) }) || [],
+        this.addressService.deleteAddress({ _id: addressId }),
+      ])),
     );
   }
 

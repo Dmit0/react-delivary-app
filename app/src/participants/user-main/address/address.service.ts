@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { IsString } from 'class-validator';
 import { Model } from "mongoose";
 import { from, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
@@ -15,7 +16,7 @@ export class AddressService {
   ) {
   }
 
-  generateAddress(data: { country: string }): Observable<Address> {
+  generateAddress(data: { country: string, countryCode?: string, region?: string, street?: string, streetNumber?: string, userId?: string}): Observable<Address> {
     return from(this.countryService.findOne({ name: data.country })).pipe(
       mergeMap((country) => {
         const newAddress = new this.addressModel({ ...data, countryCode: country.code });
@@ -23,6 +24,10 @@ export class AddressService {
           map((address) => address || null));
       }),
     );
+  }
+
+  deleteAddress(_id: any): Observable<any>{
+    return from(this.addressModel.deleteOne({_id}))
   }
 
   getAddress(data: any): Observable<Address>{

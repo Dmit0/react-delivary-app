@@ -15,7 +15,7 @@ export const setCities = (cities: fetchGeoModel[]): GeoActionTypes => {
   };
 };
 
-export const setCurrentRegion = (region: fetchGeoModel): GeoActionTypes => {
+export const setCurrentRegion = (region: fetchGeoModel | null): GeoActionTypes => {
   return {
     type: SET_CURRENT_REGION,
     region

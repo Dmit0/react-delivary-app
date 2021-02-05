@@ -7,7 +7,8 @@ import { UserApi } from '../../../../../../core/api/apis/user.api';
 import { CheckIcon, XIcon } from '../../../../../../core/components/icons/check.icon';
 import { Links } from '../../../../../../core/enums';
 import { getToken } from '../../../../../../core/redux/user/selectors';
-import './update.from.css'
+import './update.form.css'
+import { validateFormData } from '../../../../../../core/utils/form.utils';
 
 export const UpdateUserFrom = () => {
 
@@ -45,12 +46,7 @@ export const UpdateUserFrom = () => {
   };
 
   const onSubmit = useCallback(async (data: any) => {
-    const updateData = Object.keys(data).reduce((acc, item) => {
-      if (data[item]) {
-        return { ...acc, [item]: data[item] };
-      }
-      return acc;
-    }, {});
+    const updateData = validateFormData(data)
     const response = token && await UserApi.updateUser(token, updateData);
     setIsNeedToRedirect(!!response);
   }, [ token ]);

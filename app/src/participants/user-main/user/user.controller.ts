@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { tap } from 'rxjs/operators';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
+import { AddAddressDto, DeleteAddressDto } from '../address/models/address.types';
 import { UpdateUserDto } from './models/user.dto';
 import { UserService } from './user.service';
 
@@ -34,5 +34,17 @@ export class UserController {
   @Post('updateUser')
   updateUser(@CurrentUser() user: any, @Body() updateUser: UpdateUserDto) {
     return this.userService.prepareToUpdateUser(user._id, updateUser)
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('addAddress')
+  AddUserAddress(@CurrentUser() user: any, @Body('address') address: AddAddressDto): any {
+    return this.userService.addAddress(user._id, address);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('deleteAddress')
+  DeleteUserAddress(@CurrentUser() user: any, @Body('addressId') addressId: string): any {
+    return this.userService.deleteAddress(user._id, addressId);
   }
 }

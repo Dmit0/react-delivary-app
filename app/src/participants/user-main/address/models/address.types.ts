@@ -1,13 +1,40 @@
-import {  IsOptional, IsNumber } from 'class-validator';
+import { IsOptional, IsNumber, IsString } from 'class-validator';
 import { Address } from './address.model';
 
-export interface DataToUpdateAddress {
-  country?: string;
-  city?: string;
-  street?: string;
-  streetNumber?: string;
-  floor?: string;
-  door?: string;
+export class UpdateAddressDto {
+  @IsOptional()
+  @IsString()
+  country: string;
+  @IsOptional()
+  @IsString()
+  countryCode: string;
+  @IsOptional()
+  @IsString()
+  region: string;
+  @IsOptional()
+  @IsString()
+  street: string;
+  @IsOptional()
+  @IsString()
+  streetNumber: string;
+}
+
+export class AddAddressDto {
+  @IsString()
+  country: string;
+  @IsString()
+  countryCode: string;
+  @IsString()
+  region: string;
+  @IsString()
+  street: string;
+  @IsString()
+  streetNumber: string;
+}
+
+export class DeleteAddressDto {
+  @IsString()
+  addressId: string
 }
 
 export class paginatedDataDto {

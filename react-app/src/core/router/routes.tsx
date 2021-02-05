@@ -4,6 +4,8 @@ import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
 import User from '../../pages/user-page';
+import AddAddress from '../../pages/user-page/update-user-pages/add-address-page';
+import UpdateAddress from '../../pages/user-page/update-user-pages/update-address-page';
 import UpdateUser from '../../pages/user-page/update-user-pages/update-user-page';
 import { Links } from '../enums';
 
@@ -31,10 +33,10 @@ const ValidatedRoutes = () => {
         <User/>
       </Route>
       <Route path={`${Links.USER}${Links.ADDRESS_ADD}`}>
-        <Cart/>
+        <AddAddress/>
       </Route>
       <Route path={`${Links.USER}${Links.ADDRESS_UPDATE}`}>
-        <Cart/>
+        <UpdateAddress/>
       </Route>
       <Route path={`${Links.USER}${Links.USER_UPDATE}`}>
         <UpdateUser/>

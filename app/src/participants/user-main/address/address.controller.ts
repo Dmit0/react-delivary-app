@@ -4,7 +4,7 @@ import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
 import { IUser } from '../user/models/user.types';
 import { AddressService } from './address.service';
-import { DataToUpdateAddress, IGetPaginatedAddresses, paginatedDataDto } from './models/address.types';
+import { AddAddressDto, IGetPaginatedAddresses, paginatedDataDto, UpdateAddressDto } from './models/address.types';
 
 @Controller('address')
 export class AddressController {
@@ -12,7 +12,7 @@ export class AddressController {
   }
   @UseGuards(JwtAuthGuard)
   @Post('update')
-  updateUserAddress(@CurrentUser() user: IUser, @Body('updateAddress') updateAddress:  DataToUpdateAddress): any {
+  updateUserAddress(@CurrentUser() user: IUser, @Body('updateAddress') updateAddress: UpdateAddressDto): any {
     return this.addressService.updateAddress(user.id,updateAddress);
   }
 

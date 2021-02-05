@@ -35,14 +35,4 @@ export const UserApi = {
       return await FetchUtils.catchFetchErrors(e, token, this.updateUser, updateUser)
     }
   },
-
-  async verifyMailKey(email: string): Promise<any> {
-    try {
-      return await http<{ status: boolean }>('/authentication/verifyMail', "POST", JSON.stringify({ email }), {
-        'Content-Type': 'application/json'
-      } )
-    }catch(e) {
-      return false
-    }
-  },
 };
