@@ -11,7 +11,7 @@ export const FetchUtils = {
         }
         return refreshedToken;
       default:
-        return error;
+        return error; //TODO: `rework solution of refresh token to each method`
     }
   },
 };

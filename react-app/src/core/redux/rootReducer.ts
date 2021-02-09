@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { addressStateReducer } from './addresses/reducer';
 import { appStateReducer } from './app/reducer';
 import { authReducer } from './auth/reducer';
 import { cartReducer } from './cart/reducer';
@@ -20,7 +21,8 @@ export const rootReducer = combineReducers({
   countries: countryReducer,
   geo: geoReducer,
   user: userReducer,
-  popup: popupReducer
+  popup: popupReducer,
+  address: addressStateReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>

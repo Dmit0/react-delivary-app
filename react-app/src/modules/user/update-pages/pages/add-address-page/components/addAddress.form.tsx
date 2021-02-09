@@ -53,6 +53,7 @@ export const AddAddressFrom = () => {
           country: currentCountry.name,
           countryCode: currentCountry.code,
           region: currentRegion.name,
+          regionId: currentRegion.isoCode,
           street: data.street,
           streetNumber: data.streetNumber
         }

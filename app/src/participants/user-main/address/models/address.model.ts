@@ -14,6 +14,8 @@ export class Address extends Document {
   street?: string;
   @Prop({ default: null })
   region?: string;
+  @Prop({default: null})
+  regionId?: string
   @Prop({ default: null })
   streetNumber?: string;
 }

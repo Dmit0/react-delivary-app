@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { Divider } from '../../../../../../core/components/decor';
 import { DeleteIcon } from '../../../../../../core/components/icons';
 import { Links } from '../../../../../../core/enums';
-import { HoleAddress } from '../../../../../../core/types';
+import { IHoleAddress } from '../../../../../../core/types';
 
 interface UserAddressCard {
-  address: HoleAddress
+  address: IHoleAddress
   deleteAddress(addressId: string): void
 }
 
@@ -26,7 +26,7 @@ export const AddressCard: React.FC<UserAddressCard> = ({address, deleteAddress})
             <DeleteIcon/>
           </div>
           <div className="user-address-card-update">
-            <Link to={`${Links.USER}${Links.ADDRESS_UPDATE}`}>
+            <Link to={`${Links.USER}${Links.ADDRESS_UPDATE_PATH}/${address._id}`}>
               <button
                 type="button"
                 className="btn btn-warning user-info-footer-item">

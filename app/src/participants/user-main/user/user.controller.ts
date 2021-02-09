@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
-import { AddAddressDto, DeleteAddressDto } from '../address/models/address.types';
+import { AddAddressDto, DeleteAddressDto, UpdateAddressDto } from '../address/models/address.types';
 import { UpdateUserDto } from './models/user.dto';
+import { IUser } from './models/user.types';
 import { UserService } from './user.service';
 
 
@@ -46,5 +47,11 @@ export class UserController {
   @Post('deleteAddress')
   DeleteUserAddress(@CurrentUser() user: any, @Body('addressId') addressId: string): any {
     return this.userService.deleteAddress(user._id, addressId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('updateAddress')
+  updateUserAddress(@CurrentUser() user: IUser, @Body('updateAddress') updateAddress: UpdateAddressDto): any {
+    return this.userService.updateAddress(user.id, updateAddress);
   }
 }

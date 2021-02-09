@@ -35,7 +35,7 @@ const ValidatedRoutes = () => {
       <Route path={`${Links.USER}${Links.ADDRESS_ADD}`}>
         <AddAddress/>
       </Route>
-      <Route path={`${Links.USER}${Links.ADDRESS_UPDATE}`}>
+      <Route path={`${Links.USER}${Links.ADDRESS_UPDATE_ROUTE}`}>
         <UpdateAddress/>
       </Route>
       <Route path={`${Links.USER}${Links.USER_UPDATE}`}>

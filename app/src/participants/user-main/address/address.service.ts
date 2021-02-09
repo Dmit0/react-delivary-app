@@ -16,7 +16,15 @@ export class AddressService {
   ) {
   }
 
-  generateAddress(data: { country: string, countryCode?: string, region?: string, street?: string, streetNumber?: string, userId?: string}): Observable<Address> {
+  generateAddress(data: {
+    country: string,
+    countryCode?: string,
+    region?: string,
+    regionId?: string,
+    street?: string,
+    streetNumber?: string,
+    userId?: string
+  }): Observable<Address> {
     return from(this.countryService.findOne({ name: data.country })).pipe(
       mergeMap((country) => {
         const newAddress = new this.addressModel({ ...data, countryCode: country.code });

@@ -7,11 +7,11 @@ import { Divider } from '../../../../../core/components/decor';
 import { Links } from '../../../../../core/enums';
 import { deleteUserAddress } from '../../../../../core/redux/user/actions';
 import { getToken } from '../../../../../core/redux/user/selectors';
-import { HoleAddress } from '../../../../../core/types';
+import { IHoleAddress } from '../../../../../core/types';
 import { rerender } from '../../../../../core/utils/rerender/address.rerender';
 
 interface UserAddressBlock {
-  userAddresses: HoleAddress[]
+  userAddresses: IHoleAddress[]
 }
 
 export const AddressBlock: React.FC<UserAddressBlock> = ({ userAddresses }) => {
