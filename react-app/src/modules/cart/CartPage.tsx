@@ -78,10 +78,7 @@ const CartPage = () => {
   };
 
   const deleteRestaurantIfNeed = (meal: meals, cart: meals[], deleteFullItem = false) => {
-    console.log(meal.count)
-    console.log(cart?.filter(item => item.restaurant === meal.restaurant))
     if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
-      console.log('delete restaurant')
       dispatch(remove_cart_restaurant(meal.restaurant));
     }
   }

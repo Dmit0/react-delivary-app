@@ -1,4 +1,9 @@
 .container {
     padding: 0;
-    margin: 0;
+}
+.userCard {
+    padding-right: 100px;
+}
+.addressCard {
+    padding-left: 100px;
 }
