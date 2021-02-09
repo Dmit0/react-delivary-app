@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
-import { AddAddressDto, DeleteAddressDto } from '../address/models/address.types';
+import { AddAddressDto, DeleteAddressDto, UpdateAddressDto } from '../address/models/address.types';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
@@ -132,6 +132,11 @@ export class UserService {
         this.addressService.deleteAddress({ _id: addressId }),
       ])),
     );
+  }
+
+  updateAddress(userId: string, address: UpdateAddressDto) {
+    const { addressId, ...updateData } = address;
+    return this.addressService.updateAddress({ _id: addressId }, { ...updateData });
   }
 
   prepareToUpdateUser(userId: string, data: UpdateUserDto) {

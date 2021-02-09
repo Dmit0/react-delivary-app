@@ -1,4 +1,4 @@
-import { country } from './index';
+import { country, IHoleAddress } from './index';
 import { IPhone } from './phone.types';
 import { IRole } from './role.types';
 
@@ -21,7 +21,7 @@ export interface userToStore {
   firstName: string,
   firstAddress?: Address,
   userId: string,
-  addresses?: HoleAddress[],
+  addresses?: IHoleAddress[],
   phone?: IPhone,
   role?: IRole,
   createdAt?: string | null,
@@ -32,7 +32,7 @@ export interface UserRedux {
   userName: string | null
   email: string | null,
   firstAddress: Address | null
-  addresses: HoleAddress[]
+  addresses: IHoleAddress[]
   status: string | null,
   phone: IPhone | null,
   role: IRole | null,
@@ -43,13 +43,4 @@ export interface Address {
   addressId: string,
   country: string,
   code: string
-}
-
-export interface HoleAddress {
-  country: string
-  countryCode: string
-  region: string
-  street: string
-  streetNumber: string
-  _id: string
 }

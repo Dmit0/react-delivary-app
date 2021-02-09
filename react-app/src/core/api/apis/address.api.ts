@@ -1,4 +1,4 @@
-import { IAddAddress } from '../../types';
+import { IAddAddress, IUpdateAddress } from '../../types';
 import { FetchUtils } from '../../utils/fetchUtils';
 import { http } from '../api';
 
@@ -23,6 +23,17 @@ export const AddressApi = {
       });
     } catch (e) {
       return await FetchUtils.catchFetchErrors(e, token, this.addAddress, addressId)
+    }
+  },
+
+  async updateAddress(token: string, address: IUpdateAddress): Promise<any> {
+    try {
+      return await http<{ status: boolean }>('/user/updateAddress', 'POST', JSON.stringify({ updateAddress: address }), {
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: `Bearer ${ token }`,
+      });
+    } catch (e) {
+      return await FetchUtils.catchFetchErrors(e, token, this.updateAddress, address)
     }
   },
 }

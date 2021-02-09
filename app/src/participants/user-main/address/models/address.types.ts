@@ -2,19 +2,18 @@ import { IsOptional, IsNumber, IsString } from 'class-validator';
 import { Address } from './address.model';
 
 export class UpdateAddressDto {
-  @IsOptional()
+  @IsString()
+  addressId: string
   @IsString()
   country: string;
-  @IsOptional()
   @IsString()
   countryCode: string;
-  @IsOptional()
   @IsString()
   region: string;
-  @IsOptional()
+  @IsString()
+  regionId: string;
   @IsString()
   street: string;
-  @IsOptional()
   @IsString()
   streetNumber: string;
 }
@@ -26,6 +25,8 @@ export class AddAddressDto {
   countryCode: string;
   @IsString()
   region: string;
+  @IsString()
+  regionId: string;
   @IsString()
   street: string;
   @IsString()
