@@ -1,3 +1,4 @@
+import { IUpdateUser } from '../../types';
 import { http } from '../api';
 import { FetchUtils } from '../../utils/fetchUtils';
 
@@ -5,7 +6,7 @@ export const UserApi = {
 
   async getUser(token: string): Promise<any> {
     try {
-      return await http<{ phone: any, addresses: any, _doc: any }>('/user/getUser', 'GET', null, {
+      return await http<{ phone: any, addresses: any, user: any, role: any }>('/user/getUser', 'GET', null, {
         Authorization: `Bearer ${ token }`,
       });
     } catch (e) {
@@ -21,6 +22,17 @@ export const UserApi = {
       });
     } catch (e) {
       return await FetchUtils.catchFetchErrors(e, token, this.loveRestaurantAction, data)
+    }
+  },
+
+  async updateUser(token: string, updateUser: IUpdateUser): Promise<any> {
+    try {
+      return await http<{ status: boolean }>('/user/updateUser', "POST", JSON.stringify(updateUser), {
+        Authorization: `Bearer ${ token }`,
+        'Content-Type': 'application/json;charset=utf-8',
+      })
+    }catch(e) {
+      return await FetchUtils.catchFetchErrors(e, token, this.updateUser, updateUser)
     }
   },
 };

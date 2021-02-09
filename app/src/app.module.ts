@@ -32,7 +32,7 @@ import { RestaurantModule } from './restaurant/restaurant.module';
     OpportunitiesModule,
     CountryModule,
     OrderModule,
-    ConfigService,// how to use it?
+    ConfigService,
     ConfigModule.forRoot({
       load: [config],
     }),

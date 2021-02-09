@@ -2,13 +2,18 @@
 .App__content{
   width:1600px;
   margin:0 auto;
-  
+  height: 100vh;
+  padding-top: 90px;
 }
 .App__content-banner{
-  margin:120px 0 0 0;
   border-radius: 20px 20px 0  0;
   cursor: pointer;
+  width: 100%;
 }
+.App__content-Banners {
+  margin:20px 0 0 0;
+}
+
 .card-inline{
 display:flex;
 flex-direction: column;
@@ -23,7 +28,6 @@ transition: all 0.5s ease-out;
 
 
 .card-inline:hover{
-  
   transform: scale(1.1);
 }
 .App__content-main{

@@ -1,15 +1,16 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { map, mergeMap, tap } from 'rxjs/operators';
-import { Opportunities } from '../../../constants/enums/opportunity.enum';
+import { map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
+import { AddAddressDto, DeleteAddressDto } from '../address/models/address.types';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
+import { UpdateUserDto } from './models/user.dto';
 import { User } from './models/user.schema';
-import { from, Observable, of } from 'rxjs';
+import { forkJoin, from, Observable, of } from 'rxjs';
 import { IUserCreate } from './models/user.types';
 import { roles } from "../../../constants/enums/roles";
 
@@ -44,41 +45,107 @@ export class UserService {
 
   createUser(user: IUserCreate): Observable<any> {
     const { email, password, name } = user;
-    return this.phoneService.createPhone({
-      phoneNumber: user.telephone.slice(user.country.dial_code.length),
-      code: user.country.dial_code,
-    }).pipe(
-      mergeMap((phone) => this.addressService.generateAddress({ country: user.country.name }).pipe(
-        mergeMap((addresses) => this.roleService.findRole({ name: 'BASE' }).pipe(
-          mergeMap((role) => {
-            const newUser = new this.userModel({ email, password, name, role: role._id, telephone: phone._id, addresses: [ addresses._id ] });
-            return from(newUser.save()).pipe(
-              mergeMap((user) => this.phoneService.updatePhone({ _id: user.telephone }, { userId: user._id }).pipe(
-                mergeMap(() => this.addressService.updateAddress({ _id: user.addresses[0]._id }, { userId: user._id }).pipe(
-                  mergeMap(() => this.cartService.generateCart({ userId: user._id }).pipe(
-                    mergeMap((cart) => this.updateUser({ _id: user._id }, { cart: cart._id }).pipe(
-                      map((user) => user || null),
-                      ),
-                    ))),
+    return forkJoin([
+      this.phoneService.createPhone({
+        phoneNumber: user.telephone.slice(user.country.dial_code.length),
+        code: user.country.dial_code,
+      }),
+      this.addressService.generateAddress({ country: user.country.name }),
+      this.roleService.findRole({ name: roles.BASE }),
+    ]).pipe(
+      mergeMap(([ phone, addresses, role ]) => {
+          const newUser = new this.userModel({
+            email,
+            password,
+            name,
+            role: role._id,
+            telephone: phone._id,
+            addresses: [ addresses._id ]
+          });
+          return from(newUser.save()).pipe(
+            mergeMap((user) => {
+              const operations = [
+                this.phoneService.updatePhone({ _id: user.telephone }, { userId: user._id }),
+                this.addressService.updateAddress({ _id: user.addresses[0]._id }, { userId: user._id }),
+              ];
+              return forkJoin(operations).pipe(
+                mergeMap(() => this.cartService.generateCart({ userId: user._id }).pipe(
+                  mergeMap((cart) => this.updateUser({ _id: user._id }, { cart: cart._id }).pipe(
+                    map((user) => user || null),
+                  )),
                 )),
-              )),
-            );
-          }),
+              );
+            }),
+          );
+        },
+      ),
+    );
+  }
+
+  setVerify(data: any): Observable<User> {
+    const { country, region, street, streetNumber } = data;
+    return from(this.roleService.findRole({ name: roles.VERIFIED })).pipe(
+      mergeMap((role) => this.addressService.updateAddress({ _id: data.addressId }, { country, region, street, streetNumber }).pipe(
+        mergeMap(() => this.updateUser({ _id: data.userId }, { role: role._id }).pipe(
+          map((user) => user || null),
         )),
       )),
     );
   }
 
-    setVerify(data: any): Observable<User> {
-      const { country, region, street, streetNumber } = data
-      return from(this.roleService.findRole({name: roles.VERIFIED})).pipe(
-          mergeMap((role)=>this.addressService.updateAddress({_id: data.addressId},{country, region, street, streetNumber}).pipe(
-              mergeMap(() => this.updateUser({ _id: data.userId }, { role: role._id }).pipe(
-                  map((user) => user || null)
-              ))
-          ))
-      )
+  addAddress(userId: string, data: AddAddressDto): Observable<any> {
+    return this.addressService.generateAddress({ ...data, userId }).pipe(
+      mergeMap((address) => forkJoin([
+        this.getUser({ _id: userId }),
+        this.roleService.findRole({ name: roles.VERIFIED }),
+      ]).pipe(
+        mergeMap(([ user, verifyRole ]) => {
+          if (user.role.equals(verifyRole._id)) {
+            return this.updateUser({ _id: userId }, { addresses: [ ...user.addresses, address._id ] });
+          }
+          return forkJoin([
+            this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
+            user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
+          ]).pipe(
+            map(([user]) => ({user}))
+          );
+        }),
+      )),
+    );
+  }
+
+  deleteAddress(userId: string, addressId: any) {
+    return this.getUser({ _id: userId }).pipe(
+      mergeMap((user) => {
+        if (user.addresses.length === 1) {
+          return this.roleService.findRole({ name: roles.BASE }).pipe(
+            mergeMap((role) => this.updateUser({ _id: userId }, { role: role._id }).pipe(
+              map((user) => user || null),
+            )),
+          );
+        }
+        return of(user);
+      }),
+      mergeMap((user) => forkJoin([
+        this.updateUser({ _id: userId }, {
+          addresses: user.addresses && user.addresses.filter((address) => !address.equals(addressId)) }) || [],
+        this.addressService.deleteAddress({ _id: addressId }),
+      ])),
+    );
+  }
+
+  prepareToUpdateUser(userId: string, data: UpdateUserDto) {
+    if (data.telephone) {
+      return this.phoneService.updatePhone({ userId }, { ...data.telephone }).pipe(
+        mergeMap(phone => this.updateUser({ _id: userId }, { ...data, telephone: phone._id }).pipe(
+          map((user) => user && true || false),
+        )),
+      );
     }
+    return this.updateUser({ _id: userId }, { ...data }).pipe(
+      map((user) => user && true || false),
+    );
+  }
 
   updateUser(criteria, data: any): Observable<User> {
     return from(this.userModel.updateOne( criteria, { ...data })).pipe(
@@ -105,22 +172,22 @@ export class UserService {
     );
   }
 
-  getUserMongoDbFields(data) {
+  getUserMongoDbFields(data): Observable<any> {
     return from(this.userModel.findOne(data)).pipe(
-      mergeMap((user) => this.addressService.getAddressesByIds(user.addresses).pipe(
-        mergeMap((addresses) => this.phoneService.getPhone({ userId: user._id }).pipe(
-          mergeMap((phone) => this.cartService.getCart({ userId: user._id }).pipe(
-            map((cart) => {
-              return {
-                ...user,
-                addresses,
-                phone,
-                cart,
-              };
-            }),
-          )),
-        )),
-      )),
+      mergeMap((user) => {
+        if (!user) {
+          new exceptionErrors.badRequestException('User not found');
+        }
+        const operations = [
+          this.addressService.getAddressesByIds(user.addresses),
+          this.roleService.findRole({ _id: user.role }),
+          this.phoneService.getPhone({ userId: user._id }),
+          this.cartService.getCart({ userId: user._id }),
+        ];
+        return forkJoin(operations).pipe(
+          map(([ addresses, role, phone, cart ]) => ({ addresses, role, phone, cart, user })),
+        );
+      })
     );
   }
 }

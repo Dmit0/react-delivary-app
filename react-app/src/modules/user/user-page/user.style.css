@@ -1,0 +1,136 @@
+.user_page_container {
+    padding: 170px 0;
+}
+
+.user_info_part {
+    background-color: white;
+    display:flex;
+    flex-direction: column;
+    border-radius: 50px;
+    margin:10px 20px 65px 20px;
+    box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+}
+
+.user-info_title {
+    margin-top: 25px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0dede;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-info-title-item {
+    margin: 0 20px;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.user_info_body {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 30px 20px;
+    border-bottom: 1px solid #e0dede;
+}
+
+.user-info-body-main {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 30px;
+}
+
+.status-card-bronze {
+    background-color: #bb7a59;
+    margin: 10px 100px;
+    border-radius: 10px;
+    padding: 10px 10px 15px 10px;
+}
+
+.status-card-title {
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 20px;
+    color: #e6e3e3;
+}
+
+.user-info-body-item {
+    margin: 5px;
+}
+
+.user_info_footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.user-info-footer-item {
+    margin: 15px 25px;
+    padding: 8px 20px;
+    border-radius: 5px;
+}
+
+.user-address-footer-item {
+    border-radius: 15px;
+    margin-right: 20px;
+    padding: 4px 12px 3px 10px;
+}
+
+.user_address_part {
+    background-color: white;
+    display:flex;
+    flex-direction: column;
+    border-radius: 50px;
+    padding: 0;
+    margin:10px 20px 65px 20px;
+    box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+}
+
+.user-address_block_title {
+    margin-top: 25px;
+    padding-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.user-address_block_title_item {
+    font-size: 20px;
+    font-weight: 400;
+    margin-left: 20px;
+}
+
+.user-address-card-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: 400;
+    padding: 30px 20px;
+}
+
+.user-address-card-body {
+    display: flex;
+    justify-content: space-between;
+}
+.user-address-card-controls {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+}
+.user-address-card-delete {
+    align-self: center;
+    cursor: pointer;
+}
+.user-address-card-update {
+    margin-top: 25px;
+    align-self: center;
+}
+.user-address-block-footer {
+    padding: 20px 10px;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 35px;
+}
+.user-address-card {
+}
+.paging-item {
+    padding: 0 5px;
+}

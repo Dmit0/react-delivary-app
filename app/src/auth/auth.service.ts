@@ -53,7 +53,7 @@ export class AuthService {
                 cart: cart.countOfItems,
                 role: role.name,
                 phone: `${ phone.code }${ phone.phoneNumber }`,
-                firstAddress: { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode },
+                firstAddress: addresses.length ? { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode } : null,
               });
             })
           ))
@@ -89,7 +89,7 @@ export class AuthService {
 
   verifyMail(email: string) {
     return this.userService.getUser(email).pipe(
-      map((user) => user && true || exceptionErrors.badRequestException('bad request')),
+      map((user) => user && true || false),
     );
   }
 

@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { get_countries } from '../core/redux/countries/actions';
+import { getToken } from '../core/redux/user/selectors';
 import { meals } from '../core/types';
 import { Sorts } from '../core/utils/sorts';
 import { useRoutes } from '../core/router/routes';
@@ -12,13 +13,15 @@ import { useAppUtils } from './root.utils';
 
 export const App = () => {
   const dispatch = useDispatch()
-  const routes = useRoutes()
+  const [isSetToken, setIsSetToken] = useState(false)
+  const token = useSelector(getToken);
+  const routes = useRoutes(token)
   const { validateToken, setCartLength } = useAppUtils()
 
   //token && refreshToken logic
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem('token') || '""');
-    token && validateToken(token);
+    token && validateToken(token).then(() => setIsSetToken(true));
     dispatch(get_countries());
     if (!token) {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
@@ -31,7 +34,7 @@ export const App = () => {
       <Toast/>
       <NavBar />
       <PopupContainer/>
-      { routes }
+      { isSetToken && routes }
       <div className="App__footer"/>
     </Router>
   )

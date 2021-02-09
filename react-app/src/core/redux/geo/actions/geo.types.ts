@@ -21,7 +21,7 @@ interface ADD_CITIES {
 
 interface SET_CURRENT_REGION {
   type: typeof SET_CURRENT_REGION
-  region: fetchGeoModel
+  region: fetchGeoModel | null
 }
 
 export type GeoActionTypes = ADD_REGIONS | ADD_CITIES | SET_CURRENT_REGION
