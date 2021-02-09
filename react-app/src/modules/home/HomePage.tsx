@@ -55,8 +55,10 @@ const HomePage: React.FC = () => {
     switch(type) {
       case ToolBarSearchTypes.OPENED:
       case ToolBarSearchTypes.ALL:
+        !currentCuisine && setCurrentCuisine('')
         dispatch(set_filtered_restaurants(fetchedRestaurants, type));break;
       case ToolBarSearchTypes.LOVED:
+        !currentCuisine && setCurrentCuisine('')
         dispatch(set_filtered_restaurants(fetchedRestaurants, type, loveRestaurants));break;
       default:
         let cuisine = cuisineTypes.find(item => item.name === type);
