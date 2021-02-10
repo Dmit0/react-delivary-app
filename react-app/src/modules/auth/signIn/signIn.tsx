@@ -31,11 +31,11 @@ export const LogIn: React.FC = () => {
     dispatch(logIn(data, true));
   },[dispatch]);
 
-  const { register, handleSubmit, errors } = useForm<formData>();
+  const { register, handleSubmit, errors, watch } = useForm<formData>();
 
   const onSubmit = (data: formData) => {
     isEmailVerified
-      ? signIn(data)
+      ? signIn(watch())
       : verifyEMail(data.email);
   };
 

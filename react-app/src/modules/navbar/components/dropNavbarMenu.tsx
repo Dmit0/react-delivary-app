@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Links } from '../../../core/enums';
 import { DropMenuType } from '../../../core/enums/drop-menu.enum';
+import { authClose } from '../../../core/redux/auth/actions';
 import { set_cart_length } from '../../../core/redux/cart/actions';
 import { set_loved_restaurant } from '../../../core/redux/loveRestaurants/actions';
 import { cleanUserData } from '../../../core/redux/user/actions';
@@ -47,6 +48,7 @@ export const DropMenu: React.FC<DropMenu> = () => {
     dispatch(set_cart_length(Sorts.getMealCount(cart)));
     const lovedRestaurants = JSON.parse(localStorage.getItem('loved') || '[]') as string[];
     dispatch(set_loved_restaurant(lovedRestaurants));
+    dispatch(authClose())
   };
 
   const menuItems = useMemo(() => {

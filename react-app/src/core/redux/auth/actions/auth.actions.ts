@@ -106,6 +106,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
         }));
         dispatch(set_cart_length(response.cart))
         isLogIn && dispatch(authLastStepClose());
+        isLogIn && dispatch(closePopup())
       } else {
         toast.warn('auth fail')
         dispatch(hideLoading());
