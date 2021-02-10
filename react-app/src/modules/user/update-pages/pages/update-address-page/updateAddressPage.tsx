@@ -29,7 +29,7 @@ const UpdateAddressPage: React.FC = () => {
 
   return (
     <div className="app">
-      <div className="container">
+      <div className="container updatePage">
         <div className="row">
           <LeftSideBar/>
           <UpdatePage header={ 'Update Address' } Icon={ <ToolIcon/> }>

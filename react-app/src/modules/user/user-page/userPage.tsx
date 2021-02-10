@@ -39,7 +39,7 @@ import { UserCard } from './components/user-block/userData';
   return (
     <div className="app">
       <div className="App__content">
-        <div className="container">
+        <div className="container userPageContainer">
           <div className="row user_page_container">
             <div className="col userCard">
               <UserCard user={user}/>
