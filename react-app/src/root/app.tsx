@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { RootLayOut } from '../core/components/lay-outs/root-lay-out/root.layOut';
 import { get_countries } from '../core/redux/countries/actions';
 import { getToken } from '../core/redux/user/selectors';
 import { meals } from '../core/types';
 import { Sorts } from '../core/utils/sorts';
 import { useRoutes } from '../core/router/routes';
-import { NavBar } from '../modules/navbar/navbar';
-import { PopupContainer } from '../modules/popup/popup';
-import { Toast } from '../modules/toast/toast';
 import { useAppUtils } from './root.utils';
 
 export const App = () => {
@@ -32,11 +30,10 @@ export const App = () => {
 
   return (
     <Router>
-      <Toast/>
-      <NavBar />
-      <PopupContainer/>
-      { isValidateTokenEnd && routes }
-      <div className="App__footer"/>
+      {isValidateTokenEnd &&
+      <RootLayOut>
+        { routes }
+      </RootLayOut>}
     </Router>
   )
 }
