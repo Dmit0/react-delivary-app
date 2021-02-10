@@ -3,9 +3,9 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleButton } from '../../../core/components/buttons';
 import { DeliveryIcon } from '../../../core/components/icons';
-import { logIn, verifyMail } from '../../../core/redux/auth/actions';
+import { authClose, logIn, verifyMail } from '../../../core/redux/auth/actions';
 import { getIsStepSuccess } from '../../../core/redux/auth/selectors';
-import { closePopup, openPopup } from '../../../core/redux/popup/actions';
+import { openPopup } from '../../../core/redux/popup/actions';
 import { loginData } from '../../../core/types';
 import { SignUpPersonalForm } from '../signUp/components/signUpAddPersonalInfo';
 
@@ -20,6 +20,7 @@ export const LogIn: React.FC = () => {
   const isEmailVerified = useSelector(getIsStepSuccess);
 
   const registrationHandler = () => {
+    dispatch(authClose())
     dispatch(openPopup(<SignUpPersonalForm/>));
   };
   const verifyEMail = useCallback((mail: string) => {
@@ -27,7 +28,6 @@ export const LogIn: React.FC = () => {
   },[dispatch]);
 
   const signIn = useCallback((data: loginData) => {
-    dispatch(closePopup())
     dispatch(logIn(data, true));
   },[dispatch]);
 
@@ -61,6 +61,7 @@ export const LogIn: React.FC = () => {
             <div className="auth-body_Mail_auth">
               <span className='Username-Label'>Email Adress</span>
               <input
+                disabled={isEmailVerified}
                 name='email'
                 ref={ register({ required: true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ }) }/>
               { errors.email && errors.email.type === 'required' && <p>Email is required</p> }
@@ -78,7 +79,7 @@ export const LogIn: React.FC = () => {
                 { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
                 { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
               </div>)
-              : (null)
+              : null
             }
           </div>
           <div className="auth-futer">
