@@ -13,7 +13,7 @@ import { useAppUtils } from './root.utils';
 
 export const App = () => {
   const dispatch = useDispatch()
-  const [isSetToken, setIsSetToken] = useState(false)
+  const [isValidateTokenEnd, setIsValidateTokenEnd] = useState<boolean>(false)
   const token = useSelector(getToken);
   const routes = useRoutes(token)
   const { validateToken, setCartLength } = useAppUtils()
@@ -21,11 +21,12 @@ export const App = () => {
   //token && refreshToken logic
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem('token') || '""');
-    token && validateToken(token).then(() => setIsSetToken(true));
+    token && validateToken(token).then(() => setIsValidateTokenEnd(true));
     dispatch(get_countries());
     if (!token) {
       const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
       setCartLength(Sorts.getMealCount(cart));
+      setIsValidateTokenEnd(true)
     }
   }, []);
 
@@ -34,7 +35,7 @@ export const App = () => {
       <Toast/>
       <NavBar />
       <PopupContainer/>
-      { isSetToken && routes }
+      { isValidateTokenEnd && routes }
       <div className="App__footer"/>
     </Router>
   )
