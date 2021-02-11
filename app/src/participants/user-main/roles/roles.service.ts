@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
-import { forkJoin, from, Observable, of } from 'rxjs';
-import { map, mergeMap, tap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
 import { opportunity as  opportunities} from '../../../constants/initializeData/opportunities.base';
 import { OpportunitiesService } from '../opportunities/opportunities.service';
 import { Role } from './models/Roles';
@@ -17,19 +17,16 @@ export class RolesService {
   }
 
   generateRoles() {
-    return forkJoin(opportunities.map((opportunity) => this.opportunitiesService.createOpportunity({ name: opportunity.name }))).pipe(
-      mergeMap((res) => {
-        return forkJoin(roles.map((role) => this.opportunitiesService.findOpportunities(role.opportunities).pipe(
-          mergeMap((opportunities) => this.createRole({
-            name: role.name, opportunities: opportunities.map((item) => {
-              return item._id;
-            }),
+    return this.opportunitiesService.createOpportunities(opportunities).pipe(
+      mergeMap(() => from(roles).pipe(
+        mergeMap(role => this.opportunitiesService.findOpportunities([ ...role.opportunities ]).pipe(
+          mergeMap((roleOpportunities) => this.createRole({
+            name: role.name,
+            opportunities: roleOpportunities.map((o) => o._id),
           })),
-        ))).pipe(
-          map(() => true),
-        );
-      }),
-    );
+          ),
+        )),
+      ));
   }
 
  private createRole(property): Observable<any> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
-import { forkJoin, from, Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { Opportunity } from './models/Opportunities';
 
@@ -11,27 +11,31 @@ export class OpportunitiesService {
     @InjectModel(Opportunity.name) private opportunityModel: Model<Opportunity>,
   ) {
   }
-  createOpportunity(property): Observable<any> {
+  createOpportunities(property: any[]): Observable<any> {
     return from(this.opportunityModel.find()).pipe(
       mergeMap((response) => {
         if (response.length > 0) {
           return of(null);
-        } else {
-          const newOpportunity = new this.opportunityModel({ ...property });
-          return from(newOpportunity.save()).pipe(
-            map((opportunity) => opportunity),
-          );
-        }
+        } else return this.createManyOpportunities(property)
       }),
     );
   }
 
-  findOpportunities(property: string[]): Observable<any> {
-   return forkJoin(property.map((item)=>{
-     return this.findOpportunity({name:item}).pipe(
-       map((opportunity) => opportunity || null)
-     )
-   }))
+  private createManyOpportunities(opportunities: any[]): Observable<any> {
+    return from(opportunities).pipe(
+      mergeMap((opportunity) => {
+        const newOpportunity = new this.opportunityModel({ ...opportunity });
+        return from(newOpportunity.save()).pipe(
+          map((opportunity) => opportunity),
+        );
+      }),
+    );
+  }
+
+  findOpportunities(property: string[]): Observable<Opportunity[]> {
+    return from(this.opportunityModel.find().where('name').in(property)).pipe(
+      map(opportunities => opportunities || null)
+    )
   }
 
   findOpportunity(property: any): Observable<any> {

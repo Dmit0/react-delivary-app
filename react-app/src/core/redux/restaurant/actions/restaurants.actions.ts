@@ -90,11 +90,11 @@ export const get_meals_by_restaurant_id = (id: string): ThunkType => {
   };
 };
 
-export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filtertype: string | cuisine, loveRestaurants: string[] = []): restaurantActionTypes => {
+export const set_filtered_restaurants = (currentRestaurants: restaurant[], FilterType: string | cuisine, loveRestaurants: string[] = []): restaurantActionTypes => {
 
   let sortedArray: restaurant[] = [];
 
-  switch (Filtertype) {
+  switch (FilterType) {
     case ToolBarSearchTypes.ALL:
       sortedArray = currentRestaurants;
       break;
@@ -105,8 +105,8 @@ export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filte
       sortedArray = Sorts.GetLovedRestaurants(loveRestaurants, currentRestaurants);
       break;
     default:
-      if (typeof Filtertype !== 'string') {
-        sortedArray = Sorts.ByCuisen(currentRestaurants, Filtertype);
+      if (typeof FilterType !== 'string') {
+        sortedArray = Sorts.ByCuisine(currentRestaurants, FilterType);
       }
       break;
   }

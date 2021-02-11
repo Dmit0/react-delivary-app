@@ -20,26 +20,24 @@ export const Sorts = {
     });
     return opened_restaurants;
   },
-  ByCuisen(restaurants: restaurant[], Cuisentype: cuisine) {
-    let sorted: restaurant[] = [];
-    restaurants.forEach(restaurant => {
-      if ((restaurant.selItems.find(item => item === Cuisentype._id) !== undefined)) {
-        sorted.push(restaurant);
+  ByCuisine(restaurants: restaurant[], Cuisine: cuisine) {
+    return restaurants.reduce((acc: restaurant[], res) => {
+      if (res.selItems.find(item => item === Cuisine._id)) {
+        return [ ...acc, res ];
       }
-    });
-    //setCurrentFilterRestaurants([...sorted])
-
-    return sorted;
+      return acc;
+    }, []);
   },
+
   ByInputStr(restaurants: restaurant[], filerStr: string) {
     if (filerStr === '') {
       return [];
     }
-    let new_restaurants = restaurants.filter(restaurant => {
+    return restaurants.filter(restaurant => {
       return restaurant.name.toLowerCase().search(filerStr.toLowerCase()) !== -1;
     });
-    return new_restaurants;
   },
+
   GetLovedRestaurants(loved: string[], all: restaurant[]) {
     return all.filter((item) => loved.includes(item._id));
   },

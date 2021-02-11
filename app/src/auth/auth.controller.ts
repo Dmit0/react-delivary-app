@@ -1,9 +1,11 @@
 import { Controller, Get, Post, Body, UseGuards, Req } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { IUser } from '../participants/user-main/user/models/user.types';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt.guarg';
 import { LocalAuthGuard } from './guards/local.guard';
-import { AuthReturnData, UserRegistrationDto, UserSignInDto, UserSignUpAddressDto } from './models/auth.models';
+import { RefreshTokenDto, UserCreateDto, UserSignUpAddressDto } from './models/auth.dto';
+import { AuthReturnData } from './models/auth.models';
 import { CurrentUser } from './utils/auth.utils';
 
 @Controller('authentication')
@@ -14,12 +16,12 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('signIn')
-  signIn(@CurrentUser() user: any): AuthReturnData {
+  signIn(@CurrentUser() user: IUser): AuthReturnData {
     return this.authService.SignIn(user);
   }
 
   @Post('signUp')
-  signUp(@Body() userRegistrationDto: UserRegistrationDto) {
+  signUp(@Body() userRegistrationDto: UserCreateDto) {
     return this.authService.SignUp(userRegistrationDto);
   }
 
@@ -28,7 +30,7 @@ export class AuthController {
     return this.authService.verifyMail(email);
   }
 
-  //JWT CHECK
+  @UseGuards(JwtAuthGuard)
   @Post('signUpStep3')
   signUpStep3(@Body() userSignUpAddressDto: UserSignUpAddressDto) {
     return this.authService.signUpStep3(userSignUpAddressDto)
@@ -41,7 +43,7 @@ export class AuthController {
 
   @Get('redirect')
   @UseGuards(AuthGuard('google'))
-  googleAuthRedirect(@CurrentUser() user: any) {
+  googleAuthRedirect(@CurrentUser() user: IUser) {
     console.log('null')
   }
 
@@ -52,7 +54,7 @@ export class AuthController {
   }
 
   @Post('refreshToken')
-  refreshToken(@Body() data: any) {
+  refreshToken(@Body() data: RefreshTokenDto) {
     return this.authService.refreshToken(data.token)
   }
 }

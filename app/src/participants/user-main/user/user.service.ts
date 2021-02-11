@@ -4,7 +4,7 @@ import { Model } from 'mongoose';
 import { map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
-import { AddAddressDto, DeleteAddressDto, UpdateAddressDto } from '../address/models/address.types';
+import { AddAddressDto, UpdateAddressDto } from '../address/models/address.types';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
@@ -84,11 +84,12 @@ export class UserService {
 
   setVerify(data: any): Observable<User> {
     const { country, region, street, streetNumber } = data;
-    return from(this.roleService.findRole({ name: roles.VERIFIED })).pipe(
-      mergeMap((role) => this.addressService.updateAddress({ _id: data.addressId }, { country, region, street, streetNumber }).pipe(
-        mergeMap(() => this.updateUser({ _id: data.userId }, { role: role._id }).pipe(
-          map((user) => user || null),
-        )),
+    return this.roleService.findRole({ name: roles.VERIFIED }).pipe(
+      mergeMap((role) => forkJoin([
+        this.updateUser({ _id: data.userId }, { role: role._id }),
+        this.addressService.updateAddress({ _id: data.addressId }, { country, region, street, streetNumber }),
+      ]).pipe(
+        map(([ user ]) => user || null),
       )),
     );
   }
@@ -106,9 +107,7 @@ export class UserService {
           return forkJoin([
             this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
             user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
-          ]).pipe(
-            map(([user]) => ({user}))
-          );
+          ])
         }),
       )),
     );

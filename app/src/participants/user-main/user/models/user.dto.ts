@@ -1,12 +1,6 @@
-import { IsEmail, IsOptional, IsString, ValidateNested } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsString, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-
-export class PhoneDto {
-  @IsString()
-  phoneNumber: string
-  @IsString()
-  code: string
-}
+import { PhoneDto } from '../../phone/models/phone.dto';
 
 export class UpdateUserDto {
   @IsOptional()
@@ -22,4 +16,11 @@ export class UpdateUserDto {
   @IsOptional()
   @IsString()
   password?: string;
+}
+
+export class SetLovedActionDto {
+  @IsString()
+  restaurantId: string
+  @IsBoolean()
+  action: boolean
 }
