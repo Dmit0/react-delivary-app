@@ -1,8 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
-import { AddAddressDto, DeleteAddressDto, UpdateAddressDto } from '../address/models/address.types';
-import { UpdateUserDto } from './models/user.dto';
+import { AddAddressDto, UpdateAddressDto } from '../address/models/address.types';
+import { SetLovedActionDto, UpdateUserDto } from './models/user.dto';
 import { IUser } from './models/user.types';
 import { UserService } from './user.service';
 
@@ -21,7 +21,7 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Post('setLovedAction')
-  setLovedUserRestaurants(@CurrentUser() user: any, @Body() data: { restaurantId: string, action: boolean }) {
+  setLovedUserRestaurants(@CurrentUser() user: any, @Body() data: SetLovedActionDto) {
     return this.userService.setLovedRestaurant(user._id, data.restaurantId, data.action);
   }
 

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { IsString } from 'class-validator';
 import { Model } from "mongoose";
 import { from, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';

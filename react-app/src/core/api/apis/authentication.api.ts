@@ -40,9 +40,10 @@ export const AuthenticationApi = {
         }
     },
 
-    async addAddressStep(data: addressDataStep) {
+    async addAddressStep(token: string, data: addressDataStep) {
         try {
             return await http<{ status: boolean }>('/authentication/signUpStep3', 'POST', JSON.stringify(data), {
+                Authorization: `Bearer ${ token }`,
                 'Content-Type': 'application/json;charset=utf-8',
             });
         } catch (e) {

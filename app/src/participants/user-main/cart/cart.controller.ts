@@ -1,9 +1,8 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
-import { tap } from 'rxjs/operators';
 import { JwtAuthGuard } from '../../../auth/guards/jwt.guarg';
 import { CurrentUser } from '../../../auth/utils/auth.utils';
-import { Action } from '../../../constants/enums/cart';
 import { CartService } from './cart.service';
+import { ChangeItemInCartDto, DeleteMealFromCartDto, SetItemInCartDto } from './models/cart.dto';
 
 @Controller('cart')
 export class CartController {
@@ -12,13 +11,13 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @Post('setItemInCart')
-  setItemInCart(@CurrentUser() user: any, @Body() data: { mealId: string }) {
+  setItemInCart(@CurrentUser() user: any, @Body() data: SetItemInCartDto) {
     return this.cartService.setItemInCart(user._id, data.mealId)
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('changeItemInCart')
-  changeItemInCart(@CurrentUser() user: any, @Body() data: { action: Action, mealId }) {
+  changeItemInCart(@CurrentUser() user: any, @Body() data: ChangeItemInCartDto) {
     return this.cartService.changeItemInCart(user._id, data.mealId, data.action)
   }
 
@@ -36,7 +35,7 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @Post('deleteMealFromCart')
-  deleteMealFromCart(@CurrentUser() user: any, @Body() data: { mealId: string }) {
+  deleteMealFromCart(@CurrentUser() user: any, @Body() data: DeleteMealFromCartDto) {
     return this.cartService.deleteMealFromCart(user._id, data.mealId)
   }
 

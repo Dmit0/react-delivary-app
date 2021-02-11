@@ -2,15 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel} from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { from, Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Meal } from './models/meals.schema';
 
 @Injectable()
 export class MealService {
 
-  constructor(
-    @InjectModel(Meal.name) private mealModel: Model<Meal>,
-  ) {
+  constructor(@InjectModel(Meal.name) private mealModel: Model<Meal>) {
   }
 
   getMealsByRestaurantId(id) {
@@ -20,7 +18,9 @@ export class MealService {
   }
 
   getMeal(property: any) {
-    return from(this.mealModel.findOne(property))
+    return from(this.mealModel.findOne(property)).pipe(
+      map((meal) => meal || null)
+    )
   }
 
   getMealsByIds(ids: any[]): Observable<Meal[]> {

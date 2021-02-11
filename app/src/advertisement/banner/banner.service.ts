@@ -14,7 +14,7 @@ export class BannerService {
 
   getBanners() {
     return from(this.bannerModel.find()).pipe(
-      map((banners) => banners),
+      map((banners) => banners && banners || null),
     );
   }
 }
