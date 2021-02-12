@@ -44,3 +44,10 @@ export class UserSignInDto {
   @IsString()
   password: string
 }
+
+export class VerifyPhoneDto {
+  @IsString()
+  code: string
+  @IsString()
+  number: string
+}

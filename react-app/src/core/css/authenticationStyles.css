@@ -17,8 +17,8 @@
     top: 25%;
     bottom:25%;
     right:25%;
-    width:500px;
-    height:750px;
+    width:470px;
+    height:700px;
     
     margin: auto;
     background: white;
@@ -65,15 +65,17 @@
 }
 .auth-sub-title{
     font-size: 25px;
-    margin:50px 100px 0 85px;
+    margin: 50px 100px 0 85px;
     font-weight: 600;
     color: rgb(33, 49, 60);
     letter-spacing: 0.05em;
     text-align: center;
 }
 .auth-body{
-    align-self: center;
-    margin-left: 14%;
+    margin: 0 70px;
+}
+.signIn-Label {
+    margin-right: 10px;
 }
 .google-button {
     display:flex;
@@ -120,52 +122,24 @@
       margin-top: 30px;
       margin-bottom: 30px;
   }
-  .line{
-      width:350px;
-      position: relative;
-      text-align: center;  
-  }
-  .line span{
-    font-size: 14px;
-    font-weight: normal;
-    line-height: 16px;
-    color: rgb(93, 108, 116);
-    text-align: center;
-    background: rgb(255, 255, 255);
-    padding: 0px 10px;
-  }
-  .line::before {
-    display: inline-block;
-    content: "";
-    position: absolute;
-    height: 0px;
-    top: 50%;
-    left: 0px;
-    right: 0px;
-    bottom: 0px;
-    z-index: -1;
-    transform: translateY(-50%);
-    width: 350px;
-    border-top: 1px solid rgb(184, 196, 194);
-    margin: 0px auto;
-}
 .auth-body_Mail_auth{
     margin-top: 30px;
 }
 .auth-body_Mail_auth input{
     display:flex;
     width:350px;
-    padding:7px;
+    padding:4px 7px;
+    border-radius: 3px;
+    border: 1px solid grey;
 }
 .Authentication-Label{
     font-size: 14px;
     color: rgb(61, 79, 88);
-    position: relative;
     height: 16px;
-    width: 36px;
     font-weight: bold;
     line-height: 16px;
     letter-spacing: 0.02em;
+    padding-bottom: 20px;
 }
 .auth-futer{
     display:flex;
@@ -194,7 +168,7 @@
 }
 .auth-reg-futer{
     display:flex;
-    margin:70px 0 50px 0;
+    margin:40px 0 20px 0;
     justify-content: space-between;
 }
 .auth-step-futer {
@@ -215,7 +189,6 @@
 }
 .Authentication_Form{
     align-self: center;
-    margin-left: 10px;
 }
 .phone_part-number{
     width:400px;

@@ -11,7 +11,7 @@ import { PhoneService } from '../participants/user-main/phone/phone.service';
 import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
 import { UserService } from '../participants/user-main/user/user.service';
-import { UserCreateDto, UserSignInDto, UserSignUpAddressDto } from './models/auth.dto';
+import { UserCreateDto, UserSignInDto, UserSignUpAddressDto, VerifyPhoneDto } from './models/auth.dto';
 import { passwordUtils } from './utils/password.utils';
 
 @Injectable()
@@ -92,6 +92,12 @@ export class AuthService {
     );
   }
 
+  verifyPhone(phone: VerifyPhoneDto) {
+    return this.phoneService.getPhone({code: phone.code, phoneNumber: phone.number}).pipe(
+      map(phone => phone && true || false)
+    )
+  }
+
   signUpStep3(data: UserSignUpAddressDto) {
     return this.userService.setVerify(data)
   }
@@ -110,8 +116,12 @@ export class AuthService {
   }
 
   refreshToken(token: string) {
-    const decodedToken = this.jwtService.decode(token);
-    return this.generateRefreshToken(decodedToken);
+    try {
+      const decodedToken = this.jwtService.decode(token);
+      return decodedToken && this.generateRefreshToken(decodedToken) || null;
+    } catch(e) {
+      return false
+    }
   }
 
   private async generateRefreshToken(data: any) {

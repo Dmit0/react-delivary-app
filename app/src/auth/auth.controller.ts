@@ -4,7 +4,7 @@ import { IUser } from '../participants/user-main/user/models/user.types';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt.guarg';
 import { LocalAuthGuard } from './guards/local.guard';
-import { RefreshTokenDto, UserCreateDto, UserSignUpAddressDto } from './models/auth.dto';
+import { RefreshTokenDto, UserCreateDto, UserSignUpAddressDto, VerifyPhoneDto } from './models/auth.dto';
 import { AuthReturnData } from './models/auth.models';
 import { CurrentUser } from './utils/auth.utils';
 
@@ -28,6 +28,11 @@ export class AuthController {
   @Post('verifyMail')
   verifyMail(@Body() email: string) {
     return this.authService.verifyMail(email);
+  }
+
+  @Post('verifyPhone')
+  verifyPhone(@Body() phone: VerifyPhoneDto) {
+    return this.authService.verifyPhone(phone);
   }
 
   @UseGuards(JwtAuthGuard)

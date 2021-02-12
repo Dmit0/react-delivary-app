@@ -22,6 +22,16 @@ export const AuthenticationApi = {
         }
     },
 
+    async verifyPhone (phone: {code: string, number: string}) {
+        try {
+            return await http<boolean>('/authentication/verifyPhone', 'POST', JSON.stringify(phone), {
+                'Content-Type': 'application/json;charset=utf-8',
+            });
+        } catch (e) {
+            return true;
+        }
+    },
+
     async logIn(data: loginData) {
         try {
             return await http<{

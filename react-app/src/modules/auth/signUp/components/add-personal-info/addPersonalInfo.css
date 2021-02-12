@@ -1,0 +1,8 @@
+.auth_user_form_labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.auth_user_form_field {
+    padding-bottom: 10px;
+}

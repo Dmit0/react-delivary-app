@@ -2,12 +2,14 @@ import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleButton } from '../../../core/components/buttons';
+import { LineThrew } from '../../../core/components/decor/2-line/line';
 import { DeliveryIcon } from '../../../core/components/icons';
 import { authClose, logIn, verifyMail } from '../../../core/redux/auth/actions';
 import { getIsStepSuccess } from '../../../core/redux/auth/selectors';
 import { openPopup } from '../../../core/redux/popup/actions';
 import { loginData } from '../../../core/types';
-import { SignUpPersonalForm } from '../signUp/components/signUpAddPersonalInfo';
+import { Patterns } from '../../../core/utils/patterns';
+import { SignUpPersonalForm } from '../signUp/components/add-personal-info/signUpAddPersonalInfo';
 
 interface formData {
   email: string,
@@ -55,30 +57,38 @@ export const LogIn: React.FC = () => {
             <div className="auth-body_Google_auth">
               <GoogleButton text='Sign in with Google'/>
             </div>
-            <div className='line'>
-              <span>or</span>
-            </div>
+            <LineThrew/>
             <div className="auth-body_Mail_auth">
-              <span className='Username-Label'>Email Adress</span>
-              <input
-                disabled={isEmailVerified}
-                name='email'
-                ref={ register({ required: true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ }) }/>
-              { errors.email && errors.email.type === 'required' && <p>Email is required</p> }
-              { errors.email && errors.email.type === 'pattern' && <p>it isnt`t email</p> }
+              <div className='auth_user_form_field'>
+                <div className="auth_user_form_labels">
+                  <span className='Username-Label'>Email Address</span>
+                  { errors.email && errors.email.type === 'required' && <span className='signIn-Label'>Email is required</span> }
+                  { errors.email && errors.email.type === 'pattern' && <span className='signIn-Label'>it isnt`t email</span> }
+                </div>
+                <input
+                  disabled={ isEmailVerified }
+                  name='email'
+                  ref={ register({ required: true, pattern: Patterns.mail }) }
+                />
+              </div>
             </div>
             { isEmailVerified
-              ? (<div className="auth-body_Mail_auth">
-                <span className='Username-Label'>Password</span>
-                <input
-                  type="password"
-                  name='password'
-                  ref={ register({ required: true, minLength: 8, maxLength: 30, pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/ }) }/>
-                { errors.password && errors.password.type === 'required' && <span>This field is required</span> }
-                { errors.password && errors.password.type === 'minLength' && <span>Required len more then 8</span> }
-                { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
-                { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
-              </div>)
+              ? <div className="auth-body_Mail_auth">
+                <div className='auth_user_form_field'>
+                  <div className="auth_user_form_labels">
+                    <span className='Username-Label'>Password</span>
+                    { errors.password && errors.password.type === 'required' && <span>This field is required</span> }
+                    { errors.password && errors.password.type === 'minLength' && <span>Required len more then 8</span> }
+                    { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
+                    { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
+                  </div>
+                  <input
+                    type="password"
+                    name='password'
+                    ref={ register({ required: true, minLength: 8, maxLength: 30, pattern: Patterns.password }) }
+                  />
+                </div>
+              </div>
               : null
             }
           </div>
