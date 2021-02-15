@@ -87,11 +87,11 @@
     color: #fff;
     border-radius: 5px;
     white-space: nowrap;
-    box-shadow: 1px 1px 0px 1px rgba(0,0,0,0.05);
+    box-shadow: 1px 1px 0 1px rgba(0,0,0,0.05);
     transition-property: background-color, box-shadow;
     transition-duration: 150ms;
     transition-timing-function: ease-in-out;
-    padding:0px 2px 0px 0px;
+    padding:0 2px 0 0;
   }
   .google-button:focus:hover{
     box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.1);
@@ -124,13 +124,6 @@
   }
 .auth-body_Mail_auth{
     margin-top: 30px;
-}
-.auth-body_Mail_auth input{
-    display:flex;
-    width:350px;
-    padding:4px 7px;
-    border-radius: 3px;
-    border: 1px solid grey;
 }
 .Authentication-Label{
     font-size: 14px;

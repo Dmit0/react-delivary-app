@@ -4,5 +4,11 @@
 }
 
 .auth_user_form_field {
-    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.phoneField {
+    display: flex;
+}
+.codeSelect {
+    width: 100px;
 }

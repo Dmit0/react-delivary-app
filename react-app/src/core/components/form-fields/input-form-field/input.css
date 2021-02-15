@@ -1,0 +1,26 @@
+.input_form_field {
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+}
+
+.input__form_labels {
+    display: flex;
+    justify-content: space-between;
+}
+
+.input_form_input {
+    border-radius: 3px;
+    border: 1px solid hsl(0,0%,80%);
+    padding: 5px 10px;
+}
+
+.input_label {
+    font-size: 14px;
+    color: rgb(61, 79, 88);
+    height: 16px;
+    font-weight: bold;
+    line-height: 16px;
+    letter-spacing: 0.02em;
+    padding-bottom: 20px;
+}
