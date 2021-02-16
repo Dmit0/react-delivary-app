@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { map, mergeMap } from 'rxjs/operators';
+import { passwordUtils } from '../../../auth/utils/password.utils';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
 import { AddAddressDto, UpdateAddressDto } from '../address/models/address.types';
@@ -139,16 +140,26 @@ export class UserService {
   }
 
   prepareToUpdateUser(userId: string, data: UpdateUserDto) {
-    if (data.telephone) {
-      return this.phoneService.updatePhone({ userId }, { ...data.telephone }).pipe(
-        mergeMap(phone => this.updateUser({ _id: userId }, { ...data, telephone: phone._id }).pipe(
-          map((user) => user && true || false),
-        )),
-      );
-    }
-    return this.updateUser({ _id: userId }, { ...data }).pipe(
-      map((user) => user && true || false),
-    );
+    const { telephone, password, ...criteria } = data;
+    return this.getUser({ _id: userId }).pipe(
+      mergeMap(user => {
+        if (!user) {
+          throw new NotFoundException();
+        }
+        const operations = [
+          password ? passwordUtils.hashPassword(password) : of(null),
+          telephone && this.phoneService.updatePhone({ userId }, { ...data.telephone }),
+        ];
+        return forkJoin(operations).pipe(
+          mergeMap(([ password ]) => {
+            const updateData = {
+              ...criteria,
+              telephone: user.telephone._id,
+              password: password ? password : user.password,
+            };
+            return this.updateUser({ _id: userId }, { ...updateData });
+          }));
+      }));
   }
 
   updateUser(criteria, data: any): Observable<User> {

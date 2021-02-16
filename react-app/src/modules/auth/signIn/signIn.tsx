@@ -2,11 +2,14 @@ import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { GoogleButton } from '../../../core/components/buttons';
+import { LineThrew } from '../../../core/components/decor/2-line/line';
+import { InputField } from '../../../core/components/form-fields/input-form-field/input';
 import { DeliveryIcon } from '../../../core/components/icons';
 import { authClose, logIn, verifyMail } from '../../../core/redux/auth/actions';
 import { getIsStepSuccess } from '../../../core/redux/auth/selectors';
 import { openPopup } from '../../../core/redux/popup/actions';
 import { loginData } from '../../../core/types';
+import { getEmailValidation, getPasswordValidation } from '../../../core/utils/form-validation.utils';
 import { SignUpPersonalForm } from '../signUp/components/signUpAddPersonalInfo';
 
 interface formData {
@@ -20,16 +23,16 @@ export const LogIn: React.FC = () => {
   const isEmailVerified = useSelector(getIsStepSuccess);
 
   const registrationHandler = () => {
-    dispatch(authClose())
+    dispatch(authClose());
     dispatch(openPopup(<SignUpPersonalForm/>));
   };
   const verifyEMail = useCallback((mail: string) => {
     dispatch(verifyMail(mail));
-  },[dispatch]);
+  }, [ dispatch ]);
 
   const signIn = useCallback((data: loginData) => {
     dispatch(logIn(data, true));
-  },[dispatch]);
+  }, [ dispatch ]);
 
   const { register, handleSubmit, errors, watch } = useForm<formData>();
 
@@ -44,42 +47,39 @@ export const LogIn: React.FC = () => {
       <div className='main-auth-popup'>
         <div className="auth-title">
           <div className="auth-title-header">
-            <DeliveryIcon height={ '30' } width={ '30' }/>
+            <DeliveryIcon height='30'  width='30'/>
           </div>
           <div className="auth-sub-title">
             Log in to your account
           </div>
         </div>
-        <form onSubmit={ handleSubmit(onSubmit) }>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="auth-body">
             <div className="auth-body_Google_auth">
               <GoogleButton text='Sign in with Google'/>
             </div>
-            <div className='line'>
-              <span>or</span>
-            </div>
+            <LineThrew/>
             <div className="auth-body_Mail_auth">
-              <span className='Username-Label'>Email Adress</span>
-              <input
-                disabled={isEmailVerified}
+              <InputField
                 name='email'
-                ref={ register({ required: true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ }) }/>
-              { errors.email && errors.email.type === 'required' && <p>Email is required</p> }
-              { errors.email && errors.email.type === 'pattern' && <p>it isnt`t email</p> }
+                label='Email Address'
+                isDisabled={isEmailVerified}
+                rules={getEmailValidation()}
+                errors={errors.email}
+                register={register}
+              />
             </div>
-            { isEmailVerified
-              ? (<div className="auth-body_Mail_auth">
-                <span className='Username-Label'>Password</span>
-                <input
-                  type="password"
+            { isEmailVerified &&
+              <div className="auth-body_Mail_auth">
+                <InputField
                   name='password'
-                  ref={ register({ required: true, minLength: 8, maxLength: 30, pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/ }) }/>
-                { errors.password && errors.password.type === 'required' && <span>This field is required</span> }
-                { errors.password && errors.password.type === 'minLength' && <span>Required len more then 8</span> }
-                { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
-                { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
-              </div>)
-              : null
+                  label='Password'
+                  type='password'
+                  rules={getPasswordValidation(8, 30)}
+                  errors={errors.password}
+                  register={register}
+                />
+              </div>
             }
           </div>
           <div className="auth-futer">
@@ -93,7 +93,7 @@ export const LogIn: React.FC = () => {
             </div>
             <div className="auth-redirect-to-Registration">
               Dont`t have an account?
-              <span onClick={ registrationHandler }>Sign Up</span>
+              <span onClick={registrationHandler}>Sign Up</span>
             </div>
           </div>
         </form>
