@@ -2,24 +2,26 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import Select from 'react-select';
 import { AddressApi } from '../../../../../../core/api/apis/address.api';
 import { geoApi } from '../../../../../../core/api/apis/geo.api';
+import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
+import { SelectField } from '../../../../../../core/components/form-fields/select-form-field/selectField';
 import { Links } from '../../../../../../core/enums';
+import { getCurrentAddress } from '../../../../../../core/redux/addresses/selectors';
 import { set_current_country } from '../../../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
 import { setCurrentRegion, setRegions } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
-import { getToken, getUser } from '../../../../../../core/redux/user/selectors';
+import { getToken } from '../../../../../../core/redux/user/selectors';
 import './updateAddress.form.css'
-import { IHoleAddress } from '../../../../../../core/types';
+import { getRequiredValidation } from '../../../../../../core/utils/form-validation.utils';
 
 interface formData {
   street: string,
   streetNumber: string
 }
 
-export const UpdateAddressFrom = ({currentAddress}: { currentAddress: IHoleAddress | null }) => {
+export const UpdateAddressFrom = () => {
   const dispatch = useDispatch()
   const token = useSelector(getToken);
   const selectCountries = useSelector(getSelectCountries);
@@ -28,10 +30,10 @@ export const UpdateAddressFrom = ({currentAddress}: { currentAddress: IHoleAddre
   const regions = useSelector(getRegions);
   const selectRegions = useSelector(getSelectRegions);
   const countries = useSelector(getCountries);
+  const currentAddress = useSelector(getCurrentAddress)
 
-
-  const [ isNeedToRedirect, setIsNeedToRedirect ] = useState<boolean>(false);
-  const [isChanged, setIsChanged] = useState<boolean>(false)
+  const [isNeedToRedirect, setIsNeedToRedirect] = useState<boolean>(false);
+  const [isChanged, setIsChanged] = useState<boolean>(false);
   const f = useForm({ mode: 'onChange', reValidateMode: 'onChange' });
 
   const handleChangeCountry = async({ value }: any) => {
@@ -77,49 +79,40 @@ export const UpdateAddressFrom = ({currentAddress}: { currentAddress: IHoleAddre
     <form onSubmit={ f.handleSubmit(onSubmit) }>
       <div className="update_form">
         <div className="update_user_form_fields">
-          <div className="update_user_form_field">
-            <span>country</span>
-            <Select
-              name='country'
-              value={{value: currentCountry?.code, label: currentCountry?.name}}
-              options={ selectCountries }
-              onChange={ (event: any) => handleChangeCountry(event) }
-            />
-          </div>
-          <div className="update_user_form_field">
-            <span>region</span>
-            <Select
-              name='region'
-              value={ { value: currentRegion?.name, label: currentRegion?.name } }
-              disabled={ !!regions?.length }
-              options={ selectRegions }
-              onChange={ (event: any) => handleChangeRegion(event) }
-            />
-          </div>
-          <div className="update_user_form_field">
-            <div className="update_user_form_labels">
-              <span>street</span>
-              { f.errors.street && f.errors.street.type === 'required' && <span>required field</span> }
-            </div>
-            <input
-              defaultValue={currentAddress?.street}
-              className="update_user_form_input"
-              name='street'
-              ref={ f.register({ required: true }) }
-            />
-          </div>
-          <div className="update_user_form_field">
-            <div className="update_user_form_labels">
-              <span>streetNumber</span>
-              { f.errors.streetNumber && f.errors.streetNumber.type === 'required' && <span>required field</span> }
-            </div>
-            <input
-              defaultValue={currentAddress?.streetNumber}
-              className="update_user_form_input"
-              name='streetNumber'
-              ref={ f.register({ required: true }) }
-            />
-          </div>
+          <SelectField
+            name='country'
+            label='Your country'
+            currentSelectValue={{value: currentCountry?.code, label: currentCountry?.name}}
+            options={selectCountries}
+            changeSelectHandler={(event: any) => handleChangeCountry(event)}
+          />
+
+          <SelectField
+            name='region'
+            label='Your region'
+            currentSelectValue={{value: currentRegion?.name, label: currentRegion?.name}}
+            isDisabled={!regions?.length}
+            options={selectRegions}
+            changeSelectHandler={(event: any) => handleChangeRegion(event)}
+          />
+
+          <InputField
+            label='Street'
+            name='street'
+            rules={getRequiredValidation()}
+            register={f.register}
+            errors={f.errors.street}
+            defaultValue={currentAddress?.street && currentAddress?.street}
+          />
+
+          <InputField
+            label='Street number'
+            name='streetNumber'
+            rules={getRequiredValidation()}
+            register={f.register}
+            errors={f.errors.streetNumber}
+            defaultValue={currentAddress?.streetNumber && currentAddress?.streetNumber}
+          />
         </div>
         <div className="update_user_form_controllers">
           { isNeedToRedirect && <Redirect to={ Links.USER }/> }

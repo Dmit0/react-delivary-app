@@ -1,16 +1,11 @@
-import { Prop } from '@nestjs/mongoose';
-
 export interface IUser {
   id?: string,
   name: string,
   email: string,
   password: string,
-  telephone: {
-    code: string,
-    phoneNumber: string
-  },
+  telephone: string,
   createdAt: Date,
-  role: any,
+  role: string,
   ownership?: string[],
   lovedRestaurant?: string[],
   cart?: string[],

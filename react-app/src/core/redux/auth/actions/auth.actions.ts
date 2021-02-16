@@ -44,11 +44,11 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
   };
 };
 
-export const updateAddress = (address: addressDataStep): ThunkType => {
+export const updateAddress = (address: addressDataStep, token: string): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationApi.addAddressStep(address);
+      let response = await AuthenticationApi.addAddressStep(token, address);
       if (response) {
         dispatch(closePopup());
       } else {

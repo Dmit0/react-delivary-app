@@ -1,8 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Select from 'react-select';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
+import { AuthenticationApi } from '../../../../core/api/apis/authentication.api';
 import { GoogleButton } from '../../../../core/components/buttons';
+import { LineThrew } from '../../../../core/components/decor/2-line/line';
+import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
+import { PhoneField } from '../../../../core/components/form-fields/input-phone-field/input.phone';
+import { SelectField } from '../../../../core/components/form-fields/select-form-field/selectField';
 import { DeliveryIcon } from '../../../../core/components/icons';
 import { create_account } from '../../../../core/redux/auth/actions';
 import { getIsStepSuccess } from '../../../../core/redux/auth/selectors';
@@ -10,6 +14,12 @@ import { set_current_country } from '../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../core/redux/countries/selectors';
 import { openPopup } from '../../../../core/redux/popup/actions';
 import { userForCreateAccount } from '../../../../core/types';
+import {
+  getEmailValidation,
+  getPasswordValidation,
+  getPhoneValidation,
+  getRequiredValidation,
+} from '../../../../core/utils/form-validation.utils';
 import { LogIn } from '../../signIn/signIn';
 import { SignUpSelectStep } from './signUpSelectStep';
 
@@ -29,15 +39,12 @@ export const SignUpPersonalForm: React.FC = () => {
   const country = useSelector(getCountry);
   const isStepSuccess = useSelector(getIsStepSuccess);
 
-  const [ phone, setPhone ] = useState<any>();
-  const [ currentChangeCountry, setCurrentChangeCountry ] = useState<any>(false);
+  const [ isEmailExist, setIsEmailExist ] = useState<boolean>(false);
+  const [ isPhoneExist, setIsPhoneExist ] = useState<boolean>(false);
 
-  useEffect(() => {
-    if (currentChangeCountry) {
-      setPhone(country?.dial_code);
-      setCurrentChangeCountry(false);
-    }
-  }, [ currentChangeCountry, country ]);
+  const dealCountriesSelectCodes = useMemo(() => {
+    return countries.map(item => ({value: item?.dial_code || '', label: item?.dial_code || ''}))
+  }, [countries])
 
   useEffect(() => {
     isStepSuccess && dispatch(openPopup(<SignUpSelectStep/>));
@@ -50,73 +57,119 @@ export const SignUpPersonalForm: React.FC = () => {
   const handleChange = ({ value }: any) => {
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
-    setCurrentChangeCountry(true);
   };
 
   const createAccount = (user: userForCreateAccount) => {
     dispatch(create_account(user));
   };
 
-  const changeHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(
-      country?.dial_code
-        ? country.dial_code + event.target.value.slice(country.dial_code.length)
-        : '' + event.target.value,
-    );
-    setCurrentChangeCountry(false);
-  }, [ country ]);
+  const {errors, watch, register, handleSubmit} = useForm<formData>({ mode: 'onChange', reValidateMode: 'onChange' });
 
-  const { register, handleSubmit, errors } = useForm<formData>();
+  const changeInputHandler = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const setData = event.target.value;
+    const validatedEmailResponse =
+      country?.dial_code &&
+      setData &&
+      !errors.telephone &&
+      await AuthenticationApi.verifyPhone({
+        code: country.dial_code,
+        number: setData,
+      });
+    setIsPhoneExist(!!validatedEmailResponse);
+  }, [ country, errors.telephone, setIsPhoneExist ]);
+
+  const verifyEmail = useCallback(async(e: any, errors: any) => {
+    const setData = e.target.value;
+    const validatedEmailResponse = (setData && !errors.email) && await AuthenticationApi.verifyMail(setData);
+    setIsEmailExist(validatedEmailResponse);
+  }, [setIsEmailExist])
+
+  const changeSelectHandler = useCallback(({value}) => {
+    if (country?.dial_code !== value) {
+      const newCountry = countries.find(c => c.dial_code === value)
+      newCountry && dispatch(set_current_country(newCountry))
+    }
+  }, [countries, country, dispatch])
 
   const onSubmit = (data: formData) => {
     if (country && data.name) {
       createAccount({ ...data, country });
     }
   };
+
   return (
     <>
       <div className="registrationPopup">
         <div className='main-auth-popup'>
           <div className="auth-title">
             <div className="auth-title-header">
-              <DeliveryIcon height={ '30' } width={ '30' }/>
+              <DeliveryIcon height='30' width='30'/>
             </div>
           </div>
-          <form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
+          <form className='Authentication_Form' onSubmit={handleSubmit(onSubmit)}>
             <div>
               <div className="auth-body_Google_auth">
                 <GoogleButton text='Sign in with Google'/>
               </div>
-              <div className='line'>
-                <span>or</span>
-              </div>
+              <LineThrew/>
               <div className="auth-body_Mail_auth">
-                <span className='Authentication-Label'>Your name</span>
-                <input name='name' ref={ register({ required: true }) }/>
-                { errors.name && errors.name.type === 'required' && <span>This field is required</span> }
+                <div className="auth-body_Mail_auth">
 
-                <span className='Authentication-Label'>Your country</span>
-                <Select name='country' options={ selectCountries } onChange={ (event: any) => handleChange(event) }/>
+                  <InputField
+                    label='Your name'
+                    name='name'
+                    rules={getRequiredValidation()}
+                    register={register}
+                    errors={errors.name}
+                  />
 
-                <span className='Authentication-Label'>Telephone number</span>
-                <Item register={ register } current_country_code={ phone } changeHandler={ changeHandler }/>
-                { errors.telephone && errors.telephone.type === 'required' && <span>Telephone is required</span> }
-                { errors.telephone && (errors.telephone.type === 'pattern' || errors.telephone.type === 'minLength' || errors.telephone.type === 'maxLength') &&
-                <span>it isnt`t telephon number</span> }
+                  <SelectField
+                    name='country'
+                    label='Your country'
+                    currentSelectValue={country && { value: country?.code, label: country?.name }}
+                    selectPlaceHolder='Select...'
+                    options={selectCountries}
+                    changeSelectHandler={(event: any) => handleChange(event)}
+                  />
 
-                <span className='Authentication-Label'>Email Adress</span>
-                <input name='email'
-                       ref={ register({ required: true, pattern: /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/ }) }/>
-                { errors.email && errors.email.type === 'required' && <p>Email is required</p> }
-                { errors.email && errors.email.type === 'pattern' && <p>it isnt`t email</p> }
+                  <PhoneField
+                    name='telephone'
+                    selectName='telephone'
+                    selectPlaceHolder='+ ...'
+                    label='Telephone number'
+                    isDisabled={!country}
+                    register={register}
+                    currentSelectValue={country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null}
+                    placeHolder={!country ? 'Select country' : 'phone'}
+                    errors={errors.telephone}
+                    options={dealCountriesSelectCodes}
+                    changeSelectHandler={changeSelectHandler}
+                    changeInputHandler={changeInputHandler}
+                    isPhoneExist={isPhoneExist}
+                    rules={getPhoneValidation(7, 11)}
+                    currentValue={watch('telephone')}
+                  />
 
-                <span className='Authentication-Label'>Password</span>
-                <input type="password" name='password'
-                       ref={ register({ required: true, minLength: 8, maxLength: 30, pattern: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])/ }) }/>
-                { errors.password && errors.password.type === 'required' && <span>This field is required</span> }
-                { errors.password && errors.password.type === 'minLength' && <span>Required len more then 8</span> }
-                { errors.password && errors.password.type === 'maxLength' && <span>Required len less then 8</span> }
-                { errors.password && errors.password.type === 'pattern' && <span>Req Upper and Lower case</span> }
+                  <InputField
+                    name='email'
+                    label='Email Address'
+                    rules={getEmailValidation()}
+                    errors={errors.email}
+                    subExistErrors={isEmailExist}
+                    currentValue={watch('email')}
+                    register={register}
+                    onChange={(e) => verifyEmail(e, errors)}
+                  />
+
+                  <InputField
+                    name='password'
+                    label='Password'
+                    type='password'
+                    rules={getPasswordValidation(8, 30)}
+                    errors={errors.password}
+                    register={register}
+                  />
+                </div>
               </div>
             </div>
             <div className="auth-reg-futer">
@@ -124,30 +177,12 @@ export const SignUpPersonalForm: React.FC = () => {
                 <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
               </div>
               <div className="auth-next-step">
-                <button type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
+                <button disabled={isPhoneExist || isEmailExist} type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
               </div>
             </div>
           </form>
-          )
         </div>
       </div>
-    </>
-  );
-};
-
-const Item = ({ register, current_country_code, changeHandler }: any) => {
-  return (
-    <>
-      <input
-        name='telephone'
-        disabled={ !current_country_code }
-        value={ current_country_code ? current_country_code : ' select country ' }
-        onChange={ changeHandler }
-        ref={ register({
-          required: true,
-          minLength: 11,
-          maxLength: 15,
-        }) }/>
     </>
   );
 };

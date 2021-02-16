@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { AddressApi } from '../../../../../core/api/apis/address.api';
 import { Divider } from '../../../../../core/components/decor';
+import { Paging } from '../../../../../core/components/pagination/paging';
 import { Links } from '../../../../../core/enums';
 import { deleteUserAddress } from '../../../../../core/redux/user/actions';
 import { getToken } from '../../../../../core/redux/user/selectors';
@@ -41,11 +42,7 @@ export const AddressBlock: React.FC<UserAddressBlock> = ({ userAddresses }) => {
         { rerender.addressCards(userAddresses, deleteAddress) }
       </div>
       { userAddresses.length > 0 && <div className="user-address-block-footer">
-        <div className="paging">
-          <span className="paging-item">1</span>
-          <span className="paging-item">2</span>
-          <span className="paging-item">3</span>
-        </div>
+        <Paging/>
       </div>
       }
     </div>

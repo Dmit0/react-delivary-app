@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { from, Observable, of } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { map, mergeMap, tap } from 'rxjs/operators';
 import { Opportunities } from '../constants/enums/opportunity.enum';
 import { exceptionErrors } from '../constants/errors/exeptionsErrors';
@@ -11,7 +11,7 @@ import { PhoneService } from '../participants/user-main/phone/phone.service';
 import { RolesService } from '../participants/user-main/roles/roles.service';
 import { User } from '../participants/user-main/user/models/user.schema';
 import { UserService } from '../participants/user-main/user/user.service';
-import { UserRegistrationDto, UserSignInDto, UserSignUpAddressDto } from './models/auth.models';
+import { UserCreateDto, UserSignInDto, UserSignUpAddressDto, VerifyPhoneDto } from './models/auth.dto';
 import { passwordUtils } from './utils/password.utils';
 
 @Injectable()
@@ -29,7 +29,7 @@ export class AuthService {
 
   private readonly buyOpportunity: Observable<any> = this.opportunityService.findOpportunity({ name: Opportunities.BUY });
 
-  SignUp(userData: UserRegistrationDto) {
+  SignUp(userData: UserCreateDto) {
     return this.userService.getUser({ email: userData.email }).pipe(
       tap((user) => user && exceptionErrors.throwForbiddenError('user-main exist')),
       mergeMap(() => passwordUtils.hashPassword(userData.password).pipe(
@@ -43,22 +43,21 @@ export class AuthService {
 
   //create user-main Type
   SignIn(userData: any): any {
-    return this.phoneService.getPhone({ _id: userData.telephone }).pipe(
-      mergeMap((phone) => this.roleService.findRole({ _id: userData.role }).pipe(
-        mergeMap((role) => this.addressService.getAddressesByIds(userData.addresses).pipe(
-          mergeMap((addresses) => this.cartService.getCart({ _id: userData._doc.cart }).pipe(
-            map((cart) => {
-              return this.createAccessToken({
-                ...userData._doc,
-                cart: cart.countOfItems,
-                role: role.name,
-                phone: `${ phone.code }${ phone.phoneNumber }`,
-                firstAddress: addresses.length ? { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode } : null,
-              });
-            })
-          ))
-        )),
-      )),
+    return forkJoin([
+      this.phoneService.getPhone({ _id: userData.telephone }),
+      this.roleService.findRole({ _id: userData.role }),
+      this.addressService.getAddressesByIds(userData.addresses),
+      this.cartService.getCart({ _id: userData._doc.cart }),
+    ]).pipe(
+      map(([ phone, role, addresses, cart ]) => {
+        return this.createAccessToken({
+          ...userData._doc,
+          cart: cart.countOfItems,
+          role: role.name,
+          phone: `${ phone.code }${ phone.phoneNumber }`,
+          firstAddress: addresses.length ? { addressId: addresses[0]._id, country: addresses[0].country, code: addresses[0].countryCode } : null,
+        });
+      }),
     );
   }
 
@@ -93,6 +92,12 @@ export class AuthService {
     );
   }
 
+  verifyPhone(phone: VerifyPhoneDto) {
+    return this.phoneService.getPhone({code: phone.code, phoneNumber: phone.number}).pipe(
+      map(phone => phone && true || false)
+    )
+  }
+
   signUpStep3(data: UserSignUpAddressDto) {
     return this.userService.setVerify(data)
   }
@@ -110,13 +115,16 @@ export class AuthService {
     );
   }
 
-  refreshToken(token: string): Observable<any> {
-    const decodedToken = this.jwtService.decode(token);
-    return of(this.generateRefreshToken(decodedToken));
+  refreshToken(token: string) {
+    try {
+      const decodedToken = this.jwtService.decode(token);
+      return decodedToken && this.generateRefreshToken(decodedToken) || null;
+    } catch(e) {
+      return false
+    }
   }
 
   private async generateRefreshToken(data: any) {
-
     const token = await this.jwtService.sign({
       id: data.id,
       email: data.email,

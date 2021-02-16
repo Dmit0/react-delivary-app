@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { map, mergeMap } from 'rxjs/operators';
+import { passwordUtils } from '../../../auth/utils/password.utils';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { AddressService } from '../address/address.service';
-import { AddAddressDto, DeleteAddressDto, UpdateAddressDto } from '../address/models/address.types';
+import { AddAddressDto, UpdateAddressDto } from '../address/models/address.types';
 import { CartService } from '../cart/cart.service';
 import { PhoneService } from '../phone/phone.service';
 import { RolesService } from '../roles/roles.service';
@@ -84,11 +85,12 @@ export class UserService {
 
   setVerify(data: any): Observable<User> {
     const { country, region, street, streetNumber } = data;
-    return from(this.roleService.findRole({ name: roles.VERIFIED })).pipe(
-      mergeMap((role) => this.addressService.updateAddress({ _id: data.addressId }, { country, region, street, streetNumber }).pipe(
-        mergeMap(() => this.updateUser({ _id: data.userId }, { role: role._id }).pipe(
-          map((user) => user || null),
-        )),
+    return this.roleService.findRole({ name: roles.VERIFIED }).pipe(
+      mergeMap((role) => forkJoin([
+        this.updateUser({ _id: data.userId }, { role: role._id }),
+        this.addressService.updateAddress({ _id: data.addressId }, { country, region, street, streetNumber }),
+      ]).pipe(
+        map(([ user ]) => user || null),
       )),
     );
   }
@@ -106,9 +108,7 @@ export class UserService {
           return forkJoin([
             this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
             user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
-          ]).pipe(
-            map(([user]) => ({user}))
-          );
+          ])
         }),
       )),
     );
@@ -140,16 +140,26 @@ export class UserService {
   }
 
   prepareToUpdateUser(userId: string, data: UpdateUserDto) {
-    if (data.telephone) {
-      return this.phoneService.updatePhone({ userId }, { ...data.telephone }).pipe(
-        mergeMap(phone => this.updateUser({ _id: userId }, { ...data, telephone: phone._id }).pipe(
-          map((user) => user && true || false),
-        )),
-      );
-    }
-    return this.updateUser({ _id: userId }, { ...data }).pipe(
-      map((user) => user && true || false),
-    );
+    const { telephone, password, ...criteria } = data;
+    return this.getUser({ _id: userId }).pipe(
+      mergeMap(user => {
+        if (!user) {
+          throw new NotFoundException();
+        }
+        const operations = [
+          password ? passwordUtils.hashPassword(password) : of(null),
+          telephone && this.phoneService.updatePhone({ userId }, { ...data.telephone }),
+        ];
+        return forkJoin(operations).pipe(
+          mergeMap(([ password ]) => {
+            const updateData = {
+              ...criteria,
+              telephone: user.telephone._id,
+              password: password ? password : user.password,
+            };
+            return this.updateUser({ _id: userId }, { ...updateData });
+          }));
+      }));
   }
 
   updateUser(criteria, data: any): Observable<User> {

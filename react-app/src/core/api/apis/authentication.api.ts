@@ -22,6 +22,16 @@ export const AuthenticationApi = {
         }
     },
 
+    async verifyPhone (phone: {code: string, number: string}) {
+        try {
+            return await http<boolean>('/authentication/verifyPhone', 'POST', JSON.stringify(phone), {
+                'Content-Type': 'application/json;charset=utf-8',
+            });
+        } catch (e) {
+            return true;
+        }
+    },
+
     async logIn(data: loginData) {
         try {
             return await http<{
@@ -40,9 +50,10 @@ export const AuthenticationApi = {
         }
     },
 
-    async addAddressStep(data: addressDataStep) {
+    async addAddressStep(token: string, data: addressDataStep) {
         try {
             return await http<{ status: boolean }>('/authentication/signUpStep3', 'POST', JSON.stringify(data), {
+                Authorization: `Bearer ${ token }`,
                 'Content-Type': 'application/json;charset=utf-8',
             });
         } catch (e) {

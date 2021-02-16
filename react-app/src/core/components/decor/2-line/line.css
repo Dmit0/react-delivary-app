@@ -1,0 +1,29 @@
+.line{
+    width:350px;
+    position: relative;
+    text-align: center;
+}
+.line span{
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 16px;
+    color: rgb(93, 108, 116);
+    text-align: center;
+    background: rgb(255, 255, 255);
+    padding: 0px 10px;
+}
+.line::before {
+    display: inline-block;
+    content: "";
+    position: absolute;
+    height: 0px;
+    top: 50%;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    z-index: -1;
+    transform: translateY(-50%);
+    width: 350px;
+    border-top: 1px solid rgb(184, 196, 194);
+    margin: 0px auto;
+}
