@@ -33,7 +33,7 @@ const UpdateAddressPage: React.FC = () => {
         <div className="row">
           <LeftSideBar/>
           <UpdatePage header={ 'Update Address' } Icon={ <ToolIcon/> }>
-            <UpdateAddressFrom currentAddress={ currentAddress }/>
+            <UpdateAddressFrom/>
           </UpdatePage>
         </div>
       </div>

@@ -1,5 +1,5 @@
 .update_form {
-    width: 300px;
+    width: 350px;
 }
 .update_user_form_field {
     margin-top: 12px;
@@ -42,18 +42,4 @@
 
 .update_user_form_password {
     position: relative;
-}
-
-.update_user_form_password_ok {
-    position: absolute;
-    right: 2%;
-    top: 3px;
-    color: green;
-}
-
-.update_user_form_cancel {
-    position: absolute;
-    right: 2%;
-    top: 3px;
-    color: #ff5d5d;
 }

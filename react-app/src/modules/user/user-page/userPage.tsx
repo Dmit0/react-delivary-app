@@ -32,9 +32,7 @@ import { UserCard } from './components/user-block/userData';
      });
    }, []);
 
-   const getUserData = async(token: string | null) => {
-     return token && await UserApi.getUser(token);
-     }
+   const getUserData = async (token: string | null) => token && await UserApi.getUser(token);
 
   return (
     <div className="app">

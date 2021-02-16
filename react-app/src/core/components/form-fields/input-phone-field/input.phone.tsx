@@ -1,25 +1,27 @@
 import React from 'react';
 import { ValidationRules, FieldErrors } from 'react-hook-form';
 import Select from 'react-select';
-import '../input-form-field/input.css';
+import '../form.css';
 import './input.phone.css'
+import { CurrentSelectType, SelectType } from '../../../types/select.types';
 
 interface InputFieldProps {
   label: string,
   name: string,
   selectName: string,
   selectPlaceHolder?: string,
-  options: {label: string; value: string}[],
+  options: SelectType[],
   rules: ValidationRules,
   errors: FieldErrors | undefined,
   register: any
   isDisabled?: boolean,
   placeHolder?: string,
-  currentSelectValue: string,
+  currentSelectValue: CurrentSelectType | null,
   isPhoneExist: boolean,
   currentValue: string,
-  changeSelectHandler(e: any): void,
-  changeInputHandler(e: any): void,
+  defaultInputValue?: string
+  changeSelectHandler?(e: any): void,
+  changeInputHandler?(e: any): void,
 }
 
 export const PhoneField = (
@@ -38,6 +40,7 @@ export const PhoneField = (
     changeSelectHandler,
     changeInputHandler,
     isPhoneExist,
+    defaultInputValue,
     currentValue
   }: InputFieldProps) => {
     return (
@@ -53,16 +56,17 @@ export const PhoneField = (
             className='codeSelect'
             name={ selectName }
             options={ options }
-            value={ currentSelectValue && { value: currentSelectValue, label: currentSelectValue } || { label: selectPlaceHolder } }
+            value={currentSelectValue && currentSelectValue}
             onChange={ changeSelectHandler }
           />
           <input
-            className='input_form_input'
+            className='input_form_phone_input'
             disabled={ isDisabled }
             name={ name }
             ref={ register(rules) }
             placeholder={ placeHolder }
             onChange={changeInputHandler}
+            defaultValue={defaultInputValue}
           />
         </div>
       </div>

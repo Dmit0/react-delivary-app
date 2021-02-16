@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import Select from 'react-select';
 import { geoApi } from '../../../../core/api/apis/geo.api';
+import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
+import { SelectField } from '../../../../core/components/form-fields/select-form-field/selectField';
 import { DeliveryIcon } from '../../../../core/components/icons';
 import { Locality } from '../../../../core/enums/locality.enum';
 import { authClose, setStepCancel, updateAddress } from '../../../../core/redux/auth/actions';
@@ -13,6 +14,7 @@ import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../core
 import { closePopup } from '../../../../core/redux/popup/actions';
 import { getFirstAddress, getToken, getUserId } from '../../../../core/redux/user/selectors';
 import { addressDataStep } from '../../../../core/types';
+import { getRequiredValidation } from '../../../../core/utils/form-validation.utils';
 
 interface formData {
   country: string,
@@ -67,7 +69,7 @@ export const SignUpAddressStep: React.FC = () => {
     token && dispatch(updateAddress(data, token));
   };
 
-  const { register, handleSubmit } = useForm<formData>();
+  const { register, handleSubmit, errors } = useForm<formData>();
 
   const onSubmit = (data: formData) => {
     if (currentCountry && currentRegion && userId && firstUserCountry?.addressId) {
@@ -96,28 +98,40 @@ export const SignUpAddressStep: React.FC = () => {
           <form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
             <div className="auth-body_Mail_auth">
               <div>
-                <span className='Authentication-Label'>Your Country</span>
-                <Select
+                <SelectField
                   name='country'
-                  defaultValue={ { value: firstUserCountry?.country, label: firstUserCountry?.country } }
-                  options={ selectCountries }
-                  onChange={ (event: any) => handleChangeCountry(event) }
+                  label='Your country'
+                  defaultValue={{value: firstUserCountry?.country, label: firstUserCountry?.country}}
+                  currentSelectValue={{value: currentCountry?.name, label: currentCountry?.name}}
+                  options={selectCountries}
+                  changeSelectHandler={(event: any) => handleChangeCountry(event)}
                 />
-                <span className='Authentication-Label'>Your Region</span>
-                <Select
-                  name='region'
-                  value={ { value: currentRegion?.name, label: currentRegion?.name } }
-                  disabled={ !!regions }
-                  options={ selectRegions }
-                  onChange={ (event: any) => handleChangeRegion(event) }
-                />
-                <span className='Authentication-Label'>street</span>{/*Only belarus prefix +375*/ }
-                <input name='street' ref={ register({ required: true }) }/>
-                {/*{ errors.name && errors.name.type === 'required' && <span>This field is required</span> }*/}
 
-                <span className='Authentication-Label'>street number</span>
-                <input name='streetNumber' ref={ register({ required: true }) }/>
-                {/*{ errors.name && errors.name.type === 'required' && <span>This field is required</span> }*/}
+                <SelectField
+                  name='region'
+                  label='Your Region'
+                  currentSelectValue={{value: currentRegion?.name, label: currentRegion?.name}}
+                  isDisabled={!regions?.length}
+                  options={selectRegions}
+                  changeSelectHandler={(event: any) => handleChangeRegion(event)}
+                />
+
+                <InputField
+                  label='Street'
+                  name='street'
+                  rules={getRequiredValidation()}
+                  register={register}
+                  errors={errors.street}
+                />
+
+                <InputField
+                  label='Street number'
+                  name='streetNumber'
+                  rules={getRequiredValidation()}
+                  register={register}
+                  errors={errors.streetNumber}
+                />
+
               </div>
               <div className="auth-step-button">
                 <div className="auth-next-step">

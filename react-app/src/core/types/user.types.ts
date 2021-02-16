@@ -1,6 +1,9 @@
 export interface IUpdateUser {
   email?: string,
   password?: string,
-  phone?: string,
+  phone?: {
+    phoneNumber: string,
+    code: string
+  },
   name?: string,
 }

@@ -1,28 +1,27 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthenticationApi } from '../../../../../core/api/apis/authentication.api';
-import { GoogleButton } from '../../../../../core/components/buttons';
-import { LineThrew } from '../../../../../core/components/decor/2-line/line';
-import { InputField } from '../../../../../core/components/form-fields/input-form-field/input';
-import { PhoneField } from '../../../../../core/components/form-fields/input-phone-field/input.phone';
-import { DeliveryIcon } from '../../../../../core/components/icons';
-import { create_account } from '../../../../../core/redux/auth/actions';
-import { getIsStepSuccess } from '../../../../../core/redux/auth/selectors';
-import { set_current_country } from '../../../../../core/redux/countries/actions';
-import { getCountries, getCountry, getSelectCountries } from '../../../../../core/redux/countries/selectors';
-import { openPopup } from '../../../../../core/redux/popup/actions';
-import { userForCreateAccount } from '../../../../../core/types';
+import { AuthenticationApi } from '../../../../core/api/apis/authentication.api';
+import { GoogleButton } from '../../../../core/components/buttons';
+import { LineThrew } from '../../../../core/components/decor/2-line/line';
+import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
+import { PhoneField } from '../../../../core/components/form-fields/input-phone-field/input.phone';
+import { SelectField } from '../../../../core/components/form-fields/select-form-field/selectField';
+import { DeliveryIcon } from '../../../../core/components/icons';
+import { create_account } from '../../../../core/redux/auth/actions';
+import { getIsStepSuccess } from '../../../../core/redux/auth/selectors';
+import { set_current_country } from '../../../../core/redux/countries/actions';
+import { getCountries, getCountry, getSelectCountries } from '../../../../core/redux/countries/selectors';
+import { openPopup } from '../../../../core/redux/popup/actions';
+import { userForCreateAccount } from '../../../../core/types';
 import {
   getEmailValidation,
   getPasswordValidation,
   getPhoneValidation,
   getRequiredValidation,
-} from '../../../../../core/utils/form-validation.utils';
-import { LogIn } from '../../../signIn/signIn';
-import { SignUpSelectStep } from '../signUpSelectStep';
-import './addPersonalInfo.css'
+} from '../../../../core/utils/form-validation.utils';
+import { LogIn } from '../../signIn/signIn';
+import { SignUpSelectStep } from './signUpSelectStep';
 
 interface formData {
   email: string,
@@ -124,15 +123,14 @@ export const SignUpPersonalForm: React.FC = () => {
                     errors={errors.name}
                   />
 
-                  <div className="auth_user_form_field">
-                    <span className='Authentication-Label'>Your country</span>
-                    <Select
-                      name='country'
-                      value={ country && { value: country?.code, label: country?.name }}
-                      options={ selectCountries }
-                      onChange={(event: any) => handleChange(event)}
-                    />
-                  </div>
+                  <SelectField
+                    name='country'
+                    label='Your country'
+                    currentSelectValue={country && { value: country?.code, label: country?.name }}
+                    selectPlaceHolder='Select...'
+                    options={selectCountries}
+                    changeSelectHandler={(event: any) => handleChange(event)}
+                  />
 
                   <PhoneField
                     name='telephone'
@@ -141,14 +139,14 @@ export const SignUpPersonalForm: React.FC = () => {
                     label='Telephone number'
                     isDisabled={!country}
                     register={register}
-                    currentSelectValue={country?.dial_code || ''}
-                    placeHolder={!country ? 'Select country' : ''}
+                    currentSelectValue={country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null}
+                    placeHolder={!country ? 'Select country' : 'phone'}
                     errors={errors.telephone}
                     options={dealCountriesSelectCodes}
                     changeSelectHandler={changeSelectHandler}
                     changeInputHandler={changeInputHandler}
                     isPhoneExist={isPhoneExist}
-                    rules={getPhoneValidation(11, 15)}
+                    rules={getPhoneValidation(7, 11)}
                     currentValue={watch('telephone')}
                   />
 

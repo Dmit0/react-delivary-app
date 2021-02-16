@@ -10,7 +10,7 @@ import { getIsStepSuccess } from '../../../core/redux/auth/selectors';
 import { openPopup } from '../../../core/redux/popup/actions';
 import { loginData } from '../../../core/types';
 import { getEmailValidation, getPasswordValidation } from '../../../core/utils/form-validation.utils';
-import { SignUpPersonalForm } from '../signUp/components/add-personal-info/signUpAddPersonalInfo';
+import { SignUpPersonalForm } from '../signUp/components/signUpAddPersonalInfo';
 
 interface formData {
   email: string,

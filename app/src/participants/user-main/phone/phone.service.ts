@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
-import { from, Observable, of } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { catchError, map, mergeMap } from 'rxjs/operators';
 import { exceptionErrors } from '../../../constants/errors/exeptionsErrors';
 import { Phone } from './models/phone.schema';
@@ -21,7 +21,7 @@ export class PhoneService {
         } else {
           const newPhone = new this.phoneModel({ ...property });
           return from(newPhone.save()).pipe(
-            catchError((err) => {
+            catchError(() => {
               throw exceptionErrors.throwForbiddenError;
             }),
             map((role) => role || null),
