@@ -8,7 +8,7 @@
 
 .page-arrow:hover {
     background-color: white;
-    color: #949493;
+    color: #21313c;
     cursor: pointer;
 }
 .page-paging-item {
@@ -20,6 +20,14 @@
 }
 .page-paging-item:hover {
     background-color: white;
-    color: #949493;
+    color: #21313c;
     cursor: pointer;
+}
+
+.activeItem {
+    color: #ffe000;
+}
+
+.activeItem:hover{
+    color: #ffe000;
 }

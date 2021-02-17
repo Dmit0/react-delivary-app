@@ -1,35 +1,62 @@
-import React, { useMemo } from 'react';
-import './components/paging.css';
+import React, { useCallback, useMemo, useState } from 'react';
+import { Action } from '../../enums';
+import { createArrayFromNumbers } from '../../utils/array.utils';
 import { PaginationBlock } from './components/paginationIBlock';
+import './components/paging.css';
 
 interface PaginationProps {
-  pageCount?: number,
-  currentPage?: number,
-  itemsPerPage?: number,
-  onPageChange?(currentPage: number): void
+  pageCount: number,
+  pagingItemCounts?: number,
+  currentPage: number,
+  onPageChange(currentPage: number): void
 }
 
-const PAGINATION_ITEM_COUNTS = 3
+export const Paging = ({pageCount, onPageChange, pagingItemCounts = 3, currentPage}: PaginationProps) => {
 
-export const Paging = ({pageCount, currentPage, onPageChange, itemsPerPage}: PaginationProps) => {
+  const [currentStartItem, setCurrentStartItem] = useState<number>(1)
 
-  const startItem = useMemo(() => {
-    return 1;
-  }, []);
-
-  const lastItem = useMemo(() => {
-    return 3;
-  }, []);
-
-  const VisibleItems = useMemo(() => {
-    const itemsArray: any = [];
-    for (let i = 1; i <= lastItem; i++) {
-      itemsArray.push(i);
+  const investigateStepAdd = useCallback((choosePage: number, pagingItemArray: any[]) => {
+    if (choosePage === currentStartItem) {
+      return 0;
     }
-    return itemsArray
-  }, [ lastItem ]);
+    if (choosePage - (Math.ceil(pagingItemCounts - pagingItemCounts/2)) < currentStartItem) {
+      return 0
+    }
+    else return 1
+  },[currentStartItem, pagingItemCounts])
+
+  const getLastIndex = useMemo(() => {
+    return currentStartItem + pagingItemCounts - 1
+  }, [currentStartItem, pagingItemCounts])
+  
+  const countActionArrow = useCallback((action: Action) => {
+    if (action.includes(Action.INCREMENT) && currentPage === getLastIndex) {
+      return 1
+    } else if (action.includes(Action.DECREMENT) && currentPage === currentStartItem && currentPage !== 1) {
+      return -1
+    } else return 0
+  },[currentPage, currentStartItem, pagingItemCounts])
+
+  const onArrowClick = useCallback((action: Action) => {
+    const value = countActionArrow(action)
+     setCurrentStartItem((prev) => prev + value)
+    const newPage = (action.includes(Action.DECREMENT) && currentPage - 1) || (action.includes(Action.INCREMENT) && currentPage + 1) || currentPage
+    onPageChange(newPage)
+  }, [countActionArrow, currentPage, onPageChange])
+
+  const onPageClick = useCallback((pageNumber: number) => {
+    const investigateStep = investigateStepAdd(pageNumber, createArrayFromNumbers(pagingItemCounts, currentStartItem))
+    setCurrentStartItem((prev) => {
+      return prev + investigateStep;
+    })
+    onPageChange(pageNumber)
+  }, [currentStartItem, investigateStepAdd, onPageChange, pagingItemCounts])
+
+  const paginationItems = useCallback(() => {
+    return createArrayFromNumbers(pagingItemCounts, currentStartItem)
+  }, [currentStartItem, pagingItemCounts])
 
   return (
-    <PaginationBlock pagingItems={VisibleItems}/>
+    <PaginationBlock pagingItems={paginationItems} onClick={onPageClick} onArrowClick={onArrowClick} currentPage={currentPage}/>
   );
 };
