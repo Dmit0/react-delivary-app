@@ -1,0 +1,25 @@
+.page-arrow {
+    border: none;
+    color: #21313c;
+    padding: 2px 4px;
+    font-size: 22px;
+    user-select: none;
+}
+
+.page-arrow:hover {
+    background-color: white;
+    color: #949493;
+    cursor: pointer;
+}
+.page-paging-item {
+    font-size: 18px;
+    border: none;
+    color: #21313c;
+    padding: 6px 4px;
+    user-select: none;
+}
+.page-paging-item:hover {
+    background-color: white;
+    color: #949493;
+    cursor: pointer;
+}

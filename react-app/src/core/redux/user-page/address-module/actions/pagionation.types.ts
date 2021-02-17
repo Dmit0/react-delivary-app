@@ -1,0 +1,1 @@
+export const PAGINATION_ITEM_COUNTS = 3

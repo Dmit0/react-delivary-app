@@ -1,23 +1,35 @@
-import React from 'react';
-import './paging.css'
-export const Paging = () => {
+import React, { useMemo } from 'react';
+import './components/paging.css';
+import { PaginationBlock } from './components/paginationIBlock';
+
+interface PaginationProps {
+  pageCount?: number,
+  currentPage?: number,
+  itemsPerPage?: number,
+  onPageChange?(currentPage: number): void
+}
+
+const PAGINATION_ITEM_COUNTS = 3
+
+export const Paging = ({pageCount, currentPage, onPageChange, itemsPerPage}: PaginationProps) => {
+
+  const startItem = useMemo(() => {
+    return 1;
+  }, []);
+
+  const lastItem = useMemo(() => {
+    return 3;
+  }, []);
+
+  const VisibleItems = useMemo(() => {
+    const itemsArray: any = [];
+    for (let i = 1; i <= lastItem; i++) {
+      itemsArray.push(i);
+    }
+    return itemsArray
+  }, [ lastItem ]);
+
   return (
-    <nav aria-label="Page navigation example">
-      <ul className="pagination">
-        <li className="page-item">
-          <a className="page-link example" href="#" aria-label="Previous">
-            <span aria-hidden="true">&laquo;</span>
-          </a>
-        </li>
-        <li className="page-item"><a className="page-link example" href="#">1</a></li>
-        <li className="page-item"><a className="page-link example" href="#">2</a></li>
-        <li className="page-item"><a className="page-link example" href="#">3</a></li>
-        <li className="page-item example">
-          <a className="page-link example" href="#" aria-label="Next">
-            <span aria-hidden="true">&raquo;</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <PaginationBlock pagingItems={VisibleItems}/>
   );
 };
