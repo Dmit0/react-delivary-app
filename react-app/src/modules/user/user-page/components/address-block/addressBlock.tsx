@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import '../../user.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,30 +7,38 @@ import { Divider } from '../../../../../core/components/decor';
 import { Paging } from '../../../../../core/components/pagination/paging';
 import { Links } from '../../../../../core/enums';
 import { setCurrentPage } from '../../../../../core/redux/user-page/address-module/actions/address-module.actions';
-import { getCurrentPage } from '../../../../../core/redux/user-page/address-module/selectors';
+import { getAddressesTotal, getCurrentPage, getCurrentPageAddresses } from '../../../../../core/redux/user-page/address-module/selectors';
+import { ADDRESSES_PER_PAGE } from '../../../../../core/redux/user-page/types';
 import { deleteUserAddress } from '../../../../../core/redux/user/actions';
 import { getToken } from '../../../../../core/redux/user/selectors';
-import { IHoleAddress } from '../../../../../core/types';
+import { Pagination } from '../../../../../core/types/pagination.types';
 import { rerender } from '../../../../../core/utils/rerender/address.rerender';
 
-interface UserAddressBlock {
-  userAddresses: IHoleAddress[]
-}
+export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddresses(token: string, pagination?: Pagination): void}) => {
 
-export const AddressBlock: React.FC<UserAddressBlock> = ({ userAddresses }) => {
-
-  const token = useSelector(getToken)
-  const dispatch = useDispatch()
-  const currentPage = useSelector(getCurrentPage)
+  const token = useSelector(getToken);
+  const userAddresses = useSelector(getCurrentPageAddresses);
+  const total = useSelector(getAddressesTotal)
+  const dispatch = useDispatch();
+  const currentPage = useSelector(getCurrentPage);
 
   const deleteAddress = useCallback(async(addressId: string) => {
     const response = token && await AddressApi.deleteAddress(token, addressId)
     response && dispatch(deleteUserAddress(addressId))
   },[dispatch, token])
 
+  const getPaginatedOffset = useCallback((pageNumber: number): number => {
+    return (pageNumber - 1)  * ADDRESSES_PER_PAGE
+  }, [])
+
   const onPageChange = useCallback((pageNumber: number) => {
-    dispatch(setCurrentPage(pageNumber))
-  }, [dispatch])
+    dispatch(setCurrentPage(pageNumber));
+    token && getPaginatedUserAddresses(token, { offset: getPaginatedOffset(pageNumber), size: ADDRESSES_PER_PAGE })
+  }, [dispatch, getPaginatedOffset, getPaginatedUserAddresses, token])
+
+  const currentPaginatedItems = useMemo(() => {
+    return Math.ceil(total / ADDRESSES_PER_PAGE)
+  }, [total])
 
   return (
     <div className="col user_address_part">
@@ -49,7 +57,7 @@ export const AddressBlock: React.FC<UserAddressBlock> = ({ userAddresses }) => {
         { rerender.addressCards(userAddresses, deleteAddress) }
       </div>
       { userAddresses.length > 0 && <div className="user-address-block-footer">
-        <Paging pageCount={10} currentPage={currentPage} onPageChange={onPageChange}/>
+        <Paging pageCount={currentPaginatedItems} currentPage={currentPage} onPageChange={onPageChange}/>
       </div>
       }
     </div>

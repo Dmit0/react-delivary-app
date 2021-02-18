@@ -1,11 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import './user.style.css'
 import '../../../core/css/styles.css';
 import '../../../core/css/content.css';
 import { useDispatch, useSelector } from 'react-redux';
+import { AddressApi } from '../../../core/api/apis/address.api';
 import { UserApi } from '../../../core/api/apis/user.api';
+import { setAddresses } from '../../../core/redux/user-page/address-module/actions/address-module.actions';
+import { ADDRESSES_PER_PAGE } from '../../../core/redux/user-page/types';
 import { setUser } from '../../../core/redux/user/actions';
 import { getToken, getUser } from '../../../core/redux/user/selectors';
+import { Pagination } from '../../../core/types/pagination.types';
 import { AddressBlock } from './components/address-block/addressBlock';
 import { UserCard } from './components/user-block/userData';
 
@@ -32,7 +36,16 @@ import { UserCard } from './components/user-block/userData';
      });
    }, []);
 
+   useEffect(() => {
+     getPaginatedUserAddresses(token, { offset: 0, size: ADDRESSES_PER_PAGE }).catch((e) => console.log(e))
+   }, [])
+
    const getUserData = async (token: string | null) => token && await UserApi.getUser(token);
+
+   const getPaginatedUserAddresses = useCallback(async (token: string | null, pagination?: Pagination) => {
+     const addresses = token && await AddressApi.getPaginatedAddresses(token, pagination);
+     addresses && dispatch(setAddresses(addresses));
+   },[dispatch]);
 
   return (
     <div className="app">
@@ -44,7 +57,7 @@ import { UserCard } from './components/user-block/userData';
             </div>
               <div className="col addressCard">
               <div className="row">
-                <AddressBlock userAddresses={user.addresses}/>
+                <AddressBlock getPaginatedUserAddresses={getPaginatedUserAddresses}/>
               </div>
             </div>
           </div>

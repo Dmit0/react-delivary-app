@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from "mongoose";
 import { from, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap, tap } from 'rxjs/operators';
 import { CountryService } from '../country/country.service';
 import { Address } from './models/address.model';
 import { IGetPaginatedAddresses } from './models/address.types';
@@ -49,25 +49,30 @@ export class AddressService {
     );
   }
 
+  getAddresses(criteria?: any): Observable<Address[]> {
+    return from(this.addressModel.find(criteria)).pipe(
+      map(addresses => addresses || null),
+    );
+  }
+
   getAddressesByIds(ids: any[]): Observable<any> {
     return from(this.addressModel.find().where('_id').in(ids)).pipe(
       map((addresses) => addresses || null)
     )
   }
 
-  getPaginatedAddresses(userId: any, paginatedData= {
+  getPaginatedAddresses(userId: any, userAddressesLength: number, paginatedData= {
     skip: 0,
     limit: 10
-  }): Observable<IGetPaginatedAddresses> {
+  }): Observable<any> {
     return from(this.addressModel.find({ userId }).limit(paginatedData.limit).skip(paginatedData.skip)).pipe(
       map((addresses) => {
         if (!addresses) return null
         return {
           addresses,
-          total: addresses.length
+          total: userAddressesLength
         }
       }),
     )
   }
-
 }

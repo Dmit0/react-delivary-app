@@ -31,3 +31,13 @@
 .activeItem:hover{
     color: #ffe000;
 }
+
+.page-paging-disable-item {
+    color: #c5c5c5;
+    cursor: default;
+}
+
+.page-paging-disable-item:hover {
+    color: #c5c5c5;
+    cursor: default;
+}
