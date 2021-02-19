@@ -6,6 +6,8 @@ import { User } from '../../user/models/user.schema';
 export class Address extends Document {
   @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User', default: null })
   userId: User;
+  @Prop({ default: Date.now() })
+  createdAt: Date;
   @Prop({ require: true })
   country?: string;
   @Prop({ require: true })

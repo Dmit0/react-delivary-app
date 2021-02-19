@@ -8,4 +8,3 @@ export const getUserName = (state: RootState) => getUserState(state)?.user.userN
 export const getFirstAddress = (state: RootState) => getUserState(state).user.firstAddress;
 export const getUserId = (state: RootState) => getUserState(state).user.userId;
 export const getUser = (state: RootState) => getUserState(state).user;
-export const getUserAddresses = (state: RootState) => getUserState(state).user.addresses;

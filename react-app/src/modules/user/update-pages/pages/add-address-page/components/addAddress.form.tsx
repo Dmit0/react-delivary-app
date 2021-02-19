@@ -59,8 +59,8 @@ export const AddAddressFrom = () => {
           streetNumber: data.streetNumber
         }
         const response = token && await AddressApi.addAddress(token, address)
-        response &&
-        setIsNeedToRedirect(!!response)
+        response && setIsNeedToRedirect(!!response)
+        //response && dispatch(addAddressIntoPaginatedPage(address))
       }
   };
 
