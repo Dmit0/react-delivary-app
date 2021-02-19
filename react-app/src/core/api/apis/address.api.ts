@@ -6,7 +6,7 @@ export const AddressApi = {
 
   async addAddress(token: string, address: IAddAddress): Promise<any> {
     try {
-      return await http<{ address: any }>('/user/addAddress', 'POST', JSON.stringify({ address }), {
+      return await http<{ address: IHoleAddress }>('/user/addAddress', 'POST', JSON.stringify({ address }), {
         'Content-Type': 'application/json;charset=utf-8',
         Authorization: `Bearer ${ token }`,
       });
@@ -38,7 +38,6 @@ export const AddressApi = {
   },
 
   async getPaginatedAddresses(token: string, paginatedData?: { offset?: number, size?: number } ) {
-    console.log(JSON.stringify(paginatedData))
     try {
       return await http<{ addresses: IHoleAddress[], total: number }>('/address/getPaginatedAddresses', 'POST', JSON.stringify({ paginatedData }), {
         'Content-Type': 'application/json;charset=utf-8',

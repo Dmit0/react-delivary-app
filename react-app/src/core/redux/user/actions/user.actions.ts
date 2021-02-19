@@ -1,5 +1,5 @@
 import { userToStore } from '../../../types';
-import { DELETE_ADDRESS, INITIAL_STATE, SET_AUTH_USER, SET_TOKEN, SET_USER, UserActionTypes } from './user.types';
+import { INITIAL_STATE, SET_AUTH_USER, SET_TOKEN, SET_USER, UserActionTypes } from './user.types';
 
 export const setToken = (token: string): UserActionTypes => {
   return {
@@ -29,12 +29,5 @@ export const setAuthUser = (token: string, user: userToStore) => {
 export const cleanUserData = () => {
   return {
     type: INITIAL_STATE
-  }
-}
-
-export const deleteUserAddress = (addressId: string) => {
-  return {
-    type: DELETE_ADDRESS,
-    addressId
   }
 }

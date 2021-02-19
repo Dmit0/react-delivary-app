@@ -65,7 +65,7 @@ export class AddressService {
     skip: 0,
     limit: 10
   }): Observable<any> {
-    return from(this.addressModel.find({ userId }).limit(paginatedData.limit).skip(paginatedData.skip)).pipe(
+    return from(this.addressModel.find({ userId }).limit(paginatedData.limit).skip(paginatedData.skip).sort({createdAt: -1})).pipe(
       map((addresses) => {
         if (!addresses) return null
         return {

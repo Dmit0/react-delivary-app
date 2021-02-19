@@ -9,10 +9,10 @@ import { Links } from '../../../../../core/enums';
 import { setCurrentPage } from '../../../../../core/redux/user-page/address-module/actions/address-module.actions';
 import { getAddressesTotal, getCurrentPage, getCurrentPageAddresses } from '../../../../../core/redux/user-page/address-module/selectors';
 import { ADDRESSES_PER_PAGE } from '../../../../../core/redux/user-page/types';
-import { deleteUserAddress } from '../../../../../core/redux/user/actions';
 import { getToken } from '../../../../../core/redux/user/selectors';
 import { Pagination } from '../../../../../core/types/pagination.types';
 import { rerender } from '../../../../../core/utils/rerender/address.rerender';
+import { deleteAddress as deleteAddressAction } from '../../../../../core/redux/user-page/address-module/actions/address-module.actions'
 
 export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddresses(token: string, pagination?: Pagination): void}) => {
 
@@ -24,7 +24,7 @@ export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddre
 
   const deleteAddress = useCallback(async(addressId: string) => {
     const response = token && await AddressApi.deleteAddress(token, addressId)
-    response && dispatch(deleteUserAddress(addressId))
+    response && dispatch(deleteAddressAction(addressId))
   },[dispatch, token])
 
   const getPaginatedOffset = useCallback((pageNumber: number): number => {
