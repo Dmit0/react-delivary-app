@@ -3,6 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
+import Order from '../../pages/oreder-page';
 import User from '../../pages/user-page';
 import AddAddress from '../../pages/user-page/update-user-pages/add-address-page';
 import UpdateAddress from '../../pages/user-page/update-user-pages/update-address-page';
@@ -19,6 +20,9 @@ export const useRoutes = (token: string | null) => {
     </Route>
     <Route path={ Links.MEALS }>
       <Meal/>
+    </Route>
+    <Route path={ Links.ORDER }>
+      <Order/>
     </Route>
     { token && ValidatedRoutes()}
     <Redirect to={ Links.HOME }/>

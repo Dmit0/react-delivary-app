@@ -1,3 +1,4 @@
-export enum code {
-  'Unauthorized' = '401'
+export enum Code {
+  Unauthorized = '401',
+  Forbidden = '403'
 }

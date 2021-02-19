@@ -7,6 +7,7 @@ import { countryReducer } from './countries/reducer';
 import { geoReducer } from './geo/reducer';
 import { loadingBarReducer } from 'react-redux-loading-bar';
 import { lovedReducer } from './loveRestaurants/reducer';
+import { orderReducer } from './order/reducer';
 import { popupReducer } from './popup/reducer';
 import { restaurantReducer } from './restaurant/reducer';
 import { userPageReducer } from './user-page/reducer';
@@ -24,7 +25,8 @@ export const rootReducer = combineReducers({
   user: userReducer,
   popup: popupReducer,
   address: addressStateReducer,
-  userPage: userPageReducer
+  userPage: userPageReducer,
+  order: orderReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>

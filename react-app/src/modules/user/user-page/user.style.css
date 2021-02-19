@@ -129,10 +129,10 @@
     align-self: center;
 }
 .user-address-block-footer {
-    padding: 20px 10px;
+    padding: 0 10px;
     display: flex;
     justify-content: space-between;
-    margin: 0 35px;
+    margin: 0 46px;
 }
 .user-address-card {
 }

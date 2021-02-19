@@ -11,6 +11,8 @@ import { set_current_country } from '../../../../../../core/redux/countries/acti
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
 import { setCurrentRegion, setRegions } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
+import { setOrderPermission } from '../../../../../../core/redux/order/actions';
+import { getIsChangePermissionStart } from '../../../../../../core/redux/order/selectors';
 import { getToken } from '../../../../../../core/redux/user/selectors';
 import './addAddress.form.css'
 import { getRequiredValidation } from '../../../../../../core/utils/form-validation.utils';
@@ -30,8 +32,9 @@ export const AddAddressFrom = () => {
   const regions = useSelector(getRegions);
   const selectRegions = useSelector(getSelectRegions);
   const countries = useSelector(getCountries);
+  const isChangePermissionStart = useSelector(getIsChangePermissionStart);
 
-  const [ isNeedToRedirect, setIsNeedToRedirect ] = useState<boolean>(false);
+  const [ redirectPage, setRedirectPage ] = useState<string>('');
 
   const { register, handleSubmit, errors } = useForm<formData>();
 
@@ -59,10 +62,16 @@ export const AddAddressFrom = () => {
           streetNumber: data.streetNumber
         }
         const response = token && await AddressApi.addAddress(token, address)
-        response && setIsNeedToRedirect(!!response)
-        //response && dispatch(addAddressIntoPaginatedPage(address))
+        response && isChangePermissionStart && dispatch(setOrderPermission(true))
+        setRedirectPage(
+          ((response && isChangePermissionStart) && Links.ORDER) ||
+          ((response && !isChangePermissionStart) && Links.USER) ||
+          ''
+        )
       }
   };
+
+  console.log('redirectPage', redirectPage)
 
   return (
     <form onSubmit={ handleSubmit(onSubmit) }>
@@ -102,7 +111,7 @@ export const AddAddressFrom = () => {
           />
         </div>
         <div className="update_user_form_controllers">
-          { isNeedToRedirect && <Redirect to={ Links.USER }/> }
+          { redirectPage && <Redirect to={ redirectPage }/> }
           <button
             disabled={!currentRegion}
             type="submit"
