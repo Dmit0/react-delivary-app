@@ -71,8 +71,6 @@ export const AddAddressFrom = () => {
       }
   };
 
-  console.log('redirectPage', redirectPage)
-
   return (
     <form onSubmit={ handleSubmit(onSubmit) }>
       <div className="update_form">

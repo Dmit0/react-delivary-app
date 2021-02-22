@@ -47,23 +47,19 @@ import { UserCard } from './components/user-block/userData';
      addresses && dispatch(setAddresses(addresses));
    },[dispatch]);
 
-  return (
-    <div className="app">
-      <div className="App__content">
-        <div className="container userPageContainer">
-          <div className="row user_page_container">
-            <div className="col userCard">
-              <UserCard user={user}/>
-            </div>
-              <div className="col addressCard">
-              <div className="row">
-                <AddressBlock getPaginatedUserAddresses={getPaginatedUserAddresses}/>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
+   return (
+     <div className="container userPageContainer">
+       <div className="row user_page_container">
+         <div className="col userCard">
+           <UserCard user={ user }/>
+         </div>
+         <div className="col addressCard">
+           <div className="row">
+             <AddressBlock getPaginatedUserAddresses={ getPaginatedUserAddresses }/>
+           </div>
+         </div>
+       </div>
+     </div>
+   );
 }
 export default UserPage

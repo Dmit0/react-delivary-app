@@ -1,0 +1,41 @@
+.currentTimeList {
+    position: absolute;
+    width:250px;
+    height:200px;
+    border-radius: 20px;
+    background-color: #eaeaea;
+}
+
+.datePicker {
+    user-select: none;
+    cursor: pointer;
+}
+.currentTimeColumn {
+    padding-right: 15px;
+    border-right: 1px solid #bbbcbd;
+}
+.currentTimeList {
+    display: flex;
+    justify-content: space-around;
+}
+.TimeColumn {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.TimeColumn::-webkit-scrollbar {
+    width: 0;
+    scroll-behavior: smooth;
+    background: transparent;
+}
+.colElem {
+    align-self: center;
+    padding: 15px;
+    margin: 1px;
+    cursor: pointer;
+    background-color: #e0dede;
+    border-radius: 8px;
+}
+.colElem:hover {
+    background-color: #007aff;
+}

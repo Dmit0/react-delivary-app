@@ -1,4 +1,5 @@
-import { OrderActionTypes, SET_ORDER_PERMISSION, START_TO_GET_PERMISSION } from './order.types';
+import { IHoleAddress } from '../../../types';
+import { OrderActionTypes, SET_ORDER_ADDRESS, SET_ORDER_PERMISSION, START_TO_GET_PERMISSION } from './order.types';
 
 export const setOrderPermission = (permission: boolean): OrderActionTypes => {
   return {
@@ -11,5 +12,12 @@ export const startToChangePermission = (isChangePermissionStart: boolean): Order
   return {
     type: START_TO_GET_PERMISSION,
     isChangePermissionStart
+  }
+}
+
+export const setOrderAddress = (address: IHoleAddress): OrderActionTypes => {
+  return {
+    type: SET_ORDER_ADDRESS,
+    address
   }
 }

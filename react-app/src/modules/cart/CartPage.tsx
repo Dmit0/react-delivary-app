@@ -140,9 +140,9 @@ const CartPage = () => {
           title={PopupMessages.OrderPermissionTitle}
           subTitle={PopupMessages.OrderPermissionSubTitle}
           buttons={[{
-            name: 'Yes',
-            link: `${Links.USER}${Links.ADDRESS_ADD}`,
-            action: () => {dispatch(startToChangePermission(true))}
+              name: 'Yes',
+              link: `${Links.USER}${Links.ADDRESS_ADD}`,
+              action: () => {dispatch(startToChangePermission(true))}
             },
             {
               name: 'No',
@@ -151,6 +151,7 @@ const CartPage = () => {
             ]}
         />));
     }
+    dispatch(setOrderPermission(!!makeOrderResponse.permission))
     setIsNeedOrderRedirect(!!makeOrderResponse || !token)
   }
 
@@ -171,41 +172,37 @@ const CartPage = () => {
 
   return (
     <>
-      <div className="App">
-        <div className="App__content">
-          <div className="cart">
-            <div className='cart-header'>
-              <div className='cart-description'>
-                <CartIcon/>
-                <span className='car-item-description'>Cart</span>
-              </div>
-              <div className='delete-butoon-controller' onClick={ clear_cart_Handler }>
-                <TrashIcon/>
-                <span className='delete-block-name'>Clean cart</span>
-              </div>
-            </div>
-            <div className='cart-body'>
-              { rerender.mealsBlock(
-                cartRestaurants,
-                cart,
-                setBlockSum,
-                deleteOneItem,
-                deleteMealFromCart,
-                addMeal
-              )}
-              <div className='info'>
-                <span>Total Items : { count_items() }</span>
-                <span>Total amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
-              </div>
-            </div>
-            <div className='cart-footer'>
-              <Link to={ Links.HOME }>
-                <button type="button" className="btn btn-outline-warning return_button">Return</button>
-              </Link>
-              { isNeedOrderRedirect && <Redirect to={ Links.ORDER }/> }
-              <button onClick={orderItems} type="button" className="btn btn-outline-warning pay_button">Order now</button>
-            </div>
+      <div className="cart">
+        <div className='cart-header'>
+          <div className='cart-description'>
+            <CartIcon/>
+            <span className='car-item-description'>Cart</span>
           </div>
+          <div className='delete-butoon-controller' onClick={ clear_cart_Handler }>
+            <TrashIcon/>
+            <span className='delete-block-name'>Clean cart</span>
+          </div>
+        </div>
+        <div className='cart-body'>
+          { rerender.mealsBlock(
+            cartRestaurants,
+            cart,
+            setBlockSum,
+            deleteOneItem,
+            deleteMealFromCart,
+            addMeal,
+          ) }
+          <div className='info'>
+            <span>Total Items : { count_items() }</span>
+            <span>Total amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
+          </div>
+        </div>
+        <div className='cart-footer'>
+          <Link to={ Links.HOME }>
+            <button type="button" className="btn btn-outline-warning return_button">Return</button>
+          </Link>
+          { isNeedOrderRedirect && <Redirect to={ Links.ORDER }/> }
+          <button onClick={ orderItems } type="button" className="btn btn-outline-warning pay_button">Order now</button>
         </div>
       </div>
     </>

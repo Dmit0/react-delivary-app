@@ -90,29 +90,27 @@ const HomePage: React.FC = () => {
   }, [ loveRestaurants ]);
 
   return (
-    <div className="App">
-      <div className="App__content">
-        <Banners banners={ banners }/>
-        <div className="App_content_part">
-          <ToolBar
-            filterType={ currentSortType }
-            onSetSortType={ sortTypeHandler }
-            cuisineTypes={ cuisineTypes }
-            currentCuisine={ currentCuisine }
-            fetched_restaurants={ fetchedRestaurants }
-          />
-          <div className="App_content_part_main">
-            <div className="App__content-main">
-              { rerender.restaurant(
-                filteredRestaurants,
-                restaurantHandler,
-                loveHandler,
-                check) }
-            </div>
+    <>
+      <Banners banners={ banners }/>
+      <div className="App_content_part">
+        <ToolBar
+          filterType={ currentSortType }
+          onSetSortType={ sortTypeHandler }
+          cuisineTypes={ cuisineTypes }
+          currentCuisine={ currentCuisine }
+          fetched_restaurants={ fetchedRestaurants }
+        />
+        <div className="App_content_part_main">
+          <div className="App__content-main">
+            { rerender.restaurant(
+              filteredRestaurants,
+              restaurantHandler,
+              loveHandler,
+              check) }
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
