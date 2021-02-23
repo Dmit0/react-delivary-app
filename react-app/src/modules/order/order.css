@@ -1,23 +1,15 @@
 .orderPage {
     height: 100vh;
-    margin: 0 10%;
+    margin: 0 2%;
 }
+
 .orderTitle {
     margin: 40px 0;
 }
+
 .orderTitleText {
     font-size: 40px;
     font-weight: 380;
-}
-.orderTimePart {
-    border-radius: 8px;
-    border:solid 1px #e0dede;
-    padding: 20px;
-    display: flex;
-    justify-content: space-between;
-}
-.orderSelectTime {
-    cursor: pointer;
 }
 
 .orderBody {
@@ -26,13 +18,9 @@
 }
 
 .orderInfo {
-    width: 40%;
+    width: 45%;
 }
 
-.timeInput {
-    height: 1px;
-    width: 1px;
-}
 .orderListItems {
     height: 500px;
     width: 350px;

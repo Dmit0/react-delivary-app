@@ -6,3 +6,4 @@ const getOrderState = (state: RootState): OrderState => state.order;
 export const getCurrentOrderPermission = (state: RootState) => getOrderState(state).permission;
 export const getIsChangePermissionStart = (state: RootState) => getOrderState(state).isChangePermissionStart;
 export const getOrderAddress = (state: RootState) => getOrderState(state).orderAddress;
+export const getCurrentOrderTime = (state: RootState) => getOrderState(state).currentOrderTime;

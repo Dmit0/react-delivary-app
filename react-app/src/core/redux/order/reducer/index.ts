@@ -1,9 +1,17 @@
-import { OrderActionTypes, OrderState, SET_ORDER_ADDRESS, SET_ORDER_PERMISSION, START_TO_GET_PERMISSION } from '../actions';
+import {
+  OrderActionTypes,
+  OrderState,
+  SET_CURRENT_ORDER_TIME,
+  SET_ORDER_ADDRESS,
+  SET_ORDER_PERMISSION,
+  START_TO_GET_PERMISSION,
+} from '../actions';
 
 const initialState: OrderState = {
   permission: false,
   isChangePermissionStart: false,
   orderAddress: null,
+  currentOrderTime: null
 };
 
 export const orderReducer = (state = initialState, action: OrderActionTypes): OrderState => {
@@ -15,6 +23,8 @@ export const orderReducer = (state = initialState, action: OrderActionTypes): Or
       return {...state, isChangePermissionStart: action.isChangePermissionStart}
     case SET_ORDER_ADDRESS:
       return {...state, orderAddress: action.address}
+    case SET_CURRENT_ORDER_TIME:
+      return {...state, currentOrderTime: action.time}
     default:
       return state;
   }

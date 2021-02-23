@@ -1,8 +1,8 @@
-import React, { useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { TimePicker } from '../../core/components/time-picker/time-picker';
+import React from 'react';
+import {useSelector } from 'react-redux';
 import { getCurrentOrderPermission, getOrderAddress } from '../../core/redux/order/selectors';
 import './order.css'
+import { TimeSwitcher } from './components/timeSwitcher/timeSwitcher';
 
 export const OrderPage = () => {
   const permission = useSelector(getCurrentOrderPermission)
@@ -15,12 +15,7 @@ export const OrderPage = () => {
       </div>
       <div className='orderBody'>
         <div className='orderInfo'>
-          <div className='orderTimePart'>
-            <span className='orderTimeSwitcher'>as soon as possible</span>
-            <div className='orderTimeSchedule'>
-              <TimePicker placeHolder='select time'/>
-            </div>
-          </div>
+          <TimeSwitcher/>
           { permission
             ? <div className='orderPageSetAddress'/>
             : <div className='orderPageChooseAddress'/>
