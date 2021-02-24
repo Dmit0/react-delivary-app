@@ -1,0 +1,16 @@
+.addressSwitcherBody {
+    border-radius: 8px;
+    border:solid 1px #e0dede;
+    padding: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 10%;
+}
+.mapPart {
+    width: 40%;
+}
+
+.addressSelectBody {
+    width: 50%;
+}

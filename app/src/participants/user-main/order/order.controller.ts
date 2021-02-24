@@ -8,6 +8,6 @@ export class OrderController {
   @UseGuards(BuyGuard)
   @Post('makeOrder')
   setItemInCart(@CurrentUser() user: any, @Body() data: any) {
-    return true
+    return {permission: true}
   }
 }
