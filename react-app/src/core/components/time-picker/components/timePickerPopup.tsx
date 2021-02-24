@@ -21,7 +21,7 @@ export const TimePopup = ({ currentTime, onSelectItem, onSubmit }: TimePickerTyp
   const getArrayButtons = (rowName: TimePickerValues) => {
     return rowName === 'P'
       ?  TimePicker[rowName]
-      :  createArrayFromNumbers(TimePicker[rowName], 0, true)
+      :  createArrayFromNumbers(TimePicker[rowName], 0, true, true)
   }
 
   const renderButtons = (rowName: TimePickerValues): any => {

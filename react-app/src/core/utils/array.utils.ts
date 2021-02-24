@@ -1,9 +1,9 @@
-export const createArrayFromNumbers = (pagingItemCounts: number, startItem = 1, extend = false ) => {
+export const createArrayFromNumbers = (pagingItemCounts: number, startItem = 1, extend = false, isString = false ) => {
   const itemsArray: any = [];
   for (let i = startItem; i <= pagingItemCounts + startItem - 1; i++) {
     if (extend && i < 10) {
       itemsArray.push(`0${i}`);
-    } else itemsArray.push(i.toString());
+    } else itemsArray.push(isString ? i.toString() : i);
   }
   return itemsArray
 };
