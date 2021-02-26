@@ -25,7 +25,7 @@ export const OrderAddressCreate = () => {
         />
         <SelectField
           name='country'
-          label='Your country'
+          label='Your region'
           options={selectCountries}
           changeSelectHandler={(event: any) => handleChangeCountry(event)}
         />
@@ -37,7 +37,7 @@ export const OrderAddressCreate = () => {
           errors={errors.street}
         />
         <InputField
-          label='Street'
+          label='Street number'
           name='street'
           rules={getRequiredValidation()}
           register={register}

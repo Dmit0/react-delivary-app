@@ -11,7 +11,7 @@ interface TimePickerTypes {
 
 const getCurrentTime = (): CurrentTime => {
   const date = new Date()
-  const arr = moment(date).add(moment.duration(1, 'hours')).format("0h:mm:A").split(':');
+  const arr = moment(date).add(moment.duration(1, 'hours')).format("hh:mm:A").split(':');
   return {
     H: arr[0],
     M: arr[1],

@@ -13,7 +13,7 @@ export const AddressSwitcher = () => {
   return (
     <div className='addressSwitcherBody'>
       <div className='mapPart'>
-        <img src="/assets/map.png" width='100%' height='50%' alt="MapIcon" loading="lazy"/>
+        <img src="/assets/map.png" width='100%' height='100%' alt="MapIcon" loading="lazy"/>
       </div>
       {
         permission

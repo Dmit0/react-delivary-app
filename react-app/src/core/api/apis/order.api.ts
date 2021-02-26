@@ -12,4 +12,14 @@ export const OrderAPI = {
       return await FetchUtils.catchFetchErrors(e, token, this.order, data)
     }
   },
+
+  async checkOrderPermission(token: string) {
+    try {
+      return await http<{ permission: boolean }>('order/checkOrderPermission', 'GET', null, {
+        Authorization: `Bearer ${ token }`,
+      });
+    } catch(e) {
+      return { permission: false }
+    }
+  }
 };
