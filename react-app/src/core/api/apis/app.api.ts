@@ -1,8 +1,8 @@
 import { banner } from '../../types';
-import { http } from '../api';
+import { axiosHttp } from '../api';
 
 export const AppApi = {
   async get() {
-    return await http<banner[]>('banners/getBanners');
+    return await axiosHttp<banner[]>('banners/getBanners');
   },
 };

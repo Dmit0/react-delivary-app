@@ -11,8 +11,8 @@ import { set_current_country } from '../../../../../../core/redux/countries/acti
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
 import { setCurrentRegion, setRegions } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
-import { getToken } from '../../../../../../core/redux/user/selectors';
 import './addAddress.form.css'
+import { getIsLogIn } from '../../../../../../core/redux/user/selectors';
 import { getRequiredValidation } from '../../../../../../core/utils/form-validation.utils';
 interface formData {
   street: string,
@@ -23,7 +23,7 @@ export const AddAddressFrom = () => {
 
   const dispatch = useDispatch()
 
-  const token = useSelector(getToken);
+  const token = useSelector(getIsLogIn);
   const selectCountries = useSelector(getSelectCountries);
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry)
@@ -58,7 +58,7 @@ export const AddAddressFrom = () => {
           street: data.street,
           streetNumber: data.streetNumber
         }
-        const response = token && await AddressApi.addAddress(token, address)
+        const response = token && await AddressApi.addAddress(address)
         response && setIsNeedToRedirect(!!response)
         //response && dispatch(addAddressIntoPaginatedPage(address))
       }

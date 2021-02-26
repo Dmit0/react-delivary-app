@@ -12,7 +12,7 @@ import { getCountries, getCountry, getSelectCountries } from '../../../../core/r
 import { setCurrentRegion, setRegions } from '../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../core/redux/geo/selectors';
 import { closePopup } from '../../../../core/redux/popup/actions';
-import { getFirstAddress, getToken, getUserId } from '../../../../core/redux/user/selectors';
+import { getFirstAddress, getIsLogIn, getUserId } from '../../../../core/redux/user/selectors';
 import { addressDataStep } from '../../../../core/types';
 import { getRequiredValidation } from '../../../../core/utils/form-validation.utils';
 
@@ -33,7 +33,7 @@ export const SignUpAddressStep: React.FC = () => {
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry);
   const userId = useSelector(getUserId);
-  const token = useSelector(getToken)
+  const token = useSelector(getIsLogIn)
 
   useEffect(() => {
     firstUserCountry && fetchGeo(Locality.REGION, firstUserCountry.code)
@@ -66,7 +66,7 @@ export const SignUpAddressStep: React.FC = () => {
   };
 
   const onAddFirstAddress = async (data: addressDataStep) => {
-    token && dispatch(updateAddress(data, token));
+    token && dispatch(updateAddress(data));
   };
 
   const { register, handleSubmit, errors } = useForm<formData>();

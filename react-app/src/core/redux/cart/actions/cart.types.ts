@@ -17,7 +17,6 @@ interface set_meal_to_cart {
   type: typeof SET_MEAL_TO_CART,
   set_cart_meal: {
     meal: meals,
-    token: boolean
   }
 }
 

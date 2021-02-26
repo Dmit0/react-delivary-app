@@ -1,15 +1,9 @@
-import { FetchUtils } from '../../utils/fetchUtils';
-import { http } from '../api';
+import { axiosHttp } from '../api';
 
 export const OrderAPI = {
-  async order(token: string, data: any) {
-    try {
-      return await http<{ status: boolean }>('order/makeOrder', 'POST', JSON.stringify(data), {
-        Authorization: `Bearer ${ token }`,
+  async order(data: any) {
+      return await axiosHttp<{ status: boolean }>('order/makeOrder', 'POST', JSON.stringify(data), {
         'Content-Type': 'application/json;charset=utf-8',
       });
-    } catch (e) {
-      return await FetchUtils.catchFetchErrors(e, token, this.order, data)
-    }
   },
 };

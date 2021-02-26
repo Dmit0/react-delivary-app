@@ -1,23 +1,26 @@
 import { useDispatch } from 'react-redux';
 import { AuthenticationApi } from '../core/api/apis/authentication.api';
 import { UserApi } from '../core/api/apis/user.api';
+import { Core } from '../core/enums/core.enum';
 import { set_cart_length } from '../core/redux/cart/actions';
-import { setToken, setUser } from '../core/redux/user/actions';
+import { setIsUserLogInToken, setUser } from '../core/redux/user/actions';
+import { setLocaleStorageItem } from '../core/utils/locale-storage.utils';
 
 export const useAppUtils = () => {
   const dispatch = useDispatch()
 
-  const validateToken = async(token: string) => {
-    const validateToken = await AuthenticationApi.validateToken(token)
+  const validateToken = async() => {
+    const validateToken = await AuthenticationApi.validateToken()
     if (validateToken) {
-      dispatch(setToken(validateToken));
-      localStorage.setItem('token', JSON.stringify(validateToken))
+      dispatch(setIsUserLogInToken(true));
+      setLocaleStorageItem(Core.Token, validateToken)
+      setLocaleStorageItem(Core.RefreshTokenError, false)
       await getUser(validateToken)
-    }
+    } else dispatch(setIsUserLogInToken(false));
   }
 
-  const getUser = async (token: string) => {
-    const userData = await UserApi.getUser(token);
+  const getUser = async (token: string) => { //TODO `Remove token`
+    const userData = await UserApi.getUser();
     if (userData) {
       const { cart, user, role, addresses, phone } = userData;
       dispatch(setUser({

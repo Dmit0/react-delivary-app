@@ -12,8 +12,8 @@ export const useHomeUtils = () => {
       : JSON.parse(localStorage.getItem('loved') || '[]') as string[];
   };
 
-  const userLoveAction = async (restaurantId: string, action: boolean, token: string) => {
-    const response = await UserApi.loveRestaurantAction(token, { restaurantId, action });
+  const userLoveAction = async (restaurantId: string, action: boolean) => {
+    const response = await UserApi.loveRestaurantAction({ restaurantId, action });
     if (response) {
       action
         ? dispatch(add_restaurant_to_loved(restaurantId))

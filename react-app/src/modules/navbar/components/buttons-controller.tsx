@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getCartLength } from '../../../core/redux/cart/selectors';
-import { getToken } from '../../../core/redux/user/selectors';
+import { getIsLogIn } from '../../../core/redux/user/selectors';
 import { DropMenu } from './dropNavbarMenu';
 
 interface NanBarButtonsProps {
@@ -11,7 +11,7 @@ interface NanBarButtonsProps {
 
 export const NavBarButtons: React.FC<NanBarButtonsProps> = ({ handleAuthOpen }) => {
   const cartLength = useSelector(getCartLength);
-  const isAuth = useSelector(getToken)
+  const isAuth = useSelector(getIsLogIn)
 
   return (
     <div className="button-controller">

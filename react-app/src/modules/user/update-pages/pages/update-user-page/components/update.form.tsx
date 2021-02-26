@@ -8,7 +8,7 @@ import { InputField } from '../../../../../../core/components/form-fields/input-
 import { PhoneField } from '../../../../../../core/components/form-fields/input-phone-field/input.phone';
 import { Links } from '../../../../../../core/enums';
 import { getCountries } from '../../../../../../core/redux/countries/selectors';
-import { getToken, getUser } from '../../../../../../core/redux/user/selectors';
+import { getIsLogIn, getUser } from '../../../../../../core/redux/user/selectors';
 import './update.form.css'
 import {
   getEmailValidation,
@@ -20,7 +20,7 @@ import { validateFormData } from '../../../../../../core/utils/form.utils';
 
 export const UpdateUserFrom = () => {
 
-  const token = useSelector(getToken);
+  const token = useSelector(getIsLogIn);
   const countries = useSelector(getCountries);
   const user = useSelector(getUser)
 
@@ -66,7 +66,7 @@ export const UpdateUserFrom = () => {
       }
     }
     const validateData = validateFormData(updateData)
-    const response = token && await UserApi.updateUser(token, validateData);
+    const response = token && await UserApi.updateUser(validateData);
     setIsNeedToRedirect(!!response);
   }, [phonePrefix, token]);
 

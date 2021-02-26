@@ -8,13 +8,13 @@ import { UserApi } from '../../../core/api/apis/user.api';
 import { setAddresses } from '../../../core/redux/user-page/address-module/actions/address-module.actions';
 import { ADDRESSES_PER_PAGE } from '../../../core/redux/user-page/types';
 import { setUser } from '../../../core/redux/user/actions';
-import { getToken, getUser } from '../../../core/redux/user/selectors';
+import { getIsLogIn, getUser } from '../../../core/redux/user/selectors';
 import { Pagination } from '../../../core/types/pagination.types';
 import { AddressBlock } from './components/address-block/addressBlock';
 import { UserCard } from './components/user-block/userData';
 
  const UserPage: React.FC = () => {
-   const token = useSelector(getToken)
+   const token = useSelector(getIsLogIn)
    const user = useSelector(getUser)
 
    const dispatch = useDispatch()
@@ -40,10 +40,10 @@ import { UserCard } from './components/user-block/userData';
      getPaginatedUserAddresses(token, { offset: 0, size: ADDRESSES_PER_PAGE }).catch((e) => console.log(e))
    }, [])
 
-   const getUserData = async (token: string | null) => token && await UserApi.getUser(token);
+   const getUserData = async (token: boolean) => token && await UserApi.getUser();
 
-   const getPaginatedUserAddresses = useCallback(async (token: string | null, pagination?: Pagination) => {
-     const addresses = token && await AddressApi.getPaginatedAddresses(token, pagination);
+   const getPaginatedUserAddresses = useCallback(async (token: boolean, pagination?: Pagination) => {
+     const addresses = token && await AddressApi.getPaginatedAddresses(pagination);
      addresses && dispatch(setAddresses(addresses));
    },[dispatch]);
 

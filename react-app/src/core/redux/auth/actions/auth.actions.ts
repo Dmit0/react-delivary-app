@@ -2,7 +2,9 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
+import { Core } from '../../../enums/core.enum';
 import { addressDataStep, loginData, userForCreateAccount } from '../../../types';
+import { setLocaleStorageItem } from '../../../utils/locale-storage.utils';
 import { set_cart_length } from '../../cart/actions';
 import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
@@ -44,11 +46,11 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
   };
 };
 
-export const updateAddress = (address: addressDataStep, token: string): ThunkType => {
+export const updateAddress = (address: addressDataStep): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationApi.addAddressStep(token, address);
+      let response = await AuthenticationApi.addAddressStep(address);
       if (response) {
         dispatch(closePopup());
       } else {
@@ -96,6 +98,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
     try {
       let response = await AuthenticationApi.logIn(data);
       if (response) {
+        setLocaleStorageItem(Core.RefreshTokenError, false)
         toast.success('auth success')
         dispatch(setAuthStepSuccess(!!response));
         dispatch(setAuthUser(response.token, {

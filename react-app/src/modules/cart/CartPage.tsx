@@ -5,6 +5,7 @@ import { cartApi } from '../../core/api/apis/cart.api';
 import { OrderAPI } from '../../core/api/apis/order.api';
 import { restaurantAPI } from '../../core/api/apis/reastaurant.api';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
+import { Core } from '../../core/enums/core.enum';
 import { remove_all_cart_restaurants, remove_cart_restaurant, set_cart_restaurants } from '../../core/redux/restaurant/actions';
 import { getCartRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/cart.css';
@@ -17,15 +18,16 @@ import {
   set_meal_to_cart,
 } from '../../core/redux/cart/actions';
 import { getCart } from '../../core/redux/cart/selectors';
-import { getToken } from '../../core/redux/user/selectors';
+import { getIsLogIn } from '../../core/redux/user/selectors';
 import { meals, restaurant } from '../../core/types';
+import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
 import { rerender } from '../../core/utils/rerender/cart.rerender';
 
 const CartPage = () => {
   const dispatch = useDispatch();
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
-  const token = useSelector(getToken);
+  const token = useSelector(getIsLogIn);
   const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
   useEffect(() => {
     getMeals(token).then((response) => {
@@ -42,9 +44,9 @@ const CartPage = () => {
     return await restaurantAPI.getRestaurants(ids)
   }
 
-  const getMeals = async (token: string | null): Promise<any> => {
+  const getMeals = async (token: boolean): Promise<any> => {
     if (token) {
-      return await cartApi.getUserCart(token);
+      return await cartApi.getUserCart();
     } else {
       const meals = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
       const restaurants = await getRestaurants(meals.map(meal => meal.restaurant));
@@ -54,26 +56,26 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    !token && localStorage.setItem('cart', JSON.stringify(cart));
+    !token && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, token ]);
 
-  const changeItemInCart = async (token: string, data: { action: Action, mealId: string }, meal: meals) => {
-    const response = cartApi.changeItemInCart(token, data);
+  const changeItemInCart = async (token: boolean, data: { action: Action, mealId: string }, meal: meals) => {
+    const response = cartApi.changeItemInCart(data);
     switch (data.action) {
       case Action.DECREMENT:
         return response && dispatch(remove_one_meal_from_cart(meal));
       case Action.INCREMENT:
-        return response && dispatch(set_meal_to_cart(meal, !!token));
+        return response && dispatch(set_meal_to_cart(meal));
     }
   };
 
-  const deleteItemFromCart = async (token: string, meal: meals) => {
-    const response = cartApi.deleteItemFromCart(token, meal._id);
+  const deleteItemFromCart = async (token: boolean, meal: meals) => {
+    const response = cartApi.deleteItemFromCart(meal._id);
     return response && dispatch(remove_item_from_cart(meal));
   };
 
-  const cleanUserCart = async (token: string) => {
-    const response = cartApi.cleanCart(token);
+  const cleanUserCart = async () => {
+    const response = cartApi.cleanCart();
     return response && dispatch(clean_cart());
   };
 
@@ -100,13 +102,13 @@ const CartPage = () => {
   const addMeal = useCallback((meal: meals) => (
     token
       ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
-      : dispatch(set_meal_to_cart(meal, false))
+      : dispatch(set_meal_to_cart(meal))
   ), [ token, dispatch ]);
 
   const clear_cart_Handler = useCallback(() => {
     dispatch(remove_all_cart_restaurants())
     token
-      ? cleanUserCart(token)
+      ? cleanUserCart()
       : dispatch(clean_cart())
   }, [ token, dispatch ]);
 
@@ -127,7 +129,7 @@ const CartPage = () => {
       const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
       return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
     })
-    if(!isNotMinAmount && token) await OrderAPI.order(token, {})
+    if(!isNotMinAmount && token) await OrderAPI.order({})
   }
   const setBlockSum = useCallback((restaurant: string, sum: number) => {
     setRestaurantBlockSum(((prev: any) => {

@@ -9,12 +9,11 @@ import {
   SET_CART_LENGTH,
 } from '../actions';
 
-export const set_meal_to_cart = (meal: meals, token: boolean): cartActionTypes => {
+export const set_meal_to_cart = (meal: meals): cartActionTypes => {
   return {
     type: SET_MEAL_TO_CART,
     set_cart_meal: {
-      meal,
-      token
+      meal
     },
   };
 };

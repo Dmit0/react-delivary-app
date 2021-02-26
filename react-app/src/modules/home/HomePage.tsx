@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToolBarSearchTypes } from '../../core/enums';
+import { getIsLogIn } from '../../core/redux/user/selectors';
 import { Banners } from '../banner/banners';
 import { getBanners } from '../../core/redux/app/selectors';
 import { getLovedRestaurants } from '../../core/redux/loveRestaurants/selectors';
@@ -16,7 +17,6 @@ import {
 import { getCuisines, getFilteredRestaurants, getRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/content.css';
 import '../../core/css/styles.css';
-import { getToken } from '../../core/redux/user/selectors';
 import { restaurant } from '../../core/types';
 import { ToolBar } from '../tool-bar/toolBar';
 import { rerender } from '../../core/utils/rerender/home.rerender';
@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
   const loveRestaurants = useSelector(getLovedRestaurants);
   const banners = useSelector(getBanners);
   const cuisineTypes = useSelector(getCuisines);
-  const token = useSelector(getToken);
+  const token = useSelector(getIsLogIn);
 
   const { getRestaurant, userLoveAction } = useHomeUtils();
 
@@ -72,7 +72,7 @@ const HomePage: React.FC = () => {
 
   const loveHandler = useCallback((restaurant: restaurant, value: boolean) => {
     token
-      ? userLoveAction(restaurant._id, value, token)
+      ? userLoveAction(restaurant._id, value)
       : value
         ? dispatch(add_restaurant_to_loved(restaurant._id))
         : dispatch(remove_restaurant_from_loved(restaurant._id));
