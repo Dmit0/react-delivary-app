@@ -78,7 +78,7 @@ export const SignUpPersonalForm: React.FC = () => {
     setIsPhoneExist(!!validatedEmailResponse);
   }, [ country, errors.telephone, setIsPhoneExist ]);
 
-  const verifyEmail = useCallback(async(e: any, errors: any) => {
+  const verifyEmail = useCallback(async (e: any, errors: any) => {
     const setData = e.target.value;
     const validatedEmailResponse = (setData && !errors.email) && await AuthenticationApi.verifyMail(setData);
     setIsEmailExist(validatedEmailResponse);

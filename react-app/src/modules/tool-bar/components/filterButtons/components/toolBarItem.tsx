@@ -1,5 +1,4 @@
 import React from 'react';
-import { cuisine } from '../../../../../core/types';
 
 interface DropCuisineProps {
   category: string

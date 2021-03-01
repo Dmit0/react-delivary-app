@@ -23,7 +23,7 @@ interface formData {
 
 export const UpdateAddressFrom = () => {
   const dispatch = useDispatch()
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
   const selectCountries = useSelector(getSelectCountries);
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry)
@@ -61,7 +61,7 @@ export const UpdateAddressFrom = () => {
         streetNumber: data.streetNumber
       }
       setCurrentRegion(null)
-      const response = token && await AddressApi.updateAddress(address)
+      const response = isLogIn && await AddressApi.updateAddress(address)
       setIsNeedToRedirect(!!response)
     }
   };

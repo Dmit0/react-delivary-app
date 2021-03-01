@@ -20,7 +20,7 @@ import { validateFormData } from '../../../../../../core/utils/form.utils';
 
 export const UpdateUserFrom = () => {
 
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
   const countries = useSelector(getCountries);
   const user = useSelector(getUser)
 
@@ -66,9 +66,9 @@ export const UpdateUserFrom = () => {
       }
     }
     const validateData = validateFormData(updateData)
-    const response = token && await UserApi.updateUser(validateData);
+    const response = isLogIn && await UserApi.updateUser(validateData);
     setIsNeedToRedirect(!!response);
-  }, [phonePrefix, token]);
+  }, [phonePrefix, isLogIn]);
 
   useEffect(() => {
     const isChanged =

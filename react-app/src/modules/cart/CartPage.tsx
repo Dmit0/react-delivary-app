@@ -27,25 +27,25 @@ const CartPage = () => {
   const dispatch = useDispatch();
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
   const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
   useEffect(() => {
-    getMeals(token).then((response) => {
-      if (token && response) {
+    getMeals(isLogIn).then((response) => {
+      if (isLogIn && response) {
         dispatch(set_meal_from_localestorage_to_cart(response.meals));
         dispatch(set_cart_restaurants(response.restaurants))
-      } else if (!token && response) {
+      } else if (!isLogIn && response) {
         response && dispatch(set_meal_from_localestorage_to_cart(response));
       }
     });
-  }, [ token, dispatch ]);
+  }, [ isLogIn, dispatch ]);
 
   const getRestaurants = async(ids: string[]): Promise<restaurant[]> => {
     return await restaurantAPI.getRestaurants(ids)
   }
 
-  const getMeals = async (token: boolean): Promise<any> => {
-    if (token) {
+  const getMeals = async (isLogIn: boolean): Promise<any> => {
+    if (isLogIn) {
       return await cartApi.getUserCart();
     } else {
       const meals = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
@@ -56,10 +56,10 @@ const CartPage = () => {
   };
 
   useEffect(() => {
-    !token && setLocaleStorageItem(Core.Cart, cart);
-  }, [ cart, token ]);
+    !isLogIn && setLocaleStorageItem(Core.Cart, cart);
+  }, [ cart, isLogIn ]);
 
-  const changeItemInCart = async (token: boolean, data: { action: Action, mealId: string }, meal: meals) => {
+  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: meals) => {
     const response = cartApi.changeItemInCart(data);
     switch (data.action) {
       case Action.DECREMENT:
@@ -69,7 +69,7 @@ const CartPage = () => {
     }
   };
 
-  const deleteItemFromCart = async (token: boolean, meal: meals) => {
+  const deleteItemFromCart = async (meal: meals) => {
     const response = cartApi.deleteItemFromCart(meal._id);
     return response && dispatch(remove_item_from_cart(meal));
   };
@@ -87,30 +87,30 @@ const CartPage = () => {
 
   const deleteOneItem = useCallback((meal: meals) => {
     deleteRestaurantIfNeed(meal, cart)
-    token
-      ? changeItemInCart(token, { action: Action.DECREMENT, mealId: meal._id }, meal)
+    isLogIn
+      ? changeItemInCart({ action: Action.DECREMENT, mealId: meal._id }, meal)
       : dispatch(remove_one_meal_from_cart(meal));
-  }, [ token, dispatch, cart ]);
+  }, [ isLogIn, dispatch, cart ]);
 
   const deleteMealFromCart = useCallback((meal: meals) => {
     deleteRestaurantIfNeed(meal, cart, true)
-    token
-      ? deleteItemFromCart(token, meal)
+    isLogIn
+      ? deleteItemFromCart(meal)
       : dispatch(remove_item_from_cart(meal))
-  }, [ token, dispatch, cart ]);
+  }, [ isLogIn, dispatch, cart ]);
 
   const addMeal = useCallback((meal: meals) => (
-    token
-      ? changeItemInCart(token, { action: Action.INCREMENT, mealId: meal._id }, meal)
+    isLogIn
+      ? changeItemInCart({ action: Action.INCREMENT, mealId: meal._id }, meal)
       : dispatch(set_meal_to_cart(meal))
-  ), [ token, dispatch ]);
+  ), [ isLogIn, dispatch ]);
 
   const clear_cart_Handler = useCallback(() => {
     dispatch(remove_all_cart_restaurants())
-    token
+    isLogIn
       ? cleanUserCart()
       : dispatch(clean_cart())
-  }, [ token, dispatch ]);
+  }, [ isLogIn, dispatch ]);
 
   const count_items = useCallback((): Number => {
     return cart.reduce((sum, current) => (
@@ -129,7 +129,7 @@ const CartPage = () => {
       const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
       return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
     })
-    if(!isNotMinAmount && token) await OrderAPI.order({})
+    if(!isNotMinAmount && isLogIn) await OrderAPI.order({})
   }
   const setBlockSum = useCallback((restaurant: string, sum: number) => {
     setRestaurantBlockSum(((prev: any) => {

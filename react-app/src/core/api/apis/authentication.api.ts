@@ -1,3 +1,4 @@
+import { Core } from '../../enums/core.enum';
 import { Address, addressDataStep, loginData } from '../../types';
 import { getLocaleStorageItem } from '../../utils/locale-storage.utils';
 import { axiosHttp } from '../api';
@@ -40,13 +41,13 @@ export const AuthenticationApi = {
         });
     },
 
-    async getLoveUserRestaurants(token: any): Promise<any> {
+    async getLoveUserRestaurants(): Promise<any> {
         return await axiosHttp<string[]>('user/getLoveRestaurant', 'GET', null, {});
     },
 
     async validateToken() {
         const tokenStatus = await axiosHttp<{ status: string }>('/authentication/checkToken');
-        return tokenStatus?.status && getLocaleStorageItem('token');
+        return tokenStatus?.status && getLocaleStorageItem(Core.Token);
     },
 
     async refreshToken(token: string) {

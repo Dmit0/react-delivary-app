@@ -13,3 +13,11 @@ export const setLocaleStorageItem = (key: string, value: any) => {
     console.log(e);
   }
 };
+
+export const removeLocaleStorageItem = (key: string) => {
+  try {
+    return localStorage.removeItem(key);
+  } catch (e) {
+    console.log(e);
+  }
+};

@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
   const loveRestaurants = useSelector(getLovedRestaurants);
   const banners = useSelector(getBanners);
   const cuisineTypes = useSelector(getCuisines);
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
 
   const { getRestaurant, userLoveAction } = useHomeUtils();
 
@@ -39,16 +39,16 @@ const HomePage: React.FC = () => {
   const [ currentCuisine, setCurrentCuisine ] = useState<string>('');
 
   useEffect(() => {
-    if (loveRestaurants.length > 0 && !token) {
+    if (loveRestaurants.length > 0 && !isLogIn) {
       localStorage.setItem('loved', JSON.stringify(loveRestaurants));
     }
-  }, [ loveRestaurants, token ]);
+  }, [ loveRestaurants, isLogIn ]);
 
   useEffect(() => {
-    getRestaurant(token).then((response) => {
+    getRestaurant(isLogIn).then((response) => {
       response && dispatch(set_loved_restaurant(response));
     });
-  }, [ token ]);
+  }, [ isLogIn ]);
 
   const sortTypeHandler = useCallback((type: string) => {
     setCurrentSortType(type)
@@ -71,12 +71,12 @@ const HomePage: React.FC = () => {
   }, [ dispatch ]);
 
   const loveHandler = useCallback((restaurant: restaurant, value: boolean) => {
-    token
+    isLogIn
       ? userLoveAction(restaurant._id, value)
       : value
         ? dispatch(add_restaurant_to_loved(restaurant._id))
         : dispatch(remove_restaurant_from_loved(restaurant._id));
-  }, [ dispatch, token, userLoveAction ]);
+  }, [ dispatch, isLogIn, userLoveAction ]);
 
   const check = useCallback((id: string) => {
     if (loveRestaurants.length) {

@@ -33,7 +33,7 @@ export const SignUpAddressStep: React.FC = () => {
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry);
   const userId = useSelector(getUserId);
-  const token = useSelector(getIsLogIn)
+  const isLogIn = useSelector(getIsLogIn)
 
   useEffect(() => {
     firstUserCountry && fetchGeo(Locality.REGION, firstUserCountry.code)
@@ -66,7 +66,7 @@ export const SignUpAddressStep: React.FC = () => {
   };
 
   const onAddFirstAddress = async (data: addressDataStep) => {
-    token && dispatch(updateAddress(data));
+    isLogIn && dispatch(updateAddress(data));
   };
 
   const { register, handleSubmit, errors } = useForm<formData>();

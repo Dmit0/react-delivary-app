@@ -14,13 +14,13 @@ import { AddressBlock } from './components/address-block/addressBlock';
 import { UserCard } from './components/user-block/userData';
 
  const UserPage: React.FC = () => {
-   const token = useSelector(getIsLogIn)
+   const isLogIn = useSelector(getIsLogIn)
    const user = useSelector(getUser)
 
    const dispatch = useDispatch()
 
    useEffect(() => {
-     getUserData(token).then(userData => {
+     getUserData(isLogIn).then(userData => {
        if (userData) {
          const { user, role, addresses, phone } = userData;
          dispatch(setUser({
@@ -37,13 +37,13 @@ import { UserCard } from './components/user-block/userData';
    }, []);
 
    useEffect(() => {
-     getPaginatedUserAddresses(token, { offset: 0, size: ADDRESSES_PER_PAGE }).catch((e) => console.log(e))
+     getPaginatedUserAddresses(isLogIn, { offset: 0, size: ADDRESSES_PER_PAGE }).catch((e) => console.log(e))
    }, [])
 
-   const getUserData = async (token: boolean) => token && await UserApi.getUser();
+   const getUserData = async (isLogIn: boolean) => isLogIn && await UserApi.getUser();
 
-   const getPaginatedUserAddresses = useCallback(async (token: boolean, pagination?: Pagination) => {
-     const addresses = token && await AddressApi.getPaginatedAddresses(pagination);
+   const getPaginatedUserAddresses = useCallback(async (isLogIn: boolean, pagination?: Pagination) => {
+     const addresses = isLogIn && await AddressApi.getPaginatedAddresses(pagination);
      addresses && dispatch(setAddresses(addresses));
    },[dispatch]);
 

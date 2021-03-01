@@ -23,7 +23,7 @@ export const AddAddressFrom = () => {
 
   const dispatch = useDispatch()
 
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
   const selectCountries = useSelector(getSelectCountries);
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry)
@@ -58,7 +58,7 @@ export const AddAddressFrom = () => {
           street: data.street,
           streetNumber: data.streetNumber
         }
-        const response = token && await AddressApi.addAddress(address)
+        const response = isLogIn && await AddressApi.addAddress(address)
         response && setIsNeedToRedirect(!!response)
         //response && dispatch(addAddressIntoPaginatedPage(address))
       }

@@ -14,18 +14,18 @@ import { Pagination } from '../../../../../core/types/pagination.types';
 import { rerender } from '../../../../../core/utils/rerender/address.rerender';
 import { deleteAddress as deleteAddressAction } from '../../../../../core/redux/user-page/address-module/actions/address-module.actions'
 
-export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddresses(token: boolean, pagination?: Pagination): void}) => {
+export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddresses(isLogIn: boolean, pagination?: Pagination): void}) => {
 
-  const token = useSelector(getIsLogIn);
+  const isLogIn = useSelector(getIsLogIn);
   const userAddresses = useSelector(getCurrentPageAddresses);
   const total = useSelector(getAddressesTotal)
   const dispatch = useDispatch();
   const currentPage = useSelector(getCurrentPage);
 
   const deleteAddress = useCallback(async(addressId: string) => {
-    const response = token && await AddressApi.deleteAddress(addressId)
+    const response = isLogIn && await AddressApi.deleteAddress(addressId)
     response && dispatch(deleteAddressAction(addressId))
-  },[dispatch, token])
+  },[dispatch, isLogIn])
 
   const getPaginatedOffset = useCallback((pageNumber: number): number => {
     return (pageNumber - 1)  * ADDRESSES_PER_PAGE
@@ -33,8 +33,8 @@ export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddre
 
   const onPageChange = useCallback((pageNumber: number) => {
     dispatch(setCurrentPage(pageNumber));
-    token && getPaginatedUserAddresses(token, { offset: getPaginatedOffset(pageNumber), size: ADDRESSES_PER_PAGE })
-  }, [dispatch, getPaginatedOffset, getPaginatedUserAddresses, token])
+    isLogIn && getPaginatedUserAddresses(isLogIn, { offset: getPaginatedOffset(pageNumber), size: ADDRESSES_PER_PAGE })
+  }, [dispatch, getPaginatedOffset, getPaginatedUserAddresses, isLogIn])
 
   const currentPaginatedItems = useMemo(() => {
     return Math.ceil(total / ADDRESSES_PER_PAGE)

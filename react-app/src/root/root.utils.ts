@@ -15,16 +15,15 @@ export const useAppUtils = () => {
       dispatch(setIsUserLogInToken(true));
       setLocaleStorageItem(Core.Token, validateToken)
       setLocaleStorageItem(Core.RefreshTokenError, false)
-      await getUser(validateToken)
+      await getUser()
     } else dispatch(setIsUserLogInToken(false));
   }
 
-  const getUser = async (token: string) => { //TODO `Remove token`
+  const getUser = async () => {
     const userData = await UserApi.getUser();
     if (userData) {
       const { cart, user, role, addresses, phone } = userData;
       dispatch(setUser({
-        token,
         email: user.email,
         firstName: user.name,
         userId: user._id,
