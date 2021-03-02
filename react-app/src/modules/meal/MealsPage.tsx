@@ -21,16 +21,16 @@ const MealsPage: React.FC = () => {
     !isLogIn && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, isLogIn ]);
 
-  const addMealToUserCart = async (meal: meals) => {
+  const addMealToUserCart = async (meal: meals) => { //TODO `remove to thunk`
     const response = await cartApi.setMealToUserCart(meal._id);
     response && dispatch(set_meal_to_cart(meal));
   };
 
   const addHandler = useCallback((meal: meals) => {
     isLogIn
-      ? addMealToUserCart(meal)
+      ? addMealToUserCart(meal) //TODO `should be dispatch`
       : dispatch(set_meal_to_cart(meal));
-  }, [ dispatch, isLogIn ]);
+  }, [dispatch, isLogIn]);
 
   return (
     <>

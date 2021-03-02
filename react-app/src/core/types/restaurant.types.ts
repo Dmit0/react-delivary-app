@@ -6,4 +6,5 @@ export interface restaurant {
   selItems: string[]
   _id: string
   minSumOfDelivery: number
+  favorite?: boolean
 }

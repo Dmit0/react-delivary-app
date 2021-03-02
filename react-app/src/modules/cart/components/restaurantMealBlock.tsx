@@ -20,13 +20,13 @@ export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
      setBlockSum
   }) => {
 
-  const countOrderRestaurantSum = (): number => {
+  const countOrderRestaurantSum = (): number => { //TODO `redux`
     return restaurantBlock.reduce((acc, el) => {
       return acc += el.count * el.price
     }, 0)
   }
 
-  const blockSum = useMemo(() => {
+  const blockSum = useMemo(() => { //TODO `redux`
     return countOrderRestaurantSum()
   },[countOrderRestaurantSum])
 

@@ -65,7 +65,7 @@ export const SignUpPersonalForm: React.FC = () => {
 
   const {errors, watch, register, handleSubmit} = useForm<formData>({ mode: 'onChange', reValidateMode: 'onChange' });
 
-  const changeInputHandler = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const changeInputHandler = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => { ///TODO `thunk`
     const setData = event.target.value;
     const validatedEmailResponse =
       country?.dial_code &&

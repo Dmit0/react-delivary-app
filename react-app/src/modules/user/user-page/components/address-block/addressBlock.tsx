@@ -22,7 +22,7 @@ export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddre
   const dispatch = useDispatch();
   const currentPage = useSelector(getCurrentPage);
 
-  const deleteAddress = useCallback(async(addressId: string) => {
+  const deleteAddress = useCallback(async(addressId: string) => { //TODO `Thunk`
     const response = isLogIn && await AddressApi.deleteAddress(addressId)
     response && dispatch(deleteAddressAction(addressId))
   },[dispatch, isLogIn])

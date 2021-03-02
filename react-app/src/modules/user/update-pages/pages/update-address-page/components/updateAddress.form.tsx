@@ -66,8 +66,6 @@ export const UpdateAddressFrom = () => {
     }
   };
 
-  console.log(regions)
-
   useEffect(() => {
     const isChanged =
       f.watch('street') !== currentAddress?.street ||

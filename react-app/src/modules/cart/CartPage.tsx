@@ -20,7 +20,7 @@ import {
 import { getCart } from '../../core/redux/cart/selectors';
 import { getIsLogIn } from '../../core/redux/user/selectors';
 import { meals, restaurant } from '../../core/types';
-import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
+import { getLocaleStorageItem, setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
 import { rerender } from '../../core/utils/rerender/cart.rerender';
 
 const CartPage = () => {
@@ -28,8 +28,10 @@ const CartPage = () => {
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const isLogIn = useSelector(getIsLogIn);
-  const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([])
-  useEffect(() => {
+
+  const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([]) //TODO `remove into redux`
+
+  useEffect(() => { //TODO `thunk`
     getMeals(isLogIn).then((response) => {
       if (isLogIn && response) {
         dispatch(set_meal_from_localestorage_to_cart(response.meals));
@@ -38,17 +40,17 @@ const CartPage = () => {
         response && dispatch(set_meal_from_localestorage_to_cart(response));
       }
     });
-  }, [ isLogIn, dispatch ]);
+  }, [isLogIn, dispatch]);
 
-  const getRestaurants = async(ids: string[]): Promise<restaurant[]> => {
+  const getRestaurants = async(ids: string[]): Promise<restaurant[]> => { //TODO `thunk`
     return await restaurantAPI.getRestaurants(ids)
   }
 
-  const getMeals = async (isLogIn: boolean): Promise<any> => {
+  const getMeals = async (isLogIn: boolean): Promise<any> => { //TODO `thunk`
     if (isLogIn) {
       return await cartApi.getUserCart();
     } else {
-      const meals = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
+      const meals = getLocaleStorageItem(Core.Cart,'[]') as meals[];
       const restaurants = await getRestaurants(meals.map(meal => meal.restaurant));
       dispatch(set_cart_restaurants(restaurants));
       return meals;
@@ -59,7 +61,7 @@ const CartPage = () => {
     !isLogIn && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, isLogIn ]);
 
-  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: meals) => {
+  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: meals) => { //TODO `thunk`
     const response = cartApi.changeItemInCart(data);
     switch (data.action) {
       case Action.DECREMENT:
@@ -69,30 +71,30 @@ const CartPage = () => {
     }
   };
 
-  const deleteItemFromCart = async (meal: meals) => {
+  const deleteItemFromCart = async (meal: meals) => { //TODO `thunk`
     const response = cartApi.deleteItemFromCart(meal._id);
     return response && dispatch(remove_item_from_cart(meal));
   };
 
-  const cleanUserCart = async () => {
+  const cleanUserCart = async () => { //TODO `thunk`
     const response = cartApi.cleanCart();
     return response && dispatch(clean_cart());
   };
 
-  const deleteRestaurantIfNeed = (meal: meals, cart: meals[], deleteFullItem = false) => {
+  const deleteRestaurantIfNeed = (meal: meals, cart: meals[], deleteFullItem = false) => { //TODO `use callback`
     if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
       dispatch(remove_cart_restaurant(meal.restaurant));
     }
   }
 
-  const deleteOneItem = useCallback((meal: meals) => {
+  const deleteOneItem = useCallback((meal: meals) => { //TODO `thunk`
     deleteRestaurantIfNeed(meal, cart)
     isLogIn
       ? changeItemInCart({ action: Action.DECREMENT, mealId: meal._id }, meal)
       : dispatch(remove_one_meal_from_cart(meal));
   }, [ isLogIn, dispatch, cart ]);
 
-  const deleteMealFromCart = useCallback((meal: meals) => {
+  const deleteMealFromCart = useCallback((meal: meals) => { //TODO `thunk`
     deleteRestaurantIfNeed(meal, cart, true)
     isLogIn
       ? deleteItemFromCart(meal)
@@ -112,26 +114,26 @@ const CartPage = () => {
       : dispatch(clean_cart())
   }, [ isLogIn, dispatch ]);
 
-  const count_items = useCallback((): Number => {
+  const count_items = useCallback((): Number => { //TODO `remove into redux that will count with setting cart into redux`
     return cart.reduce((sum, current) => (
       sum + current.count
     ), 0);
   }, [ cart ]);
 
-  const count_total_price = useCallback((): Number => {
+  const count_total_price = useCallback((): Number => { //TODO `remove into redux that will count with setting cart into redux`
     return cart.reduce((sum, current) => (
       sum + current.price * current.count
     ), 0);
   }, [ cart ]);
 
-  const orderItems = async() => {
-    const isNotMinAmount = restaurantBlockSum.some((restaurantToCheck: any) => {
+  const orderItems = async() => {//TODO `thunk`
+    const isNotMinAmount = restaurantBlockSum.some((restaurantToCheck: any) => { //TODO `remove into another method mb utils`
       const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
       return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
     })
     if(!isNotMinAmount && isLogIn) await OrderAPI.order({})
   }
-  const setBlockSum = useCallback((restaurant: string, sum: number) => {
+  const setBlockSum = useCallback((restaurant: string, sum: number) => { //TODO `redux logic`
     setRestaurantBlockSum(((prev: any) => {
       const res = prev && prev.find((item: any) => item.restaurant === restaurant);
       if (res) {

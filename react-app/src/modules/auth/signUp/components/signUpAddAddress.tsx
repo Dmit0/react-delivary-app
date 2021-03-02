@@ -36,16 +36,16 @@ export const SignUpAddressStep: React.FC = () => {
   const isLogIn = useSelector(getIsLogIn)
 
   useEffect(() => {
-    firstUserCountry && fetchGeo(Locality.REGION, firstUserCountry.code)
+    firstUserCountry && fetchGeo(Locality.REGION, firstUserCountry.code) //TODO `thunk`
   }, [])
 
-  const handleChangeCountry = async ({ value }: any) => {
+  const handleChangeCountry = async ({ value }: any) => { //TODO `thunk`
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
     country && await fetchGeo(Locality.REGION, country.code)
   };
 
-  const fetchGeo = async (localityName: string, code: string) => {
+  const fetchGeo = async (localityName: string, code: string) => { //TODO `thunk`
     switch (localityName) {
       case(Locality.REGION):
         const regions = await geoApi.fetchRegions(code);

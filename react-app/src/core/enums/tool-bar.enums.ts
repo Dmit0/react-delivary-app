@@ -1,5 +1,5 @@
 export enum ToolBarSearchTypes {
-  ALL= 'All',
+  ALL = 'All',
   LOVED = 'Loved',
   OPENED = 'Opened'
 }
