@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { RootLayOut } from '../core/components/lay-outs/root-lay-out/root.layOut';
 import { Core } from '../core/enums/core.enum';
 import { get_countries } from '../core/redux/countries/actions';
+import Router from '../core/router/Router';
+import { routes } from '../core/router/routes-config';
 import { getLocaleStorageItem } from '../core/utils/locale-storage.utils';
 import { Sorts } from '../core/utils/sorts';
-import { useRoutes } from '../core/router/routes';
 import { useAppUtils } from './root.utils';
+import { BrowserRouter } from 'react-router-dom';
 
 export const App = () => {
   const dispatch = useDispatch()
   const [isValidateTokenEnd, setIsValidateTokenEnd] = useState<boolean>(false)
-  const routes = useRoutes(getLocaleStorageItem(Core.Token))
   const { validateToken, setCartLength } = useAppUtils() //TODO `remove utils`
 
   //token && refreshToken logic
@@ -28,11 +28,11 @@ export const App = () => {
   }, []);
 
   return (
-    <Router>
-      {isValidateTokenEnd &&
+    <BrowserRouter>
+      { isValidateTokenEnd &&
       <RootLayOut>
-        { routes }
-      </RootLayOut>}
-    </Router>
-  )
+        <Router routes={ routes }/>
+      </RootLayOut> }
+    </BrowserRouter>
+  );
 }
