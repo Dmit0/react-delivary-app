@@ -162,6 +162,7 @@ export const set_filtered_restaurants = (currentRestaurants: restaurant[], Filte
     filter: sortedArray,
   };
 };
+
 export const set_input_filter = (currentRestaurants: restaurant[], str: string) => {
   let sortedArray: restaurant[];
   sortedArray = Sorts.ByInputStr(currentRestaurants, str);

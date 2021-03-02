@@ -1,10 +1,10 @@
 import { Action } from '../../enums';
-import { restaurant, meals } from '../../types';
+import { restaurant, Meal } from '../../types';
 import { axiosHttp } from '../api';
 
 export const cartApi = {
   async getUserCart() {
-     const response = await axiosHttp<{ restaurants: restaurant[], meals: { meal: meals, count: number, restaurant: string }[] }>('/cart/getCart', 'GET');
+     const response = await axiosHttp<{ restaurants: restaurant[], meals: { meal: Meal, count: number, restaurant: string }[] }>('/cart/getCart', 'GET');
      const { restaurants, meals } = response
       return {
         restaurants,

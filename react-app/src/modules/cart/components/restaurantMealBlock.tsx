@@ -1,14 +1,14 @@
 import React, { useEffect, useMemo } from 'react';
-import { meals, restaurant } from '../../../core/types';
+import { Meal, restaurant } from '../../../core/types';
 import { rerender } from '../../../core/utils/rerender/cart.rerender';
 import './meal-block.style.css'
 
 interface RestaurantMealBlockProps {
   restaurant: restaurant
-  restaurantBlock: meals[]
-  onDeleteOneItem(meal: meals): void
-  onDeleteMeal(meal: meals): void
-  onAddMeal(meal: meals): void
+  restaurantBlock: Meal[]
+  onDeleteOneItem(meal: Meal): void
+  onDeleteMeal(meal: Meal): void
+  onAddMeal(meal: Meal): void
   setBlockSum(restaurant: string, sum: number): void
 }
 

@@ -19,7 +19,7 @@ import {
 } from '../../core/redux/cart/actions';
 import { getCart } from '../../core/redux/cart/selectors';
 import { getIsLogIn } from '../../core/redux/user/selectors';
-import { meals, restaurant } from '../../core/types';
+import { Meal, restaurant } from '../../core/types';
 import { getLocaleStorageItem, setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
 import { rerender } from '../../core/utils/rerender/cart.rerender';
 
@@ -50,7 +50,7 @@ const CartPage = () => {
     if (isLogIn) {
       return await cartApi.getUserCart();
     } else {
-      const meals = getLocaleStorageItem(Core.Cart,'[]') as meals[];
+      const meals = getLocaleStorageItem(Core.Cart,'[]') as Meal[];
       const restaurants = await getRestaurants(meals.map(meal => meal.restaurant));
       dispatch(set_cart_restaurants(restaurants));
       return meals;
@@ -61,7 +61,7 @@ const CartPage = () => {
     !isLogIn && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, isLogIn ]);
 
-  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: meals) => { //TODO `thunk`
+  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: Meal) => { //TODO `thunk`
     const response = cartApi.changeItemInCart(data);
     switch (data.action) {
       case Action.DECREMENT:
@@ -71,7 +71,7 @@ const CartPage = () => {
     }
   };
 
-  const deleteItemFromCart = async (meal: meals) => { //TODO `thunk`
+  const deleteItemFromCart = async (meal: Meal) => { //TODO `thunk`
     const response = cartApi.deleteItemFromCart(meal._id);
     return response && dispatch(remove_item_from_cart(meal));
   };
@@ -81,27 +81,27 @@ const CartPage = () => {
     return response && dispatch(clean_cart());
   };
 
-  const deleteRestaurantIfNeed = (meal: meals, cart: meals[], deleteFullItem = false) => { //TODO `use callback`
+  const deleteRestaurantIfNeed = (meal: Meal, cart: Meal[], deleteFullItem = false) => { //TODO `use callback`
     if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
       dispatch(remove_cart_restaurant(meal.restaurant));
     }
   }
 
-  const deleteOneItem = useCallback((meal: meals) => { //TODO `thunk`
+  const deleteOneItem = useCallback((meal: Meal) => { //TODO `thunk`
     deleteRestaurantIfNeed(meal, cart)
     isLogIn
       ? changeItemInCart({ action: Action.DECREMENT, mealId: meal._id }, meal)
       : dispatch(remove_one_meal_from_cart(meal));
   }, [ isLogIn, dispatch, cart ]);
 
-  const deleteMealFromCart = useCallback((meal: meals) => { //TODO `thunk`
+  const deleteMealFromCart = useCallback((meal: Meal) => { //TODO `thunk`
     deleteRestaurantIfNeed(meal, cart, true)
     isLogIn
       ? deleteItemFromCart(meal)
       : dispatch(remove_item_from_cart(meal))
   }, [ isLogIn, dispatch, cart ]);
 
-  const addMeal = useCallback((meal: meals) => (
+  const addMeal = useCallback((meal: Meal) => (
     isLogIn
       ? changeItemInCart({ action: Action.INCREMENT, mealId: meal._id }, meal)
       : dispatch(set_meal_to_cart(meal))

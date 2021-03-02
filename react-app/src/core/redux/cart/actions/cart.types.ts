@@ -1,4 +1,4 @@
-import { meals } from '../../../types';
+import { Meal } from '../../../types';
 
 export const SET_MEAL_TO_CART = 'SET_MEAL_TO_CART';
 export const REMOVE_ONE_MEAL_FROM_CART = 'REMOVE_ONE_MEAL_FROM_CART';
@@ -8,7 +8,7 @@ export const CLEAN_CART = 'CLEAN_CART';
 export const SET_CART_LENGTH = 'SET_CART_LENGTH';
 
 export interface CartState {
-  cart: meals[]
+  cart: Meal[]
   cartLength: number,
   cartCost: number,
 }
@@ -16,23 +16,23 @@ export interface CartState {
 interface set_meal_to_cart {
   type: typeof SET_MEAL_TO_CART,
   set_cart_meal: {
-    meal: meals,
+    meal: Meal,
   }
 }
 
 interface remove_one_meal_from_cart {
   type: typeof REMOVE_ONE_MEAL_FROM_CART,
-  remove_one_cart_meal: meals
+  remove_one_cart_meal: Meal
 }
 
 interface remove_item_from_cart {
   type: typeof REMOVE_ITEM_FROM_CART,
-  remove_cart_meal: meals
+  remove_cart_meal: Meal
 }
 
 interface set_meal_from_localestorage_to_cart {
   type: typeof SET_MEAL_FROM_LOALESTORAGE_TO_CART,
-  lc_cart_items: meals[]
+  lc_cart_items: Meal[]
 }
 
 interface clean_cart {

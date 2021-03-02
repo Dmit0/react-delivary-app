@@ -1,5 +1,5 @@
 import { ToolBarSearchTypes } from '../../../enums';
-import { restaurant, meals, cuisine } from '../../../types';
+import { restaurant, Meal, cuisine } from '../../../types';
 
 //export const RESTAURANTS ={
 export const SET_RESTAURANTS = 'SET_RESTAURANTS';
@@ -42,7 +42,7 @@ interface REMOVE_ALL_CART_RESTAURANTS {
 
 interface SET_MEALS {
   type: typeof SET_MEALS
-  meals: meals[]
+  meals: Meal[]
 }
 
 interface SET_CUISINES {
@@ -72,7 +72,7 @@ interface SET_HOME_PAGE_FILTER {
 export interface RestaurantState {
   restaurants: restaurant[]
   current_restaurant: restaurant | null
-  current_meals: meals[]
+  current_meals: Meal[]
   cuisine: cuisine[]
   filter_restaurants: restaurant[]
   inputFilter: restaurant[]

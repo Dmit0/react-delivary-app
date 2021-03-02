@@ -1,4 +1,4 @@
-import { cuisine, restaurant, meals } from '../types';
+import { cuisine, restaurant, Meal } from '../types';
 
 export const Sorts = {
   Opened(restaurants: restaurant[]) {
@@ -42,7 +42,7 @@ export const Sorts = {
     return all.filter((item) => loved.includes(item._id));
   },
 
-  getMealCount(meals: meals[]) {
+  getMealCount(meals: Meal[]) {
     return meals.reduce((sum, current) => (
       sum + current.count
     ), 0);

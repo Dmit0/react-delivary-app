@@ -1,11 +1,11 @@
 import React from 'react';
 import '../../../core/css/meals-content.css';
 import { CartMealIcon } from '../../../core/components/icons';
-import { meals } from '../../../core/types';
+import { Meal as MealType } from '../../../core/types';
 
 interface MealProps {
-  meal: meals,
-  onAdd(meal: meals): void
+  meal: MealType,
+  onAdd(meal: MealType): void
 }
 
 export const Meal: React.FC<MealProps> = ({ meal, onAdd }) => {
