@@ -1,1 +1,1 @@
-export const ExceptionRapidHeader = 'x-rapidapi-host'
+export const ExceptionHeaders = ['x-rapidapi-host']

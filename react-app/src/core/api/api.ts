@@ -1,8 +1,8 @@
 import axios, { Method } from 'axios'
 import { ErrorsCode } from '../enums';
 import { Core } from '../enums/core.enum';
-import { ExceptionRapidHeader } from '../enums/exception-headers.enum';
 import { getLocaleStorageItem, setLocaleStorageItem } from '../utils/locale-storage.utils';
+import { checkHeadersForExceptionMatching } from '../utils/rerender/exceptions.utils';
 import { AuthenticationApi } from './apis/authentication.api';
 
 export async function axiosHttp <T>(request: string, method: Method = 'GET', data?: any, headers: HeadersInit = {}, params?: any): Promise<T> {
@@ -22,9 +22,7 @@ export async function axiosHttp <T>(request: string, method: Method = 'GET', dat
 }
 
 axios.interceptors.request.use((request) => {
-    if (Object.keys(request.headers).includes(ExceptionRapidHeader)) {
-        return request
-    }
+    if (checkHeadersForExceptionMatching(request.headers)) return request
     return {
         ...request,
         headers: {
