@@ -1,26 +1,23 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { cartApi } from '../../core/api/apis/cart.api';
-import { OrderAPI } from '../../core/api/apis/order.api';
-import { restaurantAPI } from '../../core/api/apis/reastaurant.api';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
 import { Core } from '../../core/enums/core.enum';
-import { remove_all_cart_restaurants, remove_cart_restaurant, set_cart_restaurants } from '../../core/redux/restaurant/actions';
+import { remove_all_cart_restaurants, remove_cart_restaurant } from '../../core/redux/restaurant/actions';
 import { getCartRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/cart.css';
 import { Action, Links } from '../../core/enums';
 import {
-  clean_cart,
+  cartAction,
+  clean_cart, cleanUserCart, deleteItemFromCartAction, getMealsForCart, order,
   remove_item_from_cart,
   remove_one_meal_from_cart,
-  set_meal_from_localestorage_to_cart,
   set_meal_to_cart,
 } from '../../core/redux/cart/actions';
 import { getCart } from '../../core/redux/cart/selectors';
 import { getIsLogIn } from '../../core/redux/user/selectors';
-import { Meal, restaurant } from '../../core/types';
-import { getLocaleStorageItem, setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
+import { Meal } from '../../core/types';
+import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
 import { rerender } from '../../core/utils/rerender/cart.rerender';
 
 const CartPage = () => {
@@ -31,86 +28,44 @@ const CartPage = () => {
 
   const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([]) //TODO `remove into redux`
 
-  useEffect(() => { //TODO `thunk`
-    getMeals(isLogIn).then((response) => {
-      if (isLogIn && response) {
-        dispatch(set_meal_from_localestorage_to_cart(response.meals));
-        dispatch(set_cart_restaurants(response.restaurants))
-      } else if (!isLogIn && response) {
-        response && dispatch(set_meal_from_localestorage_to_cart(response));
-      }
-    });
+  useEffect(() => {
+    dispatch(getMealsForCart(isLogIn))
   }, [isLogIn, dispatch]);
-
-  const getRestaurants = async(ids: string[]): Promise<restaurant[]> => { //TODO `thunk`
-    return await restaurantAPI.getRestaurants(ids)
-  }
-
-  const getMeals = async (isLogIn: boolean): Promise<any> => { //TODO `thunk`
-    if (isLogIn) {
-      return await cartApi.getUserCart();
-    } else {
-      const meals = getLocaleStorageItem(Core.Cart,'[]') as Meal[];
-      const restaurants = await getRestaurants(meals.map(meal => meal.restaurant));
-      dispatch(set_cart_restaurants(restaurants));
-      return meals;
-    }
-  };
 
   useEffect(() => {
     !isLogIn && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, isLogIn ]);
 
-  const changeItemInCart = async (data: { action: Action, mealId: string }, meal: Meal) => { //TODO `thunk`
-    const response = cartApi.changeItemInCart(data);
-    switch (data.action) {
-      case Action.DECREMENT:
-        return response && dispatch(remove_one_meal_from_cart(meal));
-      case Action.INCREMENT:
-        return response && dispatch(set_meal_to_cart(meal));
-    }
-  };
-
-  const deleteItemFromCart = async (meal: Meal) => { //TODO `thunk`
-    const response = cartApi.deleteItemFromCart(meal._id);
-    return response && dispatch(remove_item_from_cart(meal));
-  };
-
-  const cleanUserCart = async () => { //TODO `thunk`
-    const response = cartApi.cleanCart();
-    return response && dispatch(clean_cart());
-  };
-
-  const deleteRestaurantIfNeed = (meal: Meal, cart: Meal[], deleteFullItem = false) => { //TODO `use callback`
+  const deleteRestaurantIfNeed = useCallback((meal: Meal, cart: Meal[], deleteFullItem = false) => {
     if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
       dispatch(remove_cart_restaurant(meal.restaurant));
     }
-  }
+  }, [dispatch]);
 
-  const deleteOneItem = useCallback((meal: Meal) => { //TODO `thunk`
+  const deleteOneItem = useCallback((meal: Meal) => {
     deleteRestaurantIfNeed(meal, cart)
     isLogIn
-      ? changeItemInCart({ action: Action.DECREMENT, mealId: meal._id }, meal)
+      ? dispatch(cartAction({ action: Action.DECREMENT, mealId: meal._id }, meal))
       : dispatch(remove_one_meal_from_cart(meal));
-  }, [ isLogIn, dispatch, cart ]);
+  }, [deleteRestaurantIfNeed, cart, isLogIn, dispatch]);
 
-  const deleteMealFromCart = useCallback((meal: Meal) => { //TODO `thunk`
+  const deleteMealFromCart = useCallback((meal: Meal) => {
     deleteRestaurantIfNeed(meal, cart, true)
     isLogIn
-      ? deleteItemFromCart(meal)
+      ? dispatch(deleteItemFromCartAction(meal))
       : dispatch(remove_item_from_cart(meal))
-  }, [ isLogIn, dispatch, cart ]);
+  }, [deleteRestaurantIfNeed, cart, isLogIn, dispatch]);
 
   const addMeal = useCallback((meal: Meal) => (
     isLogIn
-      ? changeItemInCart({ action: Action.INCREMENT, mealId: meal._id }, meal)
+      ? dispatch(cartAction({ action: Action.INCREMENT, mealId: meal._id }, meal))
       : dispatch(set_meal_to_cart(meal))
   ), [ isLogIn, dispatch ]);
 
   const clear_cart_Handler = useCallback(() => {
     dispatch(remove_all_cart_restaurants())
     isLogIn
-      ? cleanUserCart()
+      ? dispatch(cleanUserCart())
       : dispatch(clean_cart())
   }, [ isLogIn, dispatch ]);
 
@@ -126,12 +81,12 @@ const CartPage = () => {
     ), 0);
   }, [ cart ]);
 
-  const orderItems = async() => {//TODO `thunk`
+  const orderItems = () => {
     const isNotMinAmount = restaurantBlockSum.some((restaurantToCheck: any) => { //TODO `remove into another method mb utils`
       const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
       return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
     })
-    if(!isNotMinAmount && isLogIn) await OrderAPI.order({})
+    if(!isNotMinAmount && isLogIn) dispatch(order())
   }
   const setBlockSum = useCallback((restaurant: string, sum: number) => { //TODO `redux logic`
     setRestaurantBlockSum(((prev: any) => {
