@@ -10,7 +10,7 @@ import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { AuthenticationApi } from '../../../api/apis/authentication.api';
-import { setAuthUser } from '../../user/actions';
+import { getUser, setAuthUser, setIsUserLogInToken } from '../../user/actions';
 import {
   AUTH_CLOSE,
   AUTH_FAIL, AUTH_LAST_STEP_CLOSE,
@@ -19,7 +19,7 @@ import {
   AUTH_STEP_CONTINUE,
   AUTH_STEP_START,
   AUTH_STEP_SUCCESS,
-  AuthenticationActionTypes,
+  AuthenticationActionTypes, ROOT_TOKEN_VALIDATE,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -36,12 +36,34 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
         dispatch(setAuthFailed());
         toast.warn('auth error')
       }
-      dispatch(hideLoading());
     } catch (e) {
       console.log(e);
-      dispatch(hideLoading());
       dispatch(setAuthFailed());
       toast.warn('auth error')
+    } finally {
+      dispatch(hideLoading());
+    }
+  };
+};
+
+export const validateToken = (): ThunkType => {
+  return async dispatch => {
+    dispatch(showLoading());
+    try {
+      const validateToken = await AuthenticationApi.validateToken()
+      if (validateToken) {
+        dispatch(setIsUserLogInToken(true));
+        setLocaleStorageItem(Core.Token, validateToken)
+        setLocaleStorageItem(Core.RefreshTokenError, false)
+        await dispatch(getUser())
+      } else dispatch(setIsUserLogInToken(false));
+    } catch (e) {
+      console.log(e);
+      dispatch(setAuthFailed());
+      toast.warn('auth error')
+    } finally {
+      dispatch(hideLoading());
+      dispatch(rootTokenValidate())
     }
   };
 };
@@ -123,6 +145,12 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
     }
   };
 };
+
+export const rootTokenValidate = () => {
+  return {
+    type: ROOT_TOKEN_VALIDATE
+  }
+}
 
 export const setAuthErrors = (message: string | null): AuthenticationActionTypes => {
   return {

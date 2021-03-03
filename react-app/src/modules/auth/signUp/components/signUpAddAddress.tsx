@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { geoApi } from '../../../../core/api/apis/geo.api';
 import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
 import { SelectField } from '../../../../core/components/form-fields/select-form-field/selectField';
 import { DeliveryIcon } from '../../../../core/components/icons';
@@ -9,7 +8,7 @@ import { Locality } from '../../../../core/enums/locality.enum';
 import { authClose, setStepCancel, updateAddress } from '../../../../core/redux/auth/actions';
 import { set_current_country } from '../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../core/redux/countries/selectors';
-import { setCurrentRegion, setRegions } from '../../../../core/redux/geo/actions';
+import { fetchGeo, setCurrentRegion } from '../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../core/redux/geo/selectors';
 import { closePopup } from '../../../../core/redux/popup/actions';
 import { getFirstAddress, getIsLogIn, getUserId } from '../../../../core/redux/user/selectors';
@@ -36,23 +35,14 @@ export const SignUpAddressStep: React.FC = () => {
   const isLogIn = useSelector(getIsLogIn)
 
   useEffect(() => {
-    firstUserCountry && fetchGeo(Locality.REGION, firstUserCountry.code) //TODO `thunk`
-  }, [])
+    firstUserCountry && dispatch(fetchGeo(Locality.REGION, firstUserCountry.code))
+  }, [firstUserCountry])
 
-  const handleChangeCountry = async ({ value }: any) => { //TODO `thunk`
+  const handleChangeCountry = ({ value }: any) => {
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
-    country && await fetchGeo(Locality.REGION, country.code)
+    country && dispatch(fetchGeo(Locality.REGION, country.code))
   };
-
-  const fetchGeo = async (localityName: string, code: string) => { //TODO `thunk`
-    switch (localityName) {
-      case(Locality.REGION):
-        const regions = await geoApi.fetchRegions(code);
-        regions && dispatch(setRegions(regions.data));break;
-      default: return null
-    }
-  }
 
   const handleChangeRegion = ({ value }: any) => {
     const region = regions.find((country) => country.name === value);

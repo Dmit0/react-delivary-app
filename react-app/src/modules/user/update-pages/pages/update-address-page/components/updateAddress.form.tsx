@@ -3,14 +3,14 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AddressApi } from '../../../../../../core/api/apis/address.api';
-import { geoApi } from '../../../../../../core/api/apis/geo.api';
 import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
 import { SelectField } from '../../../../../../core/components/form-fields/select-form-field/selectField';
 import { Links } from '../../../../../../core/enums';
+import { Locality } from '../../../../../../core/enums/locality.enum';
 import { getCurrentAddress } from '../../../../../../core/redux/addresses/selectors';
 import { set_current_country } from '../../../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
-import { setCurrentRegion, setRegions } from '../../../../../../core/redux/geo/actions';
+import { fetchGeo, setCurrentRegion } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
 import './updateAddress.form.css'
 import { getIsLogIn } from '../../../../../../core/redux/user/selectors';
@@ -36,12 +36,11 @@ export const UpdateAddressFrom = () => {
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const f = useForm({ mode: 'onChange', reValidateMode: 'onChange' });
 
-  const handleChangeCountry = async({ value }: any) => {
+  const handleChangeCountry = ({ value }: any) => {
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
-    const regions = country && await geoApi.fetchRegions(country.code)
-    regions && dispatch(setRegions(regions.data))
-    regions && dispatch(setCurrentRegion(null))
+    country && dispatch(fetchGeo(Locality.REGION, country.code))
+    dispatch(setCurrentRegion(null))
   }
 
   const handleChangeRegion = ({ value }: any) => {
@@ -73,8 +72,7 @@ export const UpdateAddressFrom = () => {
       currentCountry?.code !== currentAddress?.countryCode ||
       currentRegion?.isoCode !== currentAddress?.regionId
     setIsChanged(isChanged)
-  }, [f.watch, currentCountry, currentRegion])
-
+  }, [f.watch, currentCountry, currentRegion, f, currentAddress])
   return (
     <form onSubmit={ f.handleSubmit(onSubmit) }>
       <div className="update_form">

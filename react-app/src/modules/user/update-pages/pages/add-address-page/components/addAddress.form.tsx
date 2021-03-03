@@ -3,13 +3,13 @@ import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AddressApi } from '../../../../../../core/api/apis/address.api';
-import { geoApi } from '../../../../../../core/api/apis/geo.api';
 import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
 import { SelectField } from '../../../../../../core/components/form-fields/select-form-field/selectField';
 import { Links } from '../../../../../../core/enums';
+import { Locality } from '../../../../../../core/enums/locality.enum';
 import { set_current_country } from '../../../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
-import { setCurrentRegion, setRegions } from '../../../../../../core/redux/geo/actions';
+import { fetchGeo, setCurrentRegion } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
 import './addAddress.form.css'
 import { getIsLogIn } from '../../../../../../core/redux/user/selectors';
@@ -35,12 +35,11 @@ export const AddAddressFrom = () => {
 
   const { register, handleSubmit, errors } = useForm<formData>();
 
-  const handleChangeCountry = async({ value }: any) => {
+  const handleChangeCountry = ({ value }: any) => {
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
-    const regions = country && await geoApi.fetchRegions(country.code)
-    regions && dispatch(setRegions(regions.data))
-    regions && dispatch(setCurrentRegion(null))
+    country && dispatch(fetchGeo(Locality.REGION, country.code));
+    dispatch(setCurrentRegion(null))
   }
 
   const handleChangeRegion = ({ value }: any) => {

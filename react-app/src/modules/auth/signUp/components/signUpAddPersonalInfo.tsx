@@ -43,7 +43,7 @@ export const SignUpPersonalForm: React.FC = () => {
   const [ isPhoneExist, setIsPhoneExist ] = useState<boolean>(false);
 
   const dealCountriesSelectCodes = useMemo(() => {
-    return countries.map(item => ({value: item?.dial_code || '', label: item?.dial_code || ''}))
+    return countries.map(item => ({ value: item?.dial_code || '', label: item?.dial_code || '' }))
   }, [countries])
 
   useEffect(() => {

@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import '../../user.style.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { AddressApi } from '../../../../../core/api/apis/address.api';
 import { Divider } from '../../../../../core/components/decor';
 import { Paging } from '../../../../../core/components/pagination/paging';
 import { Links } from '../../../../../core/enums';
@@ -22,9 +21,8 @@ export const AddressBlock = ({getPaginatedUserAddresses}: {getPaginatedUserAddre
   const dispatch = useDispatch();
   const currentPage = useSelector(getCurrentPage);
 
-  const deleteAddress = useCallback(async(addressId: string) => { //TODO `Thunk`
-    const response = isLogIn && await AddressApi.deleteAddress(addressId)
-    response && dispatch(deleteAddressAction(addressId))
+  const deleteAddress = useCallback((addressId: string) => {
+    isLogIn && dispatch(deleteAddressAction(addressId));
   },[dispatch, isLogIn])
 
   const getPaginatedOffset = useCallback((pageNumber: number): number => {

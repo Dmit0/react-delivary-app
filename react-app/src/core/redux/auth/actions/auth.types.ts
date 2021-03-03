@@ -1,4 +1,4 @@
-import { userForCreateAccount, userToStore } from '../../../types';
+import { userForCreateAccount } from '../../../types';
 
 export const CREATE_ACCOUNT = 'CREATE_ACCOUNT';
 export const AUTH_SET_ERRORS = 'AUTH_SET_ERRORS'
@@ -9,9 +9,11 @@ export const AUTH_STEP_CANCEL = 'AUTH_STEP_CANCEL';
 export const AUTH_STEP_CONTINUE = 'AUTH_STEP_CONTINUE';
 export const AUTH_CLOSE = 'AUTH_CLOSE';
 export const AUTH_LAST_STEP_CLOSE = 'AUTH_LAST_STEP_CLOSE';
+export const ROOT_TOKEN_VALIDATE = 'ROOT_TOKEN_VALIDATE';
 
 
 export interface AuthenticationState {
+  rootTokeValidate: boolean
   AuthErrors: string | null
   isAuthSuccess: boolean | null
   isAuthFail: boolean
@@ -61,6 +63,10 @@ interface STEP_CONTINUE {
   type: typeof AUTH_STEP_CONTINUE
 }
 
+interface ROOT_TOKEN_VALIDATE {
+  type: typeof ROOT_TOKEN_VALIDATE
+}
+
 export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_ERRORS
   | STEP_START
@@ -70,4 +76,5 @@ export type AuthenticationActionTypes = CREATE_ACCOUNT
   | AUTH_FAIL
   | AUTH_CLOSE
   | AUTH_LAST_STEP_CLOSE
+  | ROOT_TOKEN_VALIDATE
 
