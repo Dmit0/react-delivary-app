@@ -11,8 +11,6 @@ interface InputFieldProps {
   register: any,
   type?: string,
   value?: string,
-  currentValue?: string,
-  subExistErrors?: boolean,
   defaultValue?: string,
   placeHolder?: string,
   subComponentErrors?: any,
@@ -31,8 +29,6 @@ export const InputField = (
     type = 'text',
     value,
     onChange,
-    subExistErrors = false,
-    currentValue,
     placeHolder,
     defaultValue,
     subComponentErrors,
@@ -43,7 +39,6 @@ export const InputField = (
         <div className="input__form_labels">
           <span className='input_label'>{label}</span>
           {errors?.message && <span className='input_label'>{ errors.message }</span>}
-          {subExistErrors && currentValue !== '' && !errors?.message && <span className="input_label">{name} exist</span>}
           {subComponentErrors && subComponentErrors}
         </div>
         <input

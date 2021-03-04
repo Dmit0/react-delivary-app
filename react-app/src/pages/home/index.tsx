@@ -14,7 +14,7 @@ const Home = () => {
     dispatch(get_banners());
     dispatch(del_current_restaurant_and_meals());
     dispatch(getLoveRestaurant(isLogIn));
-  }, [isLogIn]);
+  }, [dispatch, isLogIn]);
 
   return (
     <>

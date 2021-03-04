@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { AuthenticationApi } from '../../../../core/api/apis/authentication.api';
 import { GoogleButton } from '../../../../core/components/buttons';
 import { LineThrew } from '../../../../core/components/decor/2-line/line';
 import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
@@ -39,9 +38,6 @@ export const SignUpPersonalForm: React.FC = () => {
   const country = useSelector(getCountry);
   const isStepSuccess = useSelector(getIsStepSuccess);
 
-  const [ isEmailExist, setIsEmailExist ] = useState<boolean>(false);
-  const [ isPhoneExist, setIsPhoneExist ] = useState<boolean>(false);
-
   useEffect(() => {
     isStepSuccess && dispatch(openPopup(<SignUpSelectStep/>));
   }, [ dispatch, isStepSuccess ]);
@@ -51,7 +47,7 @@ export const SignUpPersonalForm: React.FC = () => {
   };
 
   const handleChange = ({ value }: any) => {
-    const country = countries.find((country) => country.name === value);
+    const country = countries.find((country) => country.dial_code === value);
     country && dispatch(set_current_country(country));
   };
 
@@ -59,26 +55,7 @@ export const SignUpPersonalForm: React.FC = () => {
     dispatch(create_account(user));
   };
 
-  const {errors, watch, register, handleSubmit} = useForm<formData>({ mode: 'onChange', reValidateMode: 'onChange' });
-
-  const changeInputHandler = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => { ///TODO `thunk`
-    const setData = event.target.value;
-    const validatedEmailResponse =
-      country?.dial_code &&
-      setData &&
-      !errors.telephone &&
-      await AuthenticationApi.verifyPhone({
-        code: country.dial_code,
-        number: setData,
-      });
-    setIsPhoneExist(!!validatedEmailResponse);
-  }, [ country, errors.telephone, setIsPhoneExist ]);
-
-  const verifyEmail = useCallback(async (e: any, errors: any) => {
-    const setData = e.target.value;
-    const validatedEmailResponse = (setData && !errors.email) && await AuthenticationApi.verifyMail(setData);
-    setIsEmailExist(validatedEmailResponse);
-  }, [setIsEmailExist])
+  const {errors, register, handleSubmit} = useForm<formData>({ mode: 'onChange', reValidateMode: 'onChange' });
 
   const changeSelectHandler = useCallback(({value}) => {
     if (country?.dial_code !== value) {
@@ -92,6 +69,10 @@ export const SignUpPersonalForm: React.FC = () => {
       createAccount({ ...data, country });
     }
   };
+
+  const getPhoneValidationWithDepends = useCallback(() => {
+    return getPhoneValidation(7, 11, country?.dial_code)
+  }, [country])
 
   return (
     <>
@@ -130,20 +111,17 @@ export const SignUpPersonalForm: React.FC = () => {
 
                   <PhoneField
                     name='telephone'
-                    selectName='telephone'
+                    selectName='code'
                     selectPlaceHolder='+ ...'
+                    placeHolder={!country ? 'Select country' : 'phone'}
                     label='Telephone number'
                     isDisabled={!country}
                     register={register}
                     currentSelectValue={country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null}
-                    placeHolder={!country ? 'Select country' : 'phone'}
                     errors={errors.telephone}
                     options={selectCountries}
                     changeSelectHandler={changeSelectHandler}
-                    changeInputHandler={changeInputHandler}
-                    isPhoneExist={isPhoneExist}
-                    rules={getPhoneValidation(7, 11)}
-                    currentValue={watch('telephone')}
+                    rules={getPhoneValidationWithDepends()}
                   />
 
                   <InputField
@@ -151,10 +129,7 @@ export const SignUpPersonalForm: React.FC = () => {
                     label='Email Address'
                     rules={getEmailValidation()}
                     errors={errors.email}
-                    subExistErrors={isEmailExist}
-                    currentValue={watch('email')}
                     register={register}
-                    onChange={(e) => verifyEmail(e, errors)}
                   />
 
                   <InputField
@@ -173,7 +148,7 @@ export const SignUpPersonalForm: React.FC = () => {
                 <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
               </div>
               <div className="auth-next-step">
-                <button disabled={isPhoneExist || isEmailExist} type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
+                <button disabled={!!Object.values(errors).length} type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
               </div>
             </div>
           </form>
