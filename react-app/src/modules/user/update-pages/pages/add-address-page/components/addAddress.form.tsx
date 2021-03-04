@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -35,18 +35,17 @@ export const AddAddressFrom = () => {
 
   const { register, handleSubmit, errors } = useForm<formData>();
 
-  const handleChangeCountry = ({ value }: any) => {
+  const handleChangeCountry = useCallback(({ value }: any) => {
     dispatch(setCurrentRegion(null))
     const country = countries.find((country) => country.dial_code === value);
     country && dispatch(set_current_country(country));
     country && dispatch(fetchGeo(Locality.REGION, country.code));
+  }, [countries, dispatch]);
 
-  }
-
-  const handleChangeRegion = ({ value }: any) => {
+  const handleChangeRegion = useCallback(({ value }: any) => {
     const region = regions.find((country) => country.name === value);
     region && dispatch(setCurrentRegion(region));
-  };
+  }, [dispatch, regions]);
 
   const onSubmit = (data: formData) => {
       if (currentRegion &&  currentCountry) {

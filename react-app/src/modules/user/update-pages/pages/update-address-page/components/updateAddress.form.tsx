@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -37,17 +37,17 @@ export const UpdateAddressFrom = () => {
   const [isChanged, setIsChanged] = useState<boolean>(false);
   const f = useForm({ mode: 'onChange', reValidateMode: 'onChange' });
 
-  const handleChangeCountry = ({ value }: any) => {
+  const handleChangeCountry = useCallback(({ value }: any) => {
     const country = countries.find((country) => country.name === value);
     country && dispatch(set_current_country(country));
     country && dispatch(fetchGeo(Locality.REGION, country.code))
     dispatch(setCurrentRegion(null))
-  }
+  }, [countries, dispatch]);
 
-  const handleChangeRegion = ({ value }: any) => {
+  const handleChangeRegion = useCallback(({ value }: any) => {
     const region = regions.find((country) => country.name === value);
     region && dispatch(setCurrentRegion(region));
-  };
+  }, [dispatch, regions]);
 
   const onSubmit = (data: formData) => {
     if (currentRegion &&  currentCountry && currentAddress) {

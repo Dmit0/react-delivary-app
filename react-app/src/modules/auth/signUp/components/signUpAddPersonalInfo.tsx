@@ -46,10 +46,10 @@ export const SignUpPersonalForm: React.FC = () => {
     dispatch(openPopup(<LogIn/>));
   };
 
-  const handleChange = ({ value }: any) => {
+  const handleChange = useCallback(({ value }: any) => {
     const country = countries.find((country) => country.dial_code === value);
     country && dispatch(set_current_country(country));
-  };
+  }, [countries, dispatch]);
 
   const createAccount = (user: userForCreateAccount) => {
     dispatch(create_account(user));
@@ -75,85 +75,84 @@ export const SignUpPersonalForm: React.FC = () => {
   }, [country])
 
   return (
-    <>
-      <div className="registrationPopup">
-        <div className='main-auth-popup'>
-          <div className="auth-title">
-            <div className="auth-title-header">
-              <DeliveryIcon height='30' width='30'/>
+    <div className="registrationPopup">
+      <div className='main-auth-popup'>
+        <div className="auth-title">
+          <div className="auth-title-header">
+            <DeliveryIcon height='30' width='30'/>
+          </div>
+        </div>
+        <form className='Authentication_Form' onSubmit={ handleSubmit(onSubmit) }>
+          <div>
+            <div className="auth-body_Google_auth">
+              <GoogleButton text='Sign in with Google'/>
+            </div>
+            <LineThrew/>
+            <div className="auth-body_Mail_auth">
+              <div className="auth-body_Mail_auth">
+
+                <InputField
+                  label='Your name'
+                  name='name'
+                  rules={ getRequiredValidation() }
+                  register={ register }
+                  errors={ errors.name }
+                />
+
+                <SelectField
+                  name='country'
+                  label='Your country'
+                  currentSelectValue={ country && { value: country?.code, label: country?.name } }
+                  selectPlaceHolder='Select...'
+                  options={ selectCountries }
+                  changeSelectHandler={ (event: any) => handleChange(event) }
+                />
+
+                <PhoneField
+                  name='telephone'
+                  selectName='code'
+                  selectPlaceHolder='+ ...'
+                  placeHolder={ !country ? 'Select country' : 'phone' }
+                  label='Telephone number'
+                  isDisabled={ !country }
+                  register={ register }
+                  currentSelectValue={ country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null }
+                  errors={ errors.telephone }
+                  options={ selectCountries }
+                  changeSelectHandler={ changeSelectHandler }
+                  rules={ getPhoneValidationWithDepends() }
+                />
+
+                <InputField
+                  name='email'
+                  label='Email Address'
+                  rules={ getEmailValidation() }
+                  errors={ errors.email }
+                  register={ register }
+                />
+
+                <InputField
+                  name='password'
+                  label='Password'
+                  type='password'
+                  rules={ getPasswordValidation(8, 30) }
+                  errors={ errors.password }
+                  register={ register }
+                />
+              </div>
             </div>
           </div>
-          <form className='Authentication_Form' onSubmit={handleSubmit(onSubmit)}>
-            <div>
-              <div className="auth-body_Google_auth">
-                <GoogleButton text='Sign in with Google'/>
-              </div>
-              <LineThrew/>
-              <div className="auth-body_Mail_auth">
-                <div className="auth-body_Mail_auth">
-
-                  <InputField
-                    label='Your name'
-                    name='name'
-                    rules={getRequiredValidation()}
-                    register={register}
-                    errors={errors.name}
-                  />
-
-                  <SelectField
-                    name='country'
-                    label='Your country'
-                    currentSelectValue={country && { value: country?.code, label: country?.name }}
-                    selectPlaceHolder='Select...'
-                    options={selectCountries}
-                    changeSelectHandler={(event: any) => handleChange(event)}
-                  />
-
-                  <PhoneField
-                    name='telephone'
-                    selectName='code'
-                    selectPlaceHolder='+ ...'
-                    placeHolder={!country ? 'Select country' : 'phone'}
-                    label='Telephone number'
-                    isDisabled={!country}
-                    register={register}
-                    currentSelectValue={country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null}
-                    errors={errors.telephone}
-                    options={selectCountries}
-                    changeSelectHandler={changeSelectHandler}
-                    rules={getPhoneValidationWithDepends()}
-                  />
-
-                  <InputField
-                    name='email'
-                    label='Email Address'
-                    rules={getEmailValidation()}
-                    errors={errors.email}
-                    register={register}
-                  />
-
-                  <InputField
-                    name='password'
-                    label='Password'
-                    type='password'
-                    rules={getPasswordValidation(8, 30)}
-                    errors={errors.password}
-                    register={register}
-                  />
-                </div>
-              </div>
+          <div className="auth-reg-futer">
+            <div className="auth-next-step">
+              <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
             </div>
-            <div className="auth-reg-futer">
-              <div className="auth-next-step">
-                <button onClick={ handleAuthOpen } type="button" className="btn btn-outline-primary auth-prev-button ">Return</button>
-              </div>
-              <div className="auth-next-step">
-                <button disabled={!!Object.values(errors).length} type="submit" className="btn btn-outline-primary reg-next-step-button ">Next</button>
-              </div>
+            <div className="auth-next-step">
+              <button disabled={ !!Object.values(errors).length } type="submit" className="btn btn-outline-primary reg-next-step-button ">Next
+              </button>
             </div>
-          </form>
-        </div>
+          </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 };

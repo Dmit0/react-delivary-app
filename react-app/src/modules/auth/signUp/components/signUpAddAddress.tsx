@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField } from '../../../../core/components/form-fields/input-form-field/input';
@@ -38,16 +38,18 @@ export const SignUpAddressStep: React.FC = () => {
     firstUserCountry && dispatch(fetchGeo(Locality.REGION, firstUserCountry.code))
   }, [dispatch, firstUserCountry])
 
-  const handleChangeCountry = ({ value }: any) => {
+  const handleChangeCountry = useCallback(({ value }: any) => {
     const country = countries.find((country) => country.name === value);
-    country && dispatch(set_current_country(country));
-    country && dispatch(fetchGeo(Locality.REGION, country.code))
-  };
+    if (country) {
+      dispatch(set_current_country(country));
+      dispatch(fetchGeo(Locality.REGION, country.code))
+    }
+  },[countries, dispatch]);
 
-  const handleChangeRegion = ({ value }: any) => {
+  const handleChangeRegion = useCallback(({ value }: any) => {
     const region = regions.find((country) => country.name === value);
     region && dispatch(setCurrentRegion(region));
-  };
+  }, [dispatch, regions]);
 
   const onClose = () => {
     dispatch(closePopup());
@@ -79,7 +81,7 @@ export const SignUpAddressStep: React.FC = () => {
       <div className='main-auth-popup'>
         <div className="auth-title">
           <div className="auth-title-header">
-            <DeliveryIcon height={ '30' } width={ '30' }/>
+            <DeliveryIcon height='30' width='30'/>
           </div>
         </div>
         <div className="reg-sub-title">Add Your Address</div>
