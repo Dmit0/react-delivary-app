@@ -14,8 +14,12 @@ export const List: React.FC<ListProps> = ({ deleteFilterInput }) => {
     <>
       { searchedRestaurants.map(restaurant => (
         <Link to={ `/MealsPage/${ restaurant._id }` }>
-          <li onClick={ () => deleteFilterInput('') } className={ 'list-group-item list_item' } data-category={ restaurant.name }
-              key={ restaurant._id }>
+          <li
+            onClick={ () => deleteFilterInput('') }
+            className={ 'list-group-item list_item' }
+            data-category={ restaurant.name }
+            key={ restaurant._id }
+          >
             <span className='search_description_name'>{ restaurant.name }</span>
             <span className='search_description_content'>{ restaurant.description }</span>
           </li>

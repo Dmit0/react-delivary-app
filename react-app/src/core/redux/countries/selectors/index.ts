@@ -1,5 +1,4 @@
-import { country, fetchGeoModel } from '../../../types';
-import { getRegions } from '../../geo/selectors';
+import { country } from '../../../types';
 import { RootState } from '../../rootReducer';
 import { CountryState } from '../actions';
 
@@ -11,6 +10,6 @@ export const getCountries = (state: RootState) => getCountryState(state)?.countr
 export const getSelectCountries = (state: RootState) => {
   const countries = getCountries(state)
   return countries.map((country: country) => {
-    return { value: country.name, label: country.name };
+    return { value: country?.dial_code || '', label: country.name };
   })
 };

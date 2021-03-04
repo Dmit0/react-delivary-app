@@ -1,13 +1,13 @@
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { AuthenticationApi } from '../../../../../../core/api/apis/authentication.api';
-import { UserApi } from '../../../../../../core/api/apis/user.api';
 import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
 import { PhoneField } from '../../../../../../core/components/form-fields/input-phone-field/input.phone';
 import { Links } from '../../../../../../core/enums';
 import { getCountries } from '../../../../../../core/redux/countries/selectors';
+import { getIsNeedToRedirect } from '../../../../../../core/redux/user-page/page-module/selectors';
 import { getIsLogIn, getUser } from '../../../../../../core/redux/user/selectors';
 import './update.form.css'
 import {
@@ -20,14 +20,15 @@ import { validateFormData } from '../../../../../../core/utils/form.utils';
 
 export const UpdateUserFrom = () => {
 
+  const dispatch = useDispatch()
   const isLogIn = useSelector(getIsLogIn);
   const countries = useSelector(getCountries);
-  const user = useSelector(getUser)
+  const user = useSelector(getUser);
+  const isNeedToRedirect = useSelector(getIsNeedToRedirect);
 
   const [isDataChanged, setIsDataChanged] = useState<boolean>(false);
   const [isPasswordChanged, setIsPasswordChanged] = useState<boolean>(false);
   const [isEmailExist, setIsEmailExist] = useState<boolean>(false);
-  const [isNeedToRedirect, setIsNeedToRedirect] = useState<boolean>(false);
   const [isPhoneExist, setIsPhoneExist] = useState<boolean>(false);
   const [phonePrefix, setPhonePrefix] = useState<string>('')
 
@@ -57,7 +58,7 @@ export const UpdateUserFrom = () => {
     setIsEmailExist(!!validatedEmailResponse);
   };
 
-  const onSubmit = useCallback(async (data: any) => {
+  const onSubmit = useCallback((data: any) => {
     const updateData = {
       ...data,
       telephone: {
@@ -66,9 +67,8 @@ export const UpdateUserFrom = () => {
       }
     }
     const validateData = validateFormData(updateData)
-    const response = isLogIn && await UserApi.updateUser(validateData);
-    setIsNeedToRedirect(!!response);
-  }, [phonePrefix, isLogIn]);
+    isLogIn && dispatch(validateData)
+  }, [phonePrefix, isLogIn, dispatch]);
 
   useEffect(() => {
     const isChanged =
@@ -82,7 +82,7 @@ export const UpdateUserFrom = () => {
 
   useEffect(() => {
     user.phone && setPhonePrefix(user.phone?.code)
-  }, [])
+  }, [user.phone])
 
   const subComponentStyles = useMemo(() => {
     if (isPasswordChanged && comparePassword) {

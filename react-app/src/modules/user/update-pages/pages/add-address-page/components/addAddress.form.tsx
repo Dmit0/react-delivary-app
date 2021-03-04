@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { AddressApi } from '../../../../../../core/api/apis/address.api';
 import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
 import { SelectField } from '../../../../../../core/components/form-fields/select-form-field/selectField';
 import { Links } from '../../../../../../core/enums';
@@ -12,6 +11,8 @@ import { getCountries, getCountry, getSelectCountries } from '../../../../../../
 import { fetchGeo, setCurrentRegion } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
 import './addAddress.form.css'
+import { addAddress } from '../../../../../../core/redux/user-page/address-module/actions/address-module.actions';
+import { getIsNeedToRedirect } from '../../../../../../core/redux/user-page/page-module/selectors';
 import { getIsLogIn } from '../../../../../../core/redux/user/selectors';
 import { getRequiredValidation } from '../../../../../../core/utils/form-validation.utils';
 interface formData {
@@ -30,16 +31,16 @@ export const AddAddressFrom = () => {
   const regions = useSelector(getRegions);
   const selectRegions = useSelector(getSelectRegions);
   const countries = useSelector(getCountries);
-
-  const [ isNeedToRedirect, setIsNeedToRedirect ] = useState<boolean>(false);
+  const isNeedToRedirect = useSelector(getIsNeedToRedirect);
 
   const { register, handleSubmit, errors } = useForm<formData>();
 
   const handleChangeCountry = ({ value }: any) => {
-    const country = countries.find((country) => country.name === value);
+    dispatch(setCurrentRegion(null))
+    const country = countries.find((country) => country.dial_code === value);
     country && dispatch(set_current_country(country));
     country && dispatch(fetchGeo(Locality.REGION, country.code));
-    dispatch(setCurrentRegion(null))
+
   }
 
   const handleChangeRegion = ({ value }: any) => {
@@ -47,7 +48,7 @@ export const AddAddressFrom = () => {
     region && dispatch(setCurrentRegion(region));
   };
 
-  const onSubmit = async (data: formData) => {
+  const onSubmit = (data: formData) => {
       if (currentRegion &&  currentCountry) {
         const address = {
           country: currentCountry.name,
@@ -57,9 +58,7 @@ export const AddAddressFrom = () => {
           street: data.street,
           streetNumber: data.streetNumber
         }
-        const response = isLogIn && await AddressApi.addAddress(address)
-        response && setIsNeedToRedirect(!!response)
-        //response && dispatch(addAddressIntoPaginatedPage(address))
+        isLogIn && dispatch(addAddress(address))
       }
   };
 

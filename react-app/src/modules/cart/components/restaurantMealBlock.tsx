@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Meal, restaurant } from '../../../core/types';
 import { rerender } from '../../../core/utils/rerender/cart.rerender';
 import './meal-block.style.css'
@@ -20,15 +20,11 @@ export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
      setBlockSum
   }) => {
 
-  const countOrderRestaurantSum = useCallback((): number => { //TODO `redux`
+  const blockSum = useMemo(() => { //TODO `redux`
     return restaurantBlock.reduce((acc, el) => {
       return acc += el.count * el.price
     }, 0)
-  }, [])
-
-  const blockSum = useMemo(() => { //TODO `redux`
-    return countOrderRestaurantSum()
-  },[countOrderRestaurantSum])
+  },[restaurantBlock])
 
   useEffect(() => {
     setBlockSum(restaurant._id, blockSum)

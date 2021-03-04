@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { AuthenticationApi } from '../../../../core/api/apis/authentication.api';
@@ -41,10 +41,6 @@ export const SignUpPersonalForm: React.FC = () => {
 
   const [ isEmailExist, setIsEmailExist ] = useState<boolean>(false);
   const [ isPhoneExist, setIsPhoneExist ] = useState<boolean>(false);
-
-  const dealCountriesSelectCodes = useMemo(() => {
-    return countries.map(item => ({ value: item?.dial_code || '', label: item?.dial_code || '' }))
-  }, [countries])
 
   useEffect(() => {
     isStepSuccess && dispatch(openPopup(<SignUpSelectStep/>));
@@ -142,7 +138,7 @@ export const SignUpPersonalForm: React.FC = () => {
                     currentSelectValue={country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null}
                     placeHolder={!country ? 'Select country' : 'phone'}
                     errors={errors.telephone}
-                    options={dealCountriesSelectCodes}
+                    options={selectCountries}
                     changeSelectHandler={changeSelectHandler}
                     changeInputHandler={changeInputHandler}
                     isPhoneExist={isPhoneExist}
