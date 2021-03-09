@@ -17,7 +17,7 @@ import {
   SET_MEAL_FROM_LOALESTORAGE_TO_CART,
   CLEAN_CART,
   cartActionTypes,
-  SET_CART_LENGTH,
+  SET_CART_LENGTH, SET_CART_VALUES,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, reduxAction<string>>
@@ -161,4 +161,11 @@ export const set_cart_length = (length: number): cartActionTypes => {
     length,
   };
 };
+
+export const setCartValues = (cart: Meal[]): cartActionTypes => {
+  return {
+    type: SET_CART_VALUES,
+    cart
+  }
+}
 

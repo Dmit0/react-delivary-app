@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
@@ -12,9 +12,9 @@ import {
   clean_cart, cleanUserCart, deleteItemFromCartAction, getMealsForCart, order,
   remove_item_from_cart,
   remove_one_meal_from_cart,
-  set_meal_to_cart,
+  set_meal_to_cart, setCartValues,
 } from '../../core/redux/cart/actions';
-import { getCart } from '../../core/redux/cart/selectors';
+import { getCart, getCartLength, getCartPrice, getIsRestaurantPricesCorrect } from '../../core/redux/cart/selectors';
 import { getIsLogIn } from '../../core/redux/user/selectors';
 import { Meal } from '../../core/types';
 import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
@@ -25,8 +25,9 @@ const CartPage = () => {
   const cartRestaurants = useSelector(getCartRestaurants);
   const cart = useSelector(getCart);
   const isLogIn = useSelector(getIsLogIn);
-
-  const [restaurantBlockSum, setRestaurantBlockSum] = useState<any>([]) //TODO `remove into redux`
+  const cartPrice = useSelector(getCartPrice);
+  const cartLength = useSelector(getCartLength);
+  const getIsRestaurantBlockPricesCorrect = useSelector(getIsRestaurantPricesCorrect);
 
   useEffect(() => {
     dispatch(getMealsForCart(isLogIn))
@@ -35,6 +36,10 @@ const CartPage = () => {
   useEffect(() => {
     !isLogIn && setLocaleStorageItem(Core.Cart, cart);
   }, [ cart, isLogIn ]);
+
+  useEffect(() => {
+    dispatch(setCartValues(cart));
+  }, [cart, dispatch])
 
   const deleteRestaurantIfNeed = useCallback((meal: Meal, cart: Meal[], deleteFullItem = false) => {
     if ((meal.count === 1 || deleteFullItem) && cart?.filter(item => item.restaurant === meal.restaurant).length === 1) {
@@ -69,39 +74,11 @@ const CartPage = () => {
       : dispatch(clean_cart())
   }, [ isLogIn, dispatch ]);
 
-  const count_items = useCallback((): Number => { //TODO `remove into redux that will count with setting cart into redux`
-    return cart.reduce((sum, current) => (
-      sum + current.count
-    ), 0);
-  }, [ cart ]);
-
-  const count_total_price = useCallback((): Number => { //TODO `remove into redux that will count with setting cart into redux`
-    return cart.reduce((sum, current) => (
-      sum + current.price * current.count
-    ), 0);
-  }, [ cart ]);
-
   const orderItems = () => {
-    const isNotMinAmount = restaurantBlockSum.some((restaurantToCheck: any) => { //TODO `remove into another method mb utils`
-      const restaurant = cartRestaurants.find(restaurant => restaurantToCheck.restaurant === restaurant._id);
-      return restaurant && restaurantToCheck.sum < restaurant.minSumOfDelivery
-    })
-    if(!isNotMinAmount && isLogIn) dispatch(order())
+    console.log(getIsRestaurantBlockPricesCorrect)
+     if(getIsRestaurantBlockPricesCorrect && isLogIn) dispatch(order())
   }
-  const setBlockSum = useCallback((restaurant: string, sum: number) => { //TODO `redux logic`
-    setRestaurantBlockSum(((prev: any) => {
-      const res = prev && prev.find((item: any) => item.restaurant === restaurant);
-      if (res) {
-        return [ ...prev.map((item: any) => {
-          if (item.restaurant === restaurant) {
-            return { restaurant: item.restaurant, sum };
-          }
-          return item;
-        }) ];
-      }
-      return [ ...prev, { restaurant, sum } ]
-    }))
-  }, [ setRestaurantBlockSum ])
+
   return (
     <>
       <div className="App">
@@ -121,14 +98,13 @@ const CartPage = () => {
               { rerender.mealsBlock(
                 cartRestaurants,
                 cart,
-                setBlockSum,
                 deleteOneItem,
                 deleteMealFromCart,
                 addMeal
               )}
               <div className='info'>
-                <span>Total Items : { count_items() }</span>
-                <span>Total amount : <span className='total_sum'>{ count_total_price() } bun</span></span>
+                <span>Total Items : {cartLength}</span>
+                <span>Total amount : <span className='total_sum'>{cartPrice} bun</span></span>
               </div>
             </div>
             <div className='cart-footer'>

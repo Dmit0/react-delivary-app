@@ -7,7 +7,6 @@ export const rerender = {
   mealsBlock(
     cartRestaurants: restaurant[],
     cart: Meal[],
-    setBlockSum: (restaurant: string, sum: number) => void,
     deleteOneItem: (meal: Meal) => void,
     deleteMealFromCart: (meal: Meal) => void,
     addMeal: (meal: Meal) => void) {
@@ -15,7 +14,6 @@ export const rerender = {
       const restaurantBlock = cart.filter(meal => meal.restaurant === restaurant._id);
       return (
         <RestaurantMealBlock
-          setBlockSum={setBlockSum}
           restaurant={restaurant}
           restaurantBlock={ restaurantBlock }
           onDeleteOneItem={ deleteOneItem }
