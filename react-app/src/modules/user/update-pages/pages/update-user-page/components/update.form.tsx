@@ -7,6 +7,7 @@ import { PhoneField } from '../../../../../../core/components/form-fields/input-
 import { Links } from '../../../../../../core/enums';
 import { getCountries } from '../../../../../../core/redux/countries/selectors';
 import { getIsNeedToRedirect } from '../../../../../../core/redux/user-page/page-module/selectors';
+import { updateUser } from '../../../../../../core/redux/user/actions';
 import { getIsLogIn, getUser } from '../../../../../../core/redux/user/selectors';
 import './update.form.css'
 import {
@@ -58,7 +59,7 @@ export const UpdateUserFrom = () => {
       }
     }
     const validateData = validateFormData(updateData)
-    isLogIn && dispatch(validateData)
+    isLogIn && dispatch(updateUser(validateData))
   }, [phonePrefix, isLogIn, dispatch]);
 
   useEffect(() => {

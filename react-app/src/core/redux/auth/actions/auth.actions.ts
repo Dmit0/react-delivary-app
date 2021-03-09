@@ -102,14 +102,14 @@ export const verifyMail = (mail: string): ThunkType => {
         dispatch(setAuthErrors(message));
         dispatch(setAuthFailed());
       }
-      dispatch(hideLoading());
     } catch (e) {
       console.log(e);
-      dispatch(hideLoading());
       const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
       toast.warn(message)
-      dispatch(setAuthErrors(message)); //TO DO REMOVE LOGIC OF ERROR INTO ANOTHER METHOD
-      dispatch(setAuthFailed());//TO DO REMOVE LOGIC OF FAIL AUTH INTO ANOTHER METHOD
+      dispatch(setAuthErrors(message));
+      dispatch(setAuthFailed());
+    } finally {
+      dispatch(hideLoading());
     }
   };
 };
@@ -134,14 +134,14 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
         isLogIn && dispatch(closePopup())
       } else {
         toast.warn('auth fail')
-        dispatch(hideLoading());
         dispatch(setAuthFailed());
       }
     } catch (e) {
       console.log(e);
       toast.warn('auth fail')
-      dispatch(hideLoading());
       dispatch(setAuthFailed());
+    } finally {
+      dispatch(hideLoading());
     }
   };
 };

@@ -1,5 +1,4 @@
-import React from "react";
-import { Redirect, Route, Switch } from 'react-router-dom';
+import React from 'react';
 import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
@@ -56,40 +55,3 @@ export const routes: IRouterConfig[] = [
     exact: false,
   },
 ];
-
-export const useRoutes = (token: boolean) => {
-  return <Switch>
-    <Route path={ Links.HOME } exact>
-      <Home/>
-    </Route>
-    <Route path={ Links.CART }>
-      <Cart/>
-    </Route>
-    <Route path={ Links.MEALS }>
-      <Meal/>
-    </Route>
-    { token && ValidatedRoutes()}
-    <Redirect to={ Links.HOME }/>
-  </Switch>;
-
-};
-
-const ValidatedRoutes = () => {
-  return (
-    <Switch>
-      <Route path={ Links.USER } exact>
-        <User/>
-      </Route>
-      <Route path={`${Links.USER}${Links.ADDRESS_ADD}`}>
-        <AddAddress/>
-      </Route>
-      <Route path={`${Links.USER}${Links.ADDRESS_UPDATE_ROUTE}`}>
-        <UpdateAddress/>
-      </Route>
-      <Route path={`${Links.USER}${Links.USER_UPDATE}`}>
-        <UpdateUser/>
-      </Route>
-      <Redirect to={ Links.HOME }/>
-    </Switch>
-  );
-};

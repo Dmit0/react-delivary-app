@@ -1,6 +1,6 @@
 import { ValidationRules } from 'react-hook-form';
 import { AuthenticationApi } from '../api/apis/authentication.api';
-import { ErrorMessages, PositiveFormResponse } from '../enums';
+import { ErrorMessages } from '../enums';
 import { Patterns } from './patterns';
 
 export const getRequiredValidation = (): ValidationRules => {
@@ -18,7 +18,7 @@ export const getEmailValidation = (): ValidationRules => {
       if (!value.match(Patterns.mail)) return ErrorMessages.MAIL_PATTERN;
       const isMailExist = await AuthenticationApi.verifyMail(value);
       if (isMailExist) return ErrorMessages.MAIL_EXIST;
-      return PositiveFormResponse.MAIL_IS_OK
+      return true
     }
   };
 };
@@ -45,7 +45,7 @@ export const getPhoneValidation = (minLength: number, maxLength: number, current
       });
       return isPhoneExist
         ? ErrorMessages.PHONE_EXIST
-        : PositiveFormResponse.PHONE_IS_OK;
+        : true;
     },
   };
 }

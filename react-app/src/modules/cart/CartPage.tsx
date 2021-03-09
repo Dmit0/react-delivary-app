@@ -75,7 +75,6 @@ const CartPage = () => {
   }, [ isLogIn, dispatch ]);
 
   const orderItems = () => {
-    console.log(getIsRestaurantBlockPricesCorrect)
      if(getIsRestaurantBlockPricesCorrect && isLogIn) dispatch(order())
   }
 

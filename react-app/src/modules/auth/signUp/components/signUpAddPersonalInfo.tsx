@@ -12,6 +12,7 @@ import { getIsStepSuccess } from '../../../../core/redux/auth/selectors';
 import { set_current_country } from '../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../core/redux/countries/selectors';
 import { openPopup } from '../../../../core/redux/popup/actions';
+import { RootState } from '../../../../core/redux/rootReducer';
 import { userForCreateAccount } from '../../../../core/types';
 import {
   getEmailValidation,
@@ -33,7 +34,8 @@ interface formData {
 export const SignUpPersonalForm: React.FC = () => {
 
   const dispatch = useDispatch();
-  const selectCountries = useSelector(getSelectCountries);
+  const selectCountriesByCode = useSelector((state: RootState) => getSelectCountries(state, true));
+  const selectCountriesByName = useSelector(getSelectCountries);
   const countries = useSelector(getCountries);
   const country = useSelector(getCountry);
   const isStepSuccess = useSelector(getIsStepSuccess);
@@ -104,7 +106,7 @@ export const SignUpPersonalForm: React.FC = () => {
                   label='Your country'
                   currentSelectValue={ country && { value: country?.code, label: country?.name } }
                   selectPlaceHolder='Select...'
-                  options={ selectCountries }
+                  options={ selectCountriesByName }
                   changeSelectHandler={ (event: any) => handleChange(event) }
                 />
 
@@ -118,7 +120,7 @@ export const SignUpPersonalForm: React.FC = () => {
                   register={ register }
                   currentSelectValue={ country?.dial_code ? { value: country?.dial_code, label: country?.dial_code } : null }
                   errors={ errors.telephone }
-                  options={ selectCountries }
+                  options={ selectCountriesByCode }
                   changeSelectHandler={ changeSelectHandler }
                   rules={ getPhoneValidationWithDepends() }
                 />
