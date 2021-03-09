@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { DeliveryIcon } from '../../../../core/components/icons';
-import { authClose, setStepCancel, setStepContinue } from '../../../../core/redux/auth/actions';
+import { authClose, setStepContinue } from '../../../../core/redux/auth/actions';
 import { closePopup, openPopup } from '../../../../core/redux/popup/actions';
 import { SignUpAddressStep } from './signUpAddAddress';
 
@@ -9,8 +9,7 @@ export const SignUpSelectStep: React.FC = () => {
 
   const dispatch = useDispatch();
 
-  const authStepStop = () => { // TODO: `FIX THIS METHOD AND LOGIC`
-    dispatch(setStepCancel());
+  const authStepStop = () => {
     dispatch(closePopup());
     dispatch(authClose());
   };

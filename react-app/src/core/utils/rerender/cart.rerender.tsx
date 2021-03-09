@@ -1,21 +1,19 @@
 import React from 'react';
-import { meals, restaurant } from '../../types';
+import { Meal, restaurant } from '../../types';
 import { CartItem } from '../../../modules/cart/components/cartItem';
 import { RestaurantMealBlock } from '../../../modules/cart/components/restaurantMealBlock';
 
 export const rerender = {
   mealsBlock(
     cartRestaurants: restaurant[],
-    cart: meals[],
-    setBlockSum: (restaurant: string, sum: number) => void,
-    deleteOneItem: (meal: meals) => void,
-    deleteMealFromCart: (meal: meals) => void,
-    addMeal: (meal: meals) => void) {
+    cart: Meal[],
+    deleteOneItem: (meal: Meal) => void,
+    deleteMealFromCart: (meal: Meal) => void,
+    addMeal: (meal: Meal) => void) {
     if (cartRestaurants.length !== 0) return cartRestaurants.map(restaurant => {
       const restaurantBlock = cart.filter(meal => meal.restaurant === restaurant._id);
       return (
         <RestaurantMealBlock
-          setBlockSum={setBlockSum}
           restaurant={restaurant}
           restaurantBlock={ restaurantBlock }
           onDeleteOneItem={ deleteOneItem }
@@ -26,10 +24,10 @@ export const rerender = {
     })
   },
   cartItem(
-    restaurantBlock: meals[],
-    onDeleteOneItem: (meal: meals) => void,
-    onDeleteMeal: (meal: meals) => void,
-    onAddMeal: (meal: meals) => void) {
+    restaurantBlock: Meal[],
+    onDeleteOneItem: (meal: Meal) => void,
+    onDeleteMeal: (meal: Meal) => void,
+    onAddMeal: (meal: Meal) => void) {
     if (restaurantBlock.length !== 0) {
       return restaurantBlock.map(meal => (
         <CartItem

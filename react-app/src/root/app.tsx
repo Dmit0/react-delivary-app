@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { RootLayOut } from '../core/components/lay-outs/root-lay-out/root.layOut';
+import { Core } from '../core/enums/core.enum';
+import { rootTokenValidate, validateToken } from '../core/redux/auth/actions';
+import { getIsTokenValidate } from '../core/redux/auth/selectors';
+import { set_cart_length } from '../core/redux/cart/actions';
 import { get_countries } from '../core/redux/countries/actions';
-import { getToken } from '../core/redux/user/selectors';
-import { meals } from '../core/types';
+import Router from '../core/router/Router';
+import { routes } from '../core/router/routes-config';
+import { getLocaleStorageItem } from '../core/utils/locale-storage.utils';
 import { Sorts } from '../core/utils/sorts';
-import { useRoutes } from '../core/router/routes';
-import { useAppUtils } from './root.utils';
+import { BrowserRouter } from 'react-router-dom';
 
 export const App = () => {
   const dispatch = useDispatch()
-  const [isValidateTokenEnd, setIsValidateTokenEnd] = useState<boolean>(false)
-  const token = useSelector(getToken);
-  const routes = useRoutes(token)
-  const { validateToken, setCartLength } = useAppUtils()
+  const isTokenValidated = useSelector(getIsTokenValidate);
 
   //token && refreshToken logic
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem('token') || '""');
-    token && validateToken(token).then(() => setIsValidateTokenEnd(true));
+    const token = getLocaleStorageItem(Core.Token);
+    token && dispatch(validateToken())
     dispatch(get_countries());
     if (!token) {
-      const cart = JSON.parse(localStorage.getItem('cart') || '[]') as meals[];
-      setCartLength(Sorts.getMealCount(cart));
-      setIsValidateTokenEnd(true)
+      const cart = getLocaleStorageItem(Core.Cart, '[]');
+      dispatch(set_cart_length(Sorts.getMealCount(cart)));
+      dispatch(rootTokenValidate())
     }
   }, []);
 
   return (
-    <Router>
-      {isValidateTokenEnd &&
+    <BrowserRouter>
+      { isTokenValidated &&
       <RootLayOut>
-        { routes }
-      </RootLayOut>}
-    </Router>
-  )
+        <Router routes={ routes }/>
+      </RootLayOut> }
+    </BrowserRouter>
+  );
 }

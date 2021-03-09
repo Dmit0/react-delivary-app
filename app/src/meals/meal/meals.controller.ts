@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req } from '@nestjs/common';
 import { MealService } from './meals.service';
 
 @Controller('meal')
@@ -7,8 +7,8 @@ export class MealController {
   constructor(private mealService: MealService) {
   }
 
-  @Get('getMeals/:id')
-  getMeals(@Param('id') id: string) {
+  @Get('getMeals')
+  getMeals(@Query('id') id: string) {
     return this.mealService.getMealsByRestaurantId(id);
   }
 }

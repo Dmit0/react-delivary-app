@@ -1,8 +1,8 @@
 import { RootState } from '../../../rootReducer';
-import { userPageState } from '../../types';
+import { AddressBlockState } from '../../types';
 
-const getUserPageState = (state: RootState): userPageState => state.userPage;
+const getUserAddressBlockState = (state: RootState): AddressBlockState => state.userPage.addressBlock;
 
-export const getCurrentPage = (state: RootState) => getUserPageState(state).currentAddressPage;
-export const getAddressesTotal = (state: RootState) => getUserPageState(state).total;
-export const getCurrentPageAddresses = (state: RootState) => getUserPageState(state).addresses;
+export const getCurrentPage = (state: RootState) => getUserAddressBlockState(state).currentAddressPage;
+export const getAddressesTotal = (state: RootState) => getUserAddressBlockState(state).total;
+export const getCurrentPageAddresses = (state: RootState) => getUserAddressBlockState(state).addresses;

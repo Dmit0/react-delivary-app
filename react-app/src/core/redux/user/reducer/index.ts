@@ -1,7 +1,7 @@
-import { INITIAL_STATE, SET_AUTH_USER, SET_TOKEN, SET_USER, UserActionTypes, userState } from '../actions';
+import { INITIAL_STATE, SET_AUTH_USER, SET_IS_USER_LOG_IN, SET_USER, UserActionTypes, userState } from '../actions';
 
 const initialState: userState = {
-  token: null,
+  isLogIn: false,
   user: {
     userId: null,
     userName: null,
@@ -17,8 +17,8 @@ const initialState: userState = {
 export const userReducer = (state = initialState, action: UserActionTypes): userState => {
 
   switch (action.type) {
-    case SET_TOKEN:
-      return { ...state, token: action.token };
+    case SET_IS_USER_LOG_IN:
+      return { ...state, isLogIn: action.isLogIn };
     case SET_USER:
       return {
         ...state,
@@ -43,7 +43,7 @@ export const userReducer = (state = initialState, action: UserActionTypes): user
           email: action.data.user.email,
           firstAddress: action.data.user.firstAddress || null
         },
-        token: action.data.token
+        isLogIn: true
       }
     case INITIAL_STATE:
       return initialState

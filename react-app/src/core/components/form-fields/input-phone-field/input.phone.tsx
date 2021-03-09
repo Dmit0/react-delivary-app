@@ -17,8 +17,6 @@ interface InputFieldProps {
   isDisabled?: boolean,
   placeHolder?: string,
   currentSelectValue: CurrentSelectType | null,
-  isPhoneExist: boolean,
-  currentValue: string,
   defaultInputValue?: string
   changeSelectHandler?(e: any): void,
   changeInputHandler?(e: any): void,
@@ -39,16 +37,13 @@ export const PhoneField = (
     currentSelectValue,
     changeSelectHandler,
     changeInputHandler,
-    isPhoneExist,
     defaultInputValue,
-    currentValue
   }: InputFieldProps) => {
     return (
       <div className="input_form_field">
         <div className="input__form_labels">
           <span className='input_label'>{ label }</span>
           { errors?.message && <span className='input_label'>{ errors.message }</span> }
-          { isPhoneExist && currentValue && !errors?.message && <span className='input_label'>Phone exist</span> }
         </div>
         <div className='phoneField'>
           <Select
