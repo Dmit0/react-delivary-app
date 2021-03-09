@@ -9,7 +9,7 @@ export const getRequiredValidation = (): ValidationRules => {
   };
 };
 
-export const getEmailValidation = (): ValidationRules => {
+export const getEmailValidation = (isNeedEmailToBeExist = false): ValidationRules => {
   return {
     required: { value: true, message: ErrorMessages.REQUIRED },
     pattern: { value: Patterns.mail, message: ErrorMessages.MAIL_PATTERN },
@@ -17,7 +17,7 @@ export const getEmailValidation = (): ValidationRules => {
       if (!value) return ErrorMessages.REQUIRED;
       if (!value.match(Patterns.mail)) return ErrorMessages.MAIL_PATTERN;
       const isMailExist = await AuthenticationApi.verifyMail(value);
-      if (isMailExist) return ErrorMessages.MAIL_EXIST;
+      if (isMailExist && !isNeedEmailToBeExist) return ErrorMessages.MAIL_EXIST;
       return true
     }
   };

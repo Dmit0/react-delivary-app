@@ -64,7 +64,7 @@ export const LogIn: React.FC = () => {
                 name='email'
                 label='Email Address'
                 isDisabled={isEmailVerified}
-                rules={getEmailValidation()}
+                rules={getEmailValidation(true)}
                 errors={errors.email}
                 register={register}
               />
