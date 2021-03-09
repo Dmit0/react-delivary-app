@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeftIcon } from '../../../../../core/components/icons/arrowLeft.icon';
+import { ArrowLeftIcon } from '../../../../../core/components/icons';
 import { Links } from '../../../../../core/enums';
 import './left-side-bar.css'
 

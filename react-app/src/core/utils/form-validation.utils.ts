@@ -1,4 +1,5 @@
 import { ValidationRules } from 'react-hook-form';
+import { AuthenticationApi } from '../api/apis/authentication.api';
 import { ErrorMessages } from '../enums';
 import { Patterns } from './patterns';
 
@@ -8,10 +9,17 @@ export const getRequiredValidation = (): ValidationRules => {
   };
 };
 
-export const getEmailValidation = (): ValidationRules => {
+export const getEmailValidation = (isNeedEmailToBeExist = false): ValidationRules => {
   return {
     required: { value: true, message: ErrorMessages.REQUIRED },
     pattern: { value: Patterns.mail, message: ErrorMessages.MAIL_PATTERN },
+    validate: async (value: string) => {
+      if (!value) return ErrorMessages.REQUIRED;
+      if (!value.match(Patterns.mail)) return ErrorMessages.MAIL_PATTERN;
+      const isMailExist = await AuthenticationApi.verifyMail(value);
+      if (isMailExist && !isNeedEmailToBeExist) return ErrorMessages.MAIL_EXIST;
+      return true
+    }
   };
 };
 
@@ -24,11 +32,20 @@ export const getPasswordValidation = (minLength: number, maxLength: number): Val
   };
 }
 
-export const getPhoneValidation = (minLength: number, maxLength: number): ValidationRules => {
+export const getPhoneValidation = (minLength: number, maxLength: number, currentPhonePrefix = '375'): ValidationRules => {
   return {
     required: { value: true, message: ErrorMessages.REQUIRED },
     minLength: { value: minLength, message: ErrorMessages.PHONE_PATTERN },
     maxLength: { value: maxLength, message: ErrorMessages.PHONE_PATTERN },
-    pattern: {value: Patterns.phone, message: ErrorMessages.PHONE_PATTERN}
+    pattern: {value: Patterns.phone, message: ErrorMessages.PHONE_PATTERN},
+    validate: async (value: string) => {
+      const isPhoneExist = await AuthenticationApi.verifyPhone({
+        code: currentPhonePrefix,
+        number: value,
+      });
+      return isPhoneExist
+        ? ErrorMessages.PHONE_EXIST
+        : true;
+    },
   };
 }

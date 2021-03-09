@@ -1,116 +1,88 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { ToolBarSearchTypes } from '../../core/enums';
+import { Core } from '../../core/enums/core.enum';
+import { getIsLogIn } from '../../core/redux/user/selectors';
+import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
 import { Banners } from '../banner/banners';
 import { getBanners } from '../../core/redux/app/selectors';
 import { getLovedRestaurants } from '../../core/redux/loveRestaurants/selectors';
 import {
+  loveHandler,
   set_current_restaurant,
   set_filtered_restaurants,
+  setCurrentHomePageFilter,
 } from '../../core/redux/restaurant/actions';
 import {
-  add_restaurant_to_loved,
-  remove_restaurant_from_loved,
-  set_loved_restaurant,
-} from '../../core/redux/loveRestaurants/actions';
-import { getCuisines, getFilteredRestaurants, getRestaurants } from '../../core/redux/restaurant/selectors';
+  getCuisines,
+  getCurrentFilterType,
+  getReRenderedFilterRestaurants,
+  getRestaurants,
+} from '../../core/redux/restaurant/selectors';
 import '../../core/css/content.css';
 import '../../core/css/styles.css';
-import { getToken } from '../../core/redux/user/selectors';
 import { restaurant } from '../../core/types';
 import { ToolBar } from '../tool-bar/toolBar';
 import { rerender } from '../../core/utils/rerender/home.rerender';
-import { useHomeUtils } from './utils/home.utils';
 
 const HomePage: React.FC = () => {
 
   const dispatch = useDispatch();
 
   const fetchedRestaurants = useSelector(getRestaurants);
-  const filteredRestaurants = useSelector(getFilteredRestaurants);
+  const getRerenderFilteredRestaurant = useSelector(getReRenderedFilterRestaurants);
   const loveRestaurants = useSelector(getLovedRestaurants);
   const banners = useSelector(getBanners);
   const cuisineTypes = useSelector(getCuisines);
-  const token = useSelector(getToken);
-
-  const { getRestaurant, userLoveAction } = useHomeUtils();
-
-  const [ currentSortType, setCurrentSortType ] = useState<string>('All');
-  const [ currentCuisine, setCurrentCuisine ] = useState<string>('');
+  const isLogIn = useSelector(getIsLogIn);
+  const currentFilter = useSelector(getCurrentFilterType);
 
   useEffect(() => {
-    if (loveRestaurants.length > 0 && !token) {
-      localStorage.setItem('loved', JSON.stringify(loveRestaurants));
+    if (loveRestaurants.length > 0 && !isLogIn) {
+      setLocaleStorageItem(Core.Loved, loveRestaurants)
     }
-  }, [ loveRestaurants, token ]);
+  }, [ loveRestaurants, isLogIn ]);
 
-  useEffect(() => {
-    getRestaurant(token).then((response) => {
-      response && dispatch(set_loved_restaurant(response));
-    });
-  }, [ token ]);
-
-  const sortTypeHandler = useCallback((type: string) => {
-    setCurrentSortType(type)
-    switch(type) {
-      case ToolBarSearchTypes.OPENED:
-      case ToolBarSearchTypes.ALL:
-        !currentCuisine && setCurrentCuisine('')
-        dispatch(set_filtered_restaurants(fetchedRestaurants, type));break;
-      case ToolBarSearchTypes.LOVED:
-        !currentCuisine && setCurrentCuisine('')
-        dispatch(set_filtered_restaurants(fetchedRestaurants, type, loveRestaurants));break;
-      default:
-        let cuisine = cuisineTypes.find(item => item.name === type);
-        cuisine && dispatch(set_filtered_restaurants(fetchedRestaurants, cuisine)) && setCurrentCuisine(type);
+  const sortTypeHandler = useCallback((type: any) => {
+    dispatch(setCurrentHomePageFilter(type));
+    if (Object.values(ToolBarSearchTypes).includes(type)) {
+      dispatch(set_filtered_restaurants(fetchedRestaurants, type, loveRestaurants))
+    } else {
+      let cuisine = cuisineTypes.find(item => item.name === type);
+      cuisine && dispatch(set_filtered_restaurants(fetchedRestaurants, cuisine))
     }
-  }, [ cuisineTypes, dispatch, fetchedRestaurants, loveRestaurants ]);
+  }, [cuisineTypes, dispatch, fetchedRestaurants, loveRestaurants]);
 
   const restaurantHandler = useCallback((restaurant: restaurant) => {
     dispatch(set_current_restaurant(restaurant));
   }, [ dispatch ]);
 
-  const loveHandler = useCallback((restaurant: restaurant, value: boolean) => {
-    token
-      ? userLoveAction(restaurant._id, value, token)
-      : value
-        ? dispatch(add_restaurant_to_loved(restaurant._id))
-        : dispatch(remove_restaurant_from_loved(restaurant._id));
-  }, [ dispatch, token, userLoveAction ]);
-
-  const check = useCallback((id: string) => {
-    if (loveRestaurants.length) {
-      let checked = loveRestaurants.find((item) => {
-        return item === id;
-      });
-      return !!checked;
-    } else {
-      return false;
-    }
-  }, [ loveRestaurants ]);
+  const loveHandlerAction = useCallback((restaurant: restaurant, value: boolean) => {
+    dispatch(loveHandler(isLogIn, restaurant, value))
+  }, [ dispatch, isLogIn ]);
 
   return (
-    <>
-      <Banners banners={ banners }/>
-      <div className="App_content_part">
-        <ToolBar
-          filterType={ currentSortType }
-          onSetSortType={ sortTypeHandler }
-          cuisineTypes={ cuisineTypes }
-          currentCuisine={ currentCuisine }
-          fetched_restaurants={ fetchedRestaurants }
-        />
-        <div className="App_content_part_main">
-          <div className="App__content-main">
-            { rerender.restaurant(
-              filteredRestaurants,
-              restaurantHandler,
-              loveHandler,
-              check) }
+    <div className="App">
+      <div className="App__content">
+        <Banners banners={ banners }/>
+        <div className="App_content_part">
+          <ToolBar
+            onSetSortType={sortTypeHandler}
+            cuisineTypes={cuisineTypes}
+            filter={currentFilter}
+          />
+          <div className="App_content_part_main">
+            <div className="App__content-main">
+              { rerender.restaurant(
+                getRerenderFilteredRestaurant,
+                restaurantHandler,
+                loveHandlerAction
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,23 +1,10 @@
 export const RESTAURANT_ADD_TO_LOVED = 'ADD_RESTAURANT_TO_LOVED';
 export const RESTAURANT_REMOVE_FROM_LOVED = 'REMOVE_RESTAURANT_TO_LOVED';
 export const SET_LOVED_RESTAURANT_FROM_LOCALESTORAGE = 'SET_LOVED_RESTAURANT_FROM_LOCALESTORAGE';
-// export const MEAL_ADD_TO_LOVED='ADD_RESTAURANT_TO_LOVED'
-// export const MEAL_REMOVE_FROM_LOVED='REMOVE_RESTAURANT_TO_LOVED'
 
 export interface LovedState {
   loved_restaurants: string[],
-  // loved_meals:meals[]
 }
-
-// interface add_meal_to_loved{
-//     type:typeof MEAL_ADD_TO_LOVED,
-//     add_loved_meal:meals
-// }
-
-// interface remove_meal_from_loved{
-//     type:typeof MEAL_REMOVE_FROM_LOVED,
-//     remove_loved_meal:meals
-// }
 
 interface add_restaurant_to_loved {
   type: typeof RESTAURANT_ADD_TO_LOVED,

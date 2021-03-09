@@ -2,13 +2,15 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { toast } from 'react-toastify';
 import { ThunkAction } from 'redux-thunk';
 import { errorEnum } from '../../../enums';
+import { Core } from '../../../enums/core.enum';
 import { addressDataStep, loginData, userForCreateAccount } from '../../../types';
+import { setLocaleStorageItem } from '../../../utils/locale-storage.utils';
 import { set_cart_length } from '../../cart/actions';
 import { closePopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { Action } from 'redux';
 import { AuthenticationApi } from '../../../api/apis/authentication.api';
-import { setAuthUser } from '../../user/actions';
+import { getUser, setAuthUser, setIsUserLogInToken } from '../../user/actions';
 import {
   AUTH_CLOSE,
   AUTH_FAIL, AUTH_LAST_STEP_CLOSE,
@@ -17,7 +19,7 @@ import {
   AUTH_STEP_CONTINUE,
   AUTH_STEP_START,
   AUTH_STEP_SUCCESS,
-  AuthenticationActionTypes,
+  AuthenticationActionTypes, ROOT_TOKEN_VALIDATE,
 } from '../actions';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
@@ -34,21 +36,43 @@ export const create_account = (user: userForCreateAccount): ThunkType => {
         dispatch(setAuthFailed());
         toast.warn('auth error')
       }
-      dispatch(hideLoading());
     } catch (e) {
       console.log(e);
-      dispatch(hideLoading());
       dispatch(setAuthFailed());
       toast.warn('auth error')
+    } finally {
+      dispatch(hideLoading());
     }
   };
 };
 
-export const updateAddress = (address: addressDataStep, token: string): ThunkType => {
+export const validateToken = (): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      let response = await AuthenticationApi.addAddressStep(token, address);
+      const validateToken = await AuthenticationApi.validateToken()
+      if (validateToken) {
+        dispatch(setIsUserLogInToken(true));
+        setLocaleStorageItem(Core.Token, validateToken)
+        setLocaleStorageItem(Core.RefreshTokenError, false)
+        await dispatch(getUser())
+      } else dispatch(setIsUserLogInToken(false));
+    } catch (e) {
+      console.log(e);
+      dispatch(setAuthFailed());
+      toast.warn('auth error')
+    } finally {
+      dispatch(hideLoading());
+      dispatch(rootTokenValidate())
+    }
+  };
+};
+
+export const updateAddress = (address: addressDataStep): ThunkType => {
+  return async dispatch => {
+    dispatch(showLoading());
+    try {
+      let response = await AuthenticationApi.addAddressStep(address);
       if (response) {
         dispatch(closePopup());
       } else {
@@ -78,14 +102,14 @@ export const verifyMail = (mail: string): ThunkType => {
         dispatch(setAuthErrors(message));
         dispatch(setAuthFailed());
       }
-      dispatch(hideLoading());
     } catch (e) {
       console.log(e);
-      dispatch(hideLoading());
       const message = errorEnum.ERROR_DUE_VERIFY_EMAIL;
       toast.warn(message)
-      dispatch(setAuthErrors(message)); //TO DO REMOVE LOGIC OF ERROR INTO ANOTHER METHOD
-      dispatch(setAuthFailed());//TO DO REMOVE LOGIC OF FAIL AUTH INTO ANOTHER METHOD
+      dispatch(setAuthErrors(message));
+      dispatch(setAuthFailed());
+    } finally {
+      dispatch(hideLoading());
     }
   };
 };
@@ -96,6 +120,7 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
     try {
       let response = await AuthenticationApi.logIn(data);
       if (response) {
+        setLocaleStorageItem(Core.RefreshTokenError, false)
         toast.success('auth success')
         dispatch(setAuthStepSuccess(!!response));
         dispatch(setAuthUser(response.token, {
@@ -109,17 +134,23 @@ export const logIn = (data: loginData, isLogIn = false): ThunkType => {
         isLogIn && dispatch(closePopup())
       } else {
         toast.warn('auth fail')
-        dispatch(hideLoading());
         dispatch(setAuthFailed());
       }
     } catch (e) {
       console.log(e);
       toast.warn('auth fail')
-      dispatch(hideLoading());
       dispatch(setAuthFailed());
+    } finally {
+      dispatch(hideLoading());
     }
   };
 };
+
+export const rootTokenValidate = () => {
+  return {
+    type: ROOT_TOKEN_VALIDATE
+  }
+}
 
 export const setAuthErrors = (message: string | null): AuthenticationActionTypes => {
   return {

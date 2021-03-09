@@ -1,4 +1,8 @@
-export enum Code {
-  Unauthorized = '401',
-  Forbidden = '403'
+export enum code {
+  'Unauthorized' = '401'
+}
+
+export enum ErrorsCode {
+  Unauthorized = 401,
+  Forbidden = 403
 }

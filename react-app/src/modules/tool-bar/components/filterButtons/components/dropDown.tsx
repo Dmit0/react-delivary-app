@@ -1,25 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
+import { ToolBarSearchTypes } from '../../../../../core/enums';
 import { cuisine } from '../../../../../core/types';
 
 interface DropCuisineProps {
   cuisineTypes: cuisine[]
-  currentCuisine: string
-  Type: string
+  filter: any
   onSetType(name: string): void
 }
 
-export const DropCuisine:React.FC<DropCuisineProps> = ({ currentCuisine, Type, cuisineTypes, onSetType }) => {
+export const DropCuisine:React.FC<DropCuisineProps> = ({ cuisineTypes, onSetType, filter }) => {
+
+  const isCuisineFilter = useMemo(() => {
+    return !Object.values(ToolBarSearchTypes).includes(filter)
+  }, [filter])
+
   return (
     <div className="dropdown navbar-brand-menu-switcher">
       <button
-        className={ currentCuisine === '' ? `btn btn-secondary dropdown-toggle navbar-brand-menu-switcher-button` : `btn btn-secondary dropdown-toggle active-button` }
+        className={ !isCuisineFilter ? `btn btn-secondary dropdown-toggle navbar-brand-menu-switcher-button` : `btn btn-secondary dropdown-toggle active-button` }
         type="button"
         id="dropdownMenuButton"
         data-toggle="dropdown"
         aria-expanded="false">
-        { Type === 'All' || Type === 'Loved' || Type === 'Opened' || Type === 'Switch'
-          ? 'more Filters'
-          : currentCuisine
+        { isCuisineFilter
+          ? filter
+          : 'more Filters'
         }
       </button>
       <ul className="dropdown-menu dropdown-menu-items" aria-labelledby="dropdownMenuButton">

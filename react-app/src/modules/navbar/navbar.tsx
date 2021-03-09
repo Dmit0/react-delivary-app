@@ -15,22 +15,20 @@ export const NavBar = () => {
   },[dispatch]);
 
   return (
-    <>
-      <div className="App__header ">
-        <div className="App_header__main">
-          <nav className="navbar navbar-light">
-            <div className="container-fluid App_header__main-container ">
-              <Link to={Links.HOME}>
+    <div className="App__header ">
+      <div className="App_header__main">
+        <nav className="navbar navbar-light">
+          <div className="container-fluid App_header__main-container ">
+            <Link to={ Links.HOME }>
                 <span className="navbar-brand  App_header__main-Header">
-                  <DeliveryIcon height={'30'} width={'30'}/>
+                  <DeliveryIcon height='30' width='30'/>
                 </span>
-              </Link>
-              <span className="Partnership">Partnership</span>
-              <NavBarButtons handleAuthOpen={handleAuthOpen}/>
-            </div>
-          </nav>
-        </div>
+            </Link>
+            <span className="Partnership">Partnership</span>
+            <NavBarButtons handleAuthOpen={ handleAuthOpen }/>
+          </div>
+        </nav>
       </div>
-    </>
+    </div>
   );
 };

@@ -1,38 +1,21 @@
 import { IUpdateUser } from '../../types';
-import { http } from '../api';
-import { FetchUtils } from '../../utils/fetchUtils';
+import { axiosHttp } from '../api';
 
 export const UserApi = {
 
-  async getUser(token: string): Promise<any> {
-    try {
-      return await http<{ phone: any, addresses: any, user: any, role: any }>('/user/getUser', 'GET', null, {
-        Authorization: `Bearer ${ token }`,
-      });
-    } catch (e) {
-      return false
-    }
+  async getUser(): Promise<any> {
+    return await axiosHttp<{ phone: any, addresses: any, user: any, role: any }>('/user/getUser');
   },
 
-  async loveRestaurantAction(token: string, data: { restaurantId: string, action: boolean }): Promise<any> {
-    try {
-      return await http<{ status: boolean }>('/user/setLovedAction', 'POST', JSON.stringify(data), {
-        Authorization: `Bearer ${ token }`,
-        'Content-Type': 'application/json;charset=utf-8',
-      });
-    } catch (e) {
-      return await FetchUtils.catchFetchErrors(e, token, this.loveRestaurantAction, data)
-    }
+  async loveRestaurantAction(data: { restaurantId: string, action: boolean }): Promise<any> {
+    return await axiosHttp<{ status: boolean }>('/user/setLovedAction', 'POST', JSON.stringify(data), {
+      'Content-Type': 'application/json;charset=utf-8',
+    });
   },
 
-  async updateUser(token: string, updateUser: IUpdateUser): Promise<any> {
-    try {
-      return await http<{ status: boolean }>('/user/updateUser', "POST", JSON.stringify(updateUser), {
-        Authorization: `Bearer ${ token }`,
-        'Content-Type': 'application/json;charset=utf-8',
-      })
-    }catch(e) {
-      return await FetchUtils.catchFetchErrors(e, token, this.updateUser, updateUser)
-    }
+  async updateUser(updateUser: IUpdateUser): Promise<any> {
+    return await axiosHttp<{ status: boolean }>('/user/updateUser', 'POST', JSON.stringify(updateUser), {
+      'Content-Type': 'application/json;charset=utf-8',
+    });
   },
 };
