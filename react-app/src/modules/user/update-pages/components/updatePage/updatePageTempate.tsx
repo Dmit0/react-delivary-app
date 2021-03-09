@@ -13,7 +13,7 @@ export const UpdatePage = ({header, Icon, children}: UpdatePageProps) => {
       <div className="update_page_form">
         <div className="update_page_form_title">
           <span className="update_title_text">{header}</span>
-          { Icon }
+          {Icon}
         </div>
         <div className="update_title_body">
           {children}

@@ -9,7 +9,7 @@ export const restaurantAPI = {
     return await axiosHttp<CuisineResponseType>('cuisine/getCuisines');
   },
   async getRestaurants(ids: string[]) {
-      return await axiosHttp<restaurant[]>('restaurants/findByIds', 'POST',JSON.stringify({ data: ids }), {
+      return await axiosHttp<restaurant[]>('restaurants/findByIds', 'POST', JSON.stringify({ data: ids }), {
         'Content-Type': 'application/json;charset=utf-8',
       })
   }

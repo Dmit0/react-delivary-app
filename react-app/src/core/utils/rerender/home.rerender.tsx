@@ -7,15 +7,15 @@ export const rerender = {
   restaurant(
     restaurants: restaurant[],
     restaurantHandler: (restaurant: restaurant) => void,
-    loveHandler: (restaurant: restaurant, value: boolean) => void,
-    check: (value: string) => boolean ) {
+    loveHandlerAction: (restaurant: restaurant, value: boolean) => void
+  ) {
     if (restaurants.length !== 0) return restaurants.map(item => (
       <Restaurant
         key={ item._id }
         restaurant={ item }
         onRestaurantClick={ restaurantHandler }
-        toggleLoved={ loveHandler }
-        checked={ check(item._id) }
+        toggleLoved={ loveHandlerAction }
+        checked={item.favorite ?? false}
       />
     ))
   }

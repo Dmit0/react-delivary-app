@@ -1,12 +1,12 @@
 import React from 'react';
 import { DeleteIcon, MinusIcon, PlusIcon } from '../../../core/components/icons';
-import { meals } from '../../../core/types';
+import { Meal } from '../../../core/types';
 
 interface CartProps {
-  meal: meals
-  onDeleteOneItem(meal: meals): void
-  onDeleteMeal(meal: meals): void
-  onAddMeal(meal: meals): void
+  meal: Meal
+  onDeleteOneItem(meal: Meal): void
+  onDeleteMeal(meal: Meal): void
+  onAddMeal(meal: Meal): void
 }
 
 export const CartItem: React.FC<CartProps> = ({ meal, onDeleteOneItem, onDeleteMeal, onAddMeal }) => {

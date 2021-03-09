@@ -1,38 +1,42 @@
 import React from 'react';
-import { cuisine, restaurant } from '../../../../core/types';
+import { ToolBarSearchTypes } from '../../../../core/enums';
+import { cuisine } from '../../../../core/types';
 import { DropCuisine } from './components/dropDown';
 import { ToolBarItem } from './components/toolBarItem';
 
 interface CategoriesProps {
   main_categories: string[]
-  Type: string
   cuisineTypes: cuisine[]
-  currentCuisine: string
+  filter: string
   onSetType(name: string): void
-  fetched_restaurants: restaurant[]
 }
 
-export const FilterButtons: React.FC<CategoriesProps> = ({ main_categories, Type, currentCuisine, cuisineTypes, onSetType, fetched_restaurants }) => {
+export const FilterButtons: React.FC<CategoriesProps> =
+  ({
+     main_categories,
+     cuisineTypes,
+     onSetType,
+     filter,
+  }) => {
   return (
     <div className="App_header__secondary-action">
       <span
-        className={ Type === 'All' ? 'navbar-brand-menu navbar-brand-menu-active' : 'navbar-brand-menu' }
-        onClick={ () => onSetType('All') }>
+        className={ filter === ToolBarSearchTypes.ALL ? 'navbar-brand-menu navbar-brand-menu-active' : 'navbar-brand-menu' }
+        onClick={ () => onSetType(ToolBarSearchTypes.ALL) }>
         All
       </span>
       { main_categories.map(category =>
         <ToolBarItem
           key={category}
-          onSetType={ onSetType }
-          category={ category }
-          Type={ Type }
+          filter={filter}
+          onSetType={onSetType}
+          category={category}
         />,
       ) }
       <DropCuisine
-        Type={ Type }
-        currentCuisine={ currentCuisine }
-        onSetType={ onSetType }
-        cuisineTypes={ cuisineTypes }
+        filter={filter}
+        onSetType={onSetType}
+        cuisineTypes={cuisineTypes}
       />
     </div>
   );

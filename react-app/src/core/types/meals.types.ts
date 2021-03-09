@@ -1,8 +1,8 @@
 export type MealsResponseType = {
-  meals: meals[]
+  meals: Meal[]
 }
 
-export interface meals {
+export interface Meal {
   picture: string,
   name: string,
   price: number,

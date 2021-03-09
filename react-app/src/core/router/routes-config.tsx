@@ -57,7 +57,7 @@ export const routes: IRouterConfig[] = [
   },
 ];
 
-export const useRoutes = (token: string | null) => {
+export const useRoutes = (token: boolean) => {
   return <Switch>
     <Route path={ Links.HOME } exact>
       <Home/>

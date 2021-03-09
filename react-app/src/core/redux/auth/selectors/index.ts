@@ -5,3 +5,4 @@ const getAuthState = (state: RootState): AuthenticationState => state.authentica
 
 export const getIsStepSuccess = (state: RootState) => getAuthState(state).isStepSuccess;
 export const getIsStepContinue = (state: RootState) => getAuthState(state).isStepContinue;
+export const getIsTokenValidate = (state: RootState) => getAuthState(state).rootTokeValidate;

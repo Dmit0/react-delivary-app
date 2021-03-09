@@ -42,7 +42,7 @@ export const DropMenu: React.FC<DropMenu> = () => {
     }
   }, []);
 
-  const logOut = () => {
+  const logOut = useCallback(() => {
     dispatch(cleanUserData());
     removeLocaleStorageItem(Core.Token);
     const cart = getLocaleStorageItem(Core.Cart, '[]');
@@ -50,14 +50,13 @@ export const DropMenu: React.FC<DropMenu> = () => {
     const lovedRestaurants = getLocaleStorageItem(Core.Loved, '[]');
     dispatch(set_loved_restaurant(lovedRestaurants));
     dispatch(authClose())
-  };
+  }, [dispatch]);
 
   const menuItems = useMemo(() => {
-    const menuItems = [
+    return [
       createMenuItem('Home Page', DropMenuType.USER_PAGE_LINK),
       createMenuItem('Log Out', DropMenuType.LOG_OUT, logOut),
     ];
-    return menuItems;
   }, [createMenuItem, logOut]);
 
   return (

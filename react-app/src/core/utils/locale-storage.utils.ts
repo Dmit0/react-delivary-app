@@ -1,7 +1,10 @@
-export const getLocaleStorageItem = (key: string, defaultReturnValue = '') => {
+export const getLocaleStorageItem = (key: string, defaultReturnValue = "") => {
   try {
     return JSON.parse(localStorage.getItem(key) || `${defaultReturnValue}`);
   } catch (e) {
+    if (!defaultReturnValue) {
+      return null
+    }
     console.log(e);
   }
 }
