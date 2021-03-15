@@ -4,13 +4,22 @@ import { Action as reduxAction } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 import { cartApi } from '../../../api/apis/cart.api';
 import { OrderAPI } from '../../../api/apis/order.api';
-import { IHoleAddress, Meal } from '../../../types';
+import { YandexGeocoder } from '../../../api/apis/yaGeocoder';
+import { IHoleAddress, IPrepareAddressForApi } from '../../../types';
+import { YandexGeocodeResultType } from '../../../types/yandex.types';
 import { getLocaleStorageItem } from '../../../utils/locale-storage.utils';
-import { set_meal_from_localestorage_to_cart, set_meal_to_cart } from '../../cart/actions';
+import { set_meal_from_localestorage_to_cart } from '../../cart/actions';
 import { openPopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { setIsNeedToRedirect } from '../../user-page/page-module/actions/user-page.actions';
-import { OrderActionTypes, SET_CURRENT_ORDER_TIME, SET_ORDER_ADDRESS, SET_ORDER_PERMISSION, START_TO_GET_PERMISSION } from './order.types';
+import {
+  OrderActionTypes, SET_CREATE_ORDER_ADDRESS,
+  SET_CURRENT_ORDER_TIME, SET_GEOCODER_RESPONSE,
+  SET_ORDER_ADDRESS,
+  SET_ORDER_ADDRESS_LOCATION,
+  SET_ORDER_PERMISSION,
+  START_TO_GET_PERMISSION,
+} from './order.types';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, reduxAction<string>>
 
@@ -19,10 +28,25 @@ export const sendOrderRequest = (popup: ReactNode): ThunkType => {
     dispatch(showLoading());
     try {
       const orderPermissionResponse = await OrderAPI.checkOrderPermission();
-      console.log(orderPermissionResponse)
       dispatch(setOrderPermission(!!orderPermissionResponse))
       dispatch(setIsNeedToRedirect(!!orderPermissionResponse))
       if (!orderPermissionResponse) dispatch(openPopup(popup))
+    } catch (e) {
+      console.log(e)
+    } finally {
+      dispatch(hideLoading());
+    }
+  };
+};
+
+export const getCoordinates = (address: string): ThunkType => {
+  return async dispatch => {
+    dispatch(showLoading());
+    try {
+      const searchResult = await YandexGeocoder.getAddressByStr(address);
+      dispatch(setGeocoderResponse(searchResult.response))
+      const currentPosition = searchResult?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(' ');
+      currentPosition && dispatch(setCurrentLocation({ lat: Number(currentPosition[0]), lng: Number(currentPosition[1]) }))
     } catch (e) {
       console.log(e)
     } finally {
@@ -40,7 +64,7 @@ export const setOrderCart = (isLogIn: boolean): ThunkType => {
           const orderPermission = await OrderAPI.checkOrderPermission();
           dispatch(setOrderPermission(orderPermission.permission))
           const useCart = await cartApi.getUserCart()
-          cart = useCart
+          cart = useCart.meals
       } else {
         cart = getLocaleStorageItem('Cart', '[]')
       }
@@ -78,5 +102,26 @@ export const setCurrentOrderTime = (time: any): OrderActionTypes => {
   return {
     type: SET_CURRENT_ORDER_TIME,
     time
+  }
+}
+
+export const setCurrentLocation = (currentAddressLocation: { lat: number, lng: number }): OrderActionTypes => {
+  return {
+    type: SET_ORDER_ADDRESS_LOCATION,
+    currentAddressLocation
+  }
+}
+
+export const createAddress = (address: IPrepareAddressForApi | null): OrderActionTypes => {
+  return {
+    type: SET_CREATE_ORDER_ADDRESS,
+    address
+  }
+}
+
+export const setGeocoderResponse = (address: YandexGeocodeResultType | null) => {
+  return {
+    type: SET_GEOCODER_RESPONSE,
+    response: address
   }
 }

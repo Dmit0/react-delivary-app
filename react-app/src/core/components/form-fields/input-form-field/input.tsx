@@ -16,6 +16,7 @@ interface InputFieldProps {
   subComponentErrors?: any,
   subComponentStyles?: string
   onChange?(event: any): void
+  onBlur?(event: any): void
 }
 
 export const InputField = (
@@ -32,7 +33,8 @@ export const InputField = (
     placeHolder,
     defaultValue,
     subComponentErrors,
-    subComponentStyles
+    subComponentStyles,
+    onBlur
   }: InputFieldProps) => {
   return (
     <div className={ subComponentStyles ? subComponentStyles : `input_form_field`}>
@@ -51,6 +53,7 @@ export const InputField = (
           placeholder={placeHolder}
           onChange={onChange && onChange}
           defaultValue={defaultValue}
+          onBlur={onBlur && onBlur}
         />
     </div>
   );

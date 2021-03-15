@@ -14,7 +14,7 @@ interface TimeSwitcherProps {
 export const TimeSwitcher: React.FC<TimeSwitcherProps> = () => {
   const dispatch = useDispatch();
   const currentOrderTime = useSelector(getCurrentOrderTime);
-  const [currentSwitchItem, setCurrentSwitchItem] = useState<number>();
+  const [currentSwitchItem, setCurrentSwitchItem] = useState<number>(0);
 
   const onCurrentTimeSelect = useCallback((selectedTime: CurrentTime) => {
     dispatch(setCurrentOrderTime(selectedTime))

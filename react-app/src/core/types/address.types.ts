@@ -27,6 +27,13 @@ export interface IHoleAddress {
   _id: string
 }
 
+export interface IPrepareAddressForApi {
+  country?: string
+  region?: string
+  street?: string
+  streetNumber?: string
+}
+
 export interface IUpdateAddress {
   addressId: string
   country: string;
