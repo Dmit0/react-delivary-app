@@ -1,3 +1,4 @@
+import { dbClickedAddress } from '../../../types';
 import { RootState } from '../../rootReducer';
 import { OrderState } from '../actions';
 
@@ -11,6 +12,21 @@ export const getCurrentOrderAddressLocation = (state: RootState) => getOrderStat
 export const getIsCreateStep = (state: RootState) => getOrderState(state).isCreateAddressStep;
 export const getCreatedAddress = (state: RootState) => getOrderState(state).createdOrderAddress;
 export const getGeocoderResult = (state: RootState) => getOrderState(state).geocoderResponse;
+export const getDbGeocoderClickResult = (state: RootState) => getOrderState(state).dbClickAddress;
+export const getIsAddressConfirm = (state: RootState) => getOrderState(state).isAddressConfirmed;
+
+
+export const getCurrentDbClick = (state: RootState): dbClickedAddress | null => {
+  const currentDbClickAddress = getDbGeocoderClickResult(state);
+  const addressData = currentDbClickAddress?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.Address
+  return currentDbClickAddress ? {
+    country: addressData?.Components && addressData?.Components.find(item => item.kind === 'country')?.name,
+    region: addressData?.Components && addressData?.Components.find(item => item.kind === 'province')?.name,
+    street: addressData?.Components && addressData?.Components.find(item => item.kind === 'street')?.name,
+    streetNumber: addressData?.Components && addressData?.Components.find(item => item.kind === 'house')?.name,
+    countryCode: addressData?.Components && addressData?.country_code,
+  } : null
+}
 
 const getCurrentOrderStringAddress = (state: RootState) => {
   const address = getOrderAddress(state);
@@ -25,22 +41,27 @@ const getCurrentOrderStringAddress = (state: RootState) => {
 export const getStringAddress = (state: RootState) => {
   const isCreatedStep = getIsCreateStep(state);
   const currentAddressForParse = isCreatedStep ? getCreatedAddress(state) : getCurrentOrderStringAddress(state);
-  return currentAddressForParse && Object.values(currentAddressForParse).join(' ') || 'Belarus'
+  return currentAddressForParse && Object.values(currentAddressForParse).join(' ') || ''
 }
 
 export const getZoomPosition = (state: RootState) => {
   const isCreatedStep = getIsCreateStep(state);
-  const currentAddress = isCreatedStep ? getCreatedAddress(state) : getOrderAddress(state);
+  const dbClickGeocoderClick = getCurrentDbClick(state)
+  const currentAddress = isCreatedStep
+    ? dbClickGeocoderClick
+      ? dbClickGeocoderClick
+      : getCreatedAddress(state)
+    : getOrderAddress(state);
   return currentAddress && Object.keys(currentAddress).reduce((acc, item) => {
-    if (item === 'country') {
-      return acc + 2;
-    } else if (item === 'region') {
-      return acc + 4;
+    if (item === 'region') {
+      return acc + 8;
     } else if (item === 'street') {
-      return acc + 6;
+      return acc + 4;
+    } else if (item === 'streetNumber') {
+      return acc + 2;
     }
     return acc
-  }, 2) || 3;
+  }, 4) || 4;
 }
 
 export const getIsChooseExactAddress = (state: RootState) => {

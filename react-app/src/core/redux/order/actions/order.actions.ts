@@ -5,7 +5,7 @@ import { ThunkAction } from 'redux-thunk';
 import { cartApi } from '../../../api/apis/cart.api';
 import { OrderAPI } from '../../../api/apis/order.api';
 import { YandexGeocoder } from '../../../api/apis/yaGeocoder';
-import { IHoleAddress, IPrepareAddressForApi } from '../../../types';
+import { currentIpAddress, IHoleAddress, IPrepareAddressForApi } from '../../../types';
 import { YandexGeocodeResultType } from '../../../types/yandex.types';
 import { getLocaleStorageItem } from '../../../utils/locale-storage.utils';
 import { set_meal_from_localestorage_to_cart } from '../../cart/actions';
@@ -13,8 +13,8 @@ import { openPopup } from '../../popup/actions';
 import { RootState } from '../../rootReducer';
 import { setIsNeedToRedirect } from '../../user-page/page-module/actions/user-page.actions';
 import {
-  OrderActionTypes, SET_CREATE_ORDER_ADDRESS,
-  SET_CURRENT_ORDER_TIME, SET_GEOCODER_RESPONSE,
+  OrderActionTypes, SET_ADDRESS_CONFIRM, SET_CREATE_ORDER_ADDRESS,
+  SET_CURRENT_ORDER_TIME, SET_GEOCODER_DBCLICK_RESPONSE, SET_GEOCODER_RESPONSE,
   SET_ORDER_ADDRESS,
   SET_ORDER_ADDRESS_LOCATION,
   SET_ORDER_PERMISSION,
@@ -39,14 +39,15 @@ export const sendOrderRequest = (popup: ReactNode): ThunkType => {
   };
 };
 
-export const getCoordinates = (address: string): ThunkType => {
+export const getCoordinates = (address: string, exactStreetType = true): ThunkType => {
   return async dispatch => {
     dispatch(showLoading());
     try {
-      const searchResult = await YandexGeocoder.getAddressByStr(address);
+      const searchResult = await YandexGeocoder.getAddressByStr(address, exactStreetType);
       dispatch(setGeocoderResponse(searchResult.response))
+      exactStreetType ? dispatch(setExactStreet(null)) : dispatch(setExactStreet(searchResult.response))
       const currentPosition = searchResult?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.Point?.pos.split(' ');
-      currentPosition && dispatch(setCurrentLocation({ lat: Number(currentPosition[0]), lng: Number(currentPosition[1]) }))
+      currentPosition && dispatch(setCurrentLocation({ lat: Number(currentPosition[1]), lng: Number(currentPosition[0]) }))
     } catch (e) {
       console.log(e)
     } finally {
@@ -91,7 +92,7 @@ export const startToChangePermission = (isChangePermissionStart: boolean): Order
   }
 }
 
-export const setOrderAddress = (address: IHoleAddress): OrderActionTypes => {
+export const setOrderAddress = (address: IHoleAddress | currentIpAddress | null): OrderActionTypes => {
   return {
     type: SET_ORDER_ADDRESS,
     address
@@ -123,5 +124,19 @@ export const setGeocoderResponse = (address: YandexGeocodeResultType | null) => 
   return {
     type: SET_GEOCODER_RESPONSE,
     response: address
+  }
+}
+
+export const setExactStreet = (address: YandexGeocodeResultType | null) => {
+  return {
+    type: SET_GEOCODER_DBCLICK_RESPONSE,
+    response: address
+  }
+}
+
+export const setIsAddressConfirm = (isConfirm: boolean) => {
+  return {
+    type: SET_ADDRESS_CONFIRM,
+    isConfirm
   }
 }

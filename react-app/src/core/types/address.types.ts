@@ -43,3 +43,11 @@ export interface IUpdateAddress {
   street: string;
   streetNumber: string;
 }
+
+export interface dbClickedAddress {
+  country?: string;
+  countryCode?: string;
+  region?: string;
+  street?: string;
+  streetNumber?: string;
+}

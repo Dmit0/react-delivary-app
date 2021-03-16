@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField } from '../../../../../core/components/form-fields/input-form-field/input';
@@ -9,7 +9,7 @@ import { getCountries, getCountry, getSelectCountries } from '../../../../../cor
 import { fetchGeo, setCurrentRegion } from '../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../core/redux/geo/selectors';
 import { createAddress } from '../../../../../core/redux/order/actions';
-import { getCreatedAddress } from '../../../../../core/redux/order/selectors';
+import { getCurrentDbClick } from '../../../../../core/redux/order/selectors';
 import { getRequiredValidation } from '../../../../../core/utils/form-validation.utils';
 
 export const OrderAddressCreate = () => {
@@ -20,7 +20,11 @@ export const OrderAddressCreate = () => {
   const regions = useSelector(getRegions);
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry);
-  const createdAddress = useSelector(getCreatedAddress);
+  const dbClickGeocoderResult = useSelector(getCurrentDbClick);
+
+  const DbClickCountry = dbClickGeocoderResult?.countryCode;
+
+  const { register, errors, setValue, watch } = useForm();
 
   const handleChangeCountry = useCallback(({ label }) => {
     dispatch(createAddress({ country: label }))
@@ -29,26 +33,53 @@ export const OrderAddressCreate = () => {
       dispatch(set_current_country(country));
       dispatch(setCurrentRegion(null));
       dispatch(fetchGeo(Locality.REGION, country.code))
+      setValue('street', '')
+      setValue('streetNumber', '')
     }
-  }, [countries, dispatch])
+  }, [countries, dispatch, setValue])
 
   const handleChangeRegion = useCallback(({ label, value }) => {
     dispatch(createAddress({ region: label }));
     const region = regions.find((country) => country.name === value);
     region && dispatch(setCurrentRegion(region));
-  }, [dispatch, regions])
+    setValue('street', '')
+    setValue('streetNumber', '')
+  }, [dispatch, regions, setValue])
 
-  const handleChangeStreet = useCallback((e) => {
+  const handleBlurStreet = useCallback((e) => {
     const street = e.target.value
-    dispatch(createAddress({ street: street }))
-  }, [dispatch])
+    if (street !== dbClickGeocoderResult?.street) dispatch(createAddress({ street }))
+  }, [dbClickGeocoderResult, dispatch])
 
-  const handleChangeStreetNumber = useCallback((e) => {
+  const handleBlurStreetNumber = useCallback((e) => {
     const streetNumber = e.target.value
-    dispatch(createAddress({ streetNumber: streetNumber }))
-  }, [dispatch])
+    if (streetNumber !== dbClickGeocoderResult?.streetNumber) dispatch(createAddress({ streetNumber }))
+  }, [dbClickGeocoderResult, dispatch])
 
-  const { register, handleSubmit, errors } = useForm();
+  useEffect(() => {
+    if (dbClickGeocoderResult) {
+      setValue('street', dbClickGeocoderResult.street || '')
+      setValue('streetNumber', dbClickGeocoderResult.streetNumber || '')
+    }
+  }, [dbClickGeocoderResult, setValue])
+
+  useEffect(() => {
+    DbClickCountry && dispatch(fetchGeo(Locality.REGION, DbClickCountry))
+  }, [DbClickCountry, dispatch])
+
+  const getIsFieldDisabled = useCallback((dependField: string) => {
+    const isCountryDepend = dependField === 'country';
+    if (dbClickGeocoderResult) {
+      return isCountryDepend
+        ? !dbClickGeocoderResult?.country
+        : !dbClickGeocoderResult?.region;
+    } else {
+      return isCountryDepend
+        ? !currentCountry?.name
+        : !currentRegion?.name;
+    }
+  }, [currentCountry, currentRegion, dbClickGeocoderResult]);
+
   return (
     <div className='addressBody'>
       <form onSubmit={()=>{}}>
@@ -56,17 +87,22 @@ export const OrderAddressCreate = () => {
           name='country'
           label='Your country'
           options={selectCountries}
-          currentSelectValue={ { value: currentCountry?.name, label: currentCountry?.name } }
+          currentSelectValue={ dbClickGeocoderResult
+            ? { value: dbClickGeocoderResult?.country || '', label: dbClickGeocoderResult?.country }
+            : { value: currentCountry?.name, label: currentCountry?.name }
+          }
           changeSelectHandler={(event: any) => handleChangeCountry(event)}
-
         />
         <SelectField
-          name='country'
+          name='region'
           label='Your region'
           options={ selectRegions }
-          currentSelectValue={ { value: currentRegion?.name, label: currentRegion?.name } }
+          currentSelectValue={ dbClickGeocoderResult
+            ? { value: dbClickGeocoderResult?.region || '', label: dbClickGeocoderResult?.region }
+            : { value: currentRegion?.name, label: currentRegion?.name }
+          }
           changeSelectHandler={(event: any) => handleChangeRegion(event)}
-          isDisabled={!currentCountry}
+          isDisabled={getIsFieldDisabled('country')}
         />
         <InputField
           label='Street'
@@ -74,17 +110,17 @@ export const OrderAddressCreate = () => {
           rules={getRequiredValidation()}
           register={register}
           errors={errors.street}
-          onBlur={(event: any) => handleChangeStreet(event)}
-          isDisabled={!currentRegion}
+          onBlur={(event: any) => handleBlurStreet(event)}
+          isDisabled={getIsFieldDisabled('region')}
         />
         <InputField
           label='Street number'
-          name='street'
+          name='streetNumber'
           rules={getRequiredValidation()}
           register={register}
-          errors={errors.street}
-          onBlur={(event: any) => handleChangeStreetNumber(event)}
-          isDisabled={!createdAddress?.street}
+          errors={errors.streetNumber}
+          onBlur={(event: any) => handleBlurStreetNumber(event)}
+          isDisabled={!watch('street')}
         />
       </form>
     </div>

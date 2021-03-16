@@ -16,7 +16,7 @@ interface GeoObject {
         Address: {
           country_code: string,
           formatted: string,
-          components: GeoObjectComponent[]
+          Components: GeoObjectComponent[]
         },
         AddressDetails: any,
         kind: string,
@@ -28,7 +28,7 @@ interface GeoObject {
   }
 }
 
-interface GeoObjectComponent {
+export interface GeoObjectComponent {
   kind: string,
   name: string
 }

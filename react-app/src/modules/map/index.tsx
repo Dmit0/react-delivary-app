@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactMapboxGl, { Layer, Image, Source, Marker, Feature } from 'react-mapbox-gl';
 import './map.css'
+import { useDispatch } from 'react-redux';
+import { getCoordinates } from '../../core/redux/order/actions';
 
 export const getMapBoxSources = (location: { lat: number, lng: number }) => {
   return {
@@ -19,16 +21,28 @@ export const getMapBoxSources = (location: { lat: number, lng: number }) => {
   };
 }
 
-const handleClick = (map: any, event: any) => {
-  console.log(event.lngLat)
+const getCoordinatesString = (position: { lng: number, lat: number }) => {
+  return Object.values(position).map(item => {
+    const stringCoordinate = item.toString()
+    return stringCoordinate.split('').slice(0, 10).join('');
+  }).join(',')
 }
 
 const MapBox = ({ position, zoom }: { position: { lat: number, lng: number }, zoom: number }) => {
+
+  const dispatch = useDispatch();
+
   const Map = ReactMapboxGl({ accessToken: 'pk.eyJ1IjoiZG1pdHJ5c2hlc2h1bm92IiwiYSI6ImNrbHV6YXVrMzBybGQydm13OGdxdGxubjUifQ.AnNA11QkmD2Y5uU9gB_HPg', attributionControl: false, doubleClickZoom: false });
+
+  const handleClick = (map: any, event: any) => {
+    const coordinates = getCoordinatesString(event.lngLat)
+    dispatch(getCoordinates(coordinates, false));
+  }
+
   return (
     <div className="map">
       <Map
-        center={[position.lat, position.lng]}
+        center={[position.lng, position.lat]}
         zoom={[zoom]}
         style="mapbox://styles/mapbox/streets-v11"
         containerStyle={{
@@ -37,14 +51,14 @@ const MapBox = ({ position, zoom }: { position: { lat: number, lng: number }, zo
         }}
         onDblClick={handleClick}
       >
-        {/*<Image id='delivery' url='/assets/marker.png'/>*/}
-        {/*<Source id="point" geoJsonSource={getMapBoxSources({lat: position.lat, lng: position.lng})}/>*/}
-        {/*<Layer*/}
-        {/*  type='symbol'*/}
-        {/*  id='marker'*/}
-        {/*  sourceId='point'*/}
-        {/*  layout={{ 'icon-image': 'delivery', 'icon-size': 1 }}*/}
-        {/*/>*/}
+        <Image id='delivery' url='https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png'/>
+        <Source id="point" geoJsonSource={getMapBoxSources({lat: position.lat, lng: position.lng})}/>
+        <Layer
+          type='symbol'
+          id='marker'
+          sourceId='point'
+          layout={{ 'icon-image': 'delivery', 'icon-size': 0.8 }}
+        />
       </Map>
     </div>
   );

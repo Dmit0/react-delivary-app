@@ -23,3 +23,10 @@
     align-items: flex-end;
     flex-direction: row-reverse;
 }
+
+.addressMarker {
+    position: absolute;
+    top: -11px;
+    left: 96%;
+    z-index: 1000;
+}

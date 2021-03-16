@@ -1,8 +1,10 @@
 import {
   OrderActionTypes,
-  OrderState,
+  OrderState, SET_ADDRESS_CONFIRM,
   SET_CREATE_ORDER_ADDRESS,
-  SET_CURRENT_ORDER_TIME, SET_GEOCODER_RESPONSE,
+  SET_CURRENT_ORDER_TIME,
+  SET_GEOCODER_DBCLICK_RESPONSE,
+  SET_GEOCODER_RESPONSE,
   SET_ORDER_ADDRESS,
   SET_ORDER_ADDRESS_LOCATION,
   SET_ORDER_PERMISSION,
@@ -17,7 +19,9 @@ const initialState: OrderState = {
   currentAddressLocation: null,
   createdOrderAddress: null,
   isCreateAddressStep: false,
-  geocoderResponse: null
+  geocoderResponse: null,
+  dbClickAddress: null,
+  isAddressConfirmed: false
 };
 
 export const orderReducer = (state = initialState, action: OrderActionTypes): OrderState => {
@@ -37,6 +41,10 @@ export const orderReducer = (state = initialState, action: OrderActionTypes): Or
       return { ...state, createdOrderAddress: action.address ? { ...state.createdOrderAddress, ...action.address}: null, isCreateAddressStep: true }
     case SET_GEOCODER_RESPONSE:
       return {...state, geocoderResponse: action.response}
+    case SET_GEOCODER_DBCLICK_RESPONSE:
+      return { ...state, dbClickAddress: action.response }
+    case SET_ADDRESS_CONFIRM:
+      return { ...state, isAddressConfirmed: action.isConfirm }
     default:
       return state;
   }
