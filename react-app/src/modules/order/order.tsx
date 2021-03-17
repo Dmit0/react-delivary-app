@@ -20,7 +20,6 @@ export const OrderPage = () => {
           <OrderInfo/>
         </div>
       </div>
-      <div className='orderPageFooter'/>
     </div>
   );
 };

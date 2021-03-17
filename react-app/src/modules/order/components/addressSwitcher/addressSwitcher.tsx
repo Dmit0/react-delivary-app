@@ -37,7 +37,10 @@ export const AddressSwitcher = () => {
         <FillCheckIcon fill={ '#43be12' } width={ 40 } height={ 40 }/>
       </div>
       }
-      <MapBox position={currentPosition || { lng: currentAddressFromIp?.lng || 0, lat: currentAddressFromIp?.lat || 0 }} zoom={currentPosition ? zoom : 12}/>
+      <MapBox
+        position={currentPosition || { lng: currentAddressFromIp?.lng || 0, lat: currentAddressFromIp?.lat || 0 }}
+        zoom={currentPosition ? zoom : 12}
+      />
       {
         permission
           ? <OrderAddressSelect/>

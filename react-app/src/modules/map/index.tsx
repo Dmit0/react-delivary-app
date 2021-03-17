@@ -1,8 +1,9 @@
 import React from 'react';
-import ReactMapboxGl, { Layer, Image, Source, Marker, Feature } from 'react-mapbox-gl';
+import ReactMapboxGl, { Layer, Image, Source } from 'react-mapbox-gl';
 import './map.css'
 import { useDispatch } from 'react-redux';
 import { getCoordinates } from '../../core/redux/order/actions';
+import env from '../../react-app-env.d'
 
 export const getMapBoxSources = (location: { lat: number, lng: number }) => {
   return {
@@ -32,7 +33,7 @@ const MapBox = ({ position, zoom }: { position: { lat: number, lng: number }, zo
 
   const dispatch = useDispatch();
 
-  const Map = ReactMapboxGl({ accessToken: 'pk.eyJ1IjoiZG1pdHJ5c2hlc2h1bm92IiwiYSI6ImNrbHV6YXVrMzBybGQydm13OGdxdGxubjUifQ.AnNA11QkmD2Y5uU9gB_HPg', attributionControl: false, doubleClickZoom: false });
+  const Map = ReactMapboxGl({ accessToken: env.MAP_BOX_KEY, attributionControl: false, doubleClickZoom: false });
 
   const handleClick = (map: any, event: any) => {
     const coordinates = getCoordinatesString(event.lngLat)

@@ -7,11 +7,7 @@ import { CurrentTime } from '../../../../core/types/time.types';
 import './timeSwitcher.css'
 import { TimeSwitcherItem } from './components/timeSwitcherItem';
 
-interface TimeSwitcherProps {
-
-}
-
-export const TimeSwitcher: React.FC<TimeSwitcherProps> = () => {
+export const TimeSwitcher = () => {
   const dispatch = useDispatch();
   const currentOrderTime = useSelector(getCurrentOrderTime);
   const [currentSwitchItem, setCurrentSwitchItem] = useState<number>(0);
@@ -23,7 +19,7 @@ export const TimeSwitcher: React.FC<TimeSwitcherProps> = () => {
   const switcherItems = useMemo(() => {
     return [
       ASAP,
-      currentOrderTime && Object.values(currentOrderTime).join(':') || ''
+      (currentOrderTime && Object.values(currentOrderTime).join(':')) || ''
     ]
   }, [currentOrderTime])
 
