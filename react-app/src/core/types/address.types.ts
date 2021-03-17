@@ -32,6 +32,7 @@ export interface IPrepareAddressForApi {
   region?: string
   street?: string
   streetNumber?: string
+  isFromIp?: boolean
 }
 
 export interface IUpdateAddress {

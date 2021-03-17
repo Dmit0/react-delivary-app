@@ -15,5 +15,6 @@ export interface currentIpAddress {
   street: string,
   streetNumber: string,
   lng: number,
-  lat: number
+  lat: number,
+  exact: boolean
 }

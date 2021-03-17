@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CheckIcon, FillCheckIcon } from '../../../../core/components/icons';
+import { FillCheckIcon } from '../../../../core/components/icons';
 import { getAddressByIp } from '../../../../core/redux/app/selectors';
 import { getCoordinates } from '../../../../core/redux/order/actions';
 import {
+  getCreatedAddress,
   getCurrentOrderAddressLocation,
   getCurrentOrderPermission,
   getIsAddressConfirm,
@@ -23,10 +24,11 @@ export const AddressSwitcher = () => {
   const zoom = useSelector(getZoomPosition);
   const currentAddressFromIp = useSelector(getAddressByIp);
   const isConfirmedAddress = useSelector(getIsAddressConfirm);
+  const currentAddressObj = useSelector(getCreatedAddress)
 
   useEffect(() => {
-    currentAddress.trim() && dispatch(getCoordinates(currentAddress));
-  }, [currentAddress, dispatch])
+    (currentAddress.trim() && !currentAddressObj?.isFromIp) && dispatch(getCoordinates(currentAddress));
+  }, [currentAddress, currentAddressObj, dispatch])
 
   return (
     <div className='addressSwitcherBody'>

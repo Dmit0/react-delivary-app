@@ -113,10 +113,13 @@ export const setCurrentLocation = (currentAddressLocation: { lat: number, lng: n
   }
 }
 
-export const createAddress = (address: IPrepareAddressForApi | null): OrderActionTypes => {
+export const createAddress = (address: IPrepareAddressForApi | null, isFromIp = false): OrderActionTypes => {
   return {
     type: SET_CREATE_ORDER_ADDRESS,
-    address
+    address: {
+      ...address,
+      isFromIp
+    }
   }
 }
 

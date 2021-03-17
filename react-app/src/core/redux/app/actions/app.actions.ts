@@ -8,7 +8,7 @@ import { GeoObjectComponent } from '../../../types/yandex.types';
 import { getCoordinatesString } from '../../../utils/coordinate.utils';
 import { RootState } from '../../rootReducer';
 import { AppApi } from '../../../api/apis/app.api';
-import { AppActionTypes, GET_BUNNERS, SET_CURRENT_IP_ADDRESS } from './app.types';
+import { GET_BUNNERS, SET_CURRENT_IP_ADDRESS } from './app.types';
 
 type ThunkType = ThunkAction<Promise<void>, RootState, unknown, Action<string>>
 
@@ -37,7 +37,8 @@ export const getCurrentUserLocation = (): ThunkType => {
       street: geocodingComponents && geocodingComponents.find((item: GeoObjectComponent ) => item.kind === 'street')?.name,
       streetNumber: geocodingComponents && geocodingComponents.find((item: GeoObjectComponent ) => item.kind === 'house')?.name,
       lng: currentLocation?.longitude,
-      lat: currentLocation?.latitude
+      lat: currentLocation?.latitude,
+      exact: yaGeocoderResponse?.response?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData.precision === 'exact'
     }
     dispatch(setCurrentAddressByIp(currentUserAddress));
   };

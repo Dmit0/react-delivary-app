@@ -1,13 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SelectField } from '../../../../../core/components/form-fields/select-form-field/selectField';
-import { getAddressByIp, getCurrentIpAddressSelect } from '../../../../../core/redux/app/selectors';
-import { set_current_country } from '../../../../../core/redux/countries/actions';
-import { setCurrentRegion } from '../../../../../core/redux/geo/actions';
-import { createAddress, setGeocoderResponse, setIsAddressConfirm, setOrderAddress } from '../../../../../core/redux/order/actions';
+import { getAddressByIp, getSelectIpAddress } from '../../../../../core/redux/app/selectors';
+import { setExactStreet, setGeocoderResponse, setIsAddressConfirm, setOrderAddress } from '../../../../../core/redux/order/actions';
 import {
   getCreatedAddress,
-  getCurrentDbClick, getIsAddressConfirm,
+  getCurrentDbClick, getCurrentOrderSelectAddress, getIsAddressConfirm,
   getIsChooseExactAddress,
   getOrderAddress,
 } from '../../../../../core/redux/order/selectors';
@@ -23,9 +21,10 @@ export const OrderAddressSelect = () => {
   const IsChooseExactAddress = useSelector(getIsChooseExactAddress);
   const createdAddress = useSelector(getCreatedAddress);
   const dbGeocoderClick = useSelector(getCurrentDbClick);
-  const currentIpSelectAddress = useSelector(getCurrentIpAddressSelect);
   const currentIpAddress = useSelector(getAddressByIp);
   const isConfirmedAddress = useSelector(getIsAddressConfirm);
+  const ipSelectAddress = useSelector(getSelectIpAddress);
+  const selectAddress = useSelector(getCurrentOrderSelectAddress);
 
   const [needNewAddress, setIsNeedNewAddress] = useState<boolean>(false)
 
@@ -42,9 +41,7 @@ export const OrderAddressSelect = () => {
   const manageAddressSwitcher = (operation: boolean) => {
     setIsNeedNewAddress(operation);
     dispatch(setGeocoderResponse(null));
-    dispatch(set_current_country(null));
-    dispatch(setCurrentRegion(null));
-    dispatch(createAddress(null));
+    dispatch(setExactStreet(null));
     dispatch(setIsAddressConfirm(false));
   }
 
@@ -57,7 +54,8 @@ export const OrderAddressSelect = () => {
             : <SelectField
               name='address'
               label='Your address'
-              options={[{value: currentIpSelectAddress, label: currentIpSelectAddress}, ...userAllAddresses]}
+              options={[...userAllAddresses]}
+              currentSelectValue={ selectAddress || ipSelectAddress }
               changeSelectHandler={ (event: any) => handleChangeCountry(event) }
             />
         }

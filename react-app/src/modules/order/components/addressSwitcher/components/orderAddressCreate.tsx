@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { InputField } from '../../../../../core/components/form-fields/input-form-field/input';
 import { SelectField } from '../../../../../core/components/form-fields/select-form-field/selectField';
 import { Locality } from '../../../../../core/enums/locality.enum';
+import { getAddressByIp } from '../../../../../core/redux/app/selectors';
 import { set_current_country } from '../../../../../core/redux/countries/actions';
 import { getCountries, getCountry, getSelectCountries } from '../../../../../core/redux/countries/selectors';
 import { fetchGeo, setCurrentRegion } from '../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../core/redux/geo/selectors';
-import { createAddress } from '../../../../../core/redux/order/actions';
-import { getCurrentDbClick } from '../../../../../core/redux/order/selectors';
+import { createAddress, setIsAddressConfirm } from '../../../../../core/redux/order/actions';
+import { getCurrentDbClick, getIsAddressConfirm, getIsChooseExactAddress } from '../../../../../core/redux/order/selectors';
+import { getIsLogIn } from '../../../../../core/redux/user/selectors';
 import { getRequiredValidation } from '../../../../../core/utils/form-validation.utils';
 
 export const OrderAddressCreate = () => {
@@ -21,6 +23,10 @@ export const OrderAddressCreate = () => {
   const currentRegion = useSelector(getCurrentRegion);
   const currentCountry = useSelector(getCountry);
   const dbClickGeocoderResult = useSelector(getCurrentDbClick);
+  const currentIpAddress = useSelector(getAddressByIp);
+  const isLogIn = useSelector(getIsLogIn);
+  const isConfirmedAddress = useSelector(getIsAddressConfirm);
+  const IsChooseExactAddress = useSelector(getIsChooseExactAddress);
 
   const DbClickCountry = dbClickGeocoderResult?.countryCode;
 
@@ -35,6 +41,7 @@ export const OrderAddressCreate = () => {
       dispatch(fetchGeo(Locality.REGION, country.code))
       setValue('street', '')
       setValue('streetNumber', '')
+      dispatch(setIsAddressConfirm(false));
     }
   }, [countries, dispatch, setValue])
 
@@ -44,16 +51,23 @@ export const OrderAddressCreate = () => {
     region && dispatch(setCurrentRegion(region));
     setValue('street', '')
     setValue('streetNumber', '')
+    dispatch(setIsAddressConfirm(false));
   }, [dispatch, regions, setValue])
 
   const handleBlurStreet = useCallback((e) => {
     const street = e.target.value
-    if (street !== dbClickGeocoderResult?.street) dispatch(createAddress({ street }))
+    if (street !== dbClickGeocoderResult?.street) {
+      dispatch(setIsAddressConfirm(false));
+      dispatch(createAddress({ street }));
+    }
   }, [dbClickGeocoderResult, dispatch])
 
   const handleBlurStreetNumber = useCallback((e) => {
     const streetNumber = e.target.value
-    if (streetNumber !== dbClickGeocoderResult?.streetNumber) dispatch(createAddress({ streetNumber }))
+    if (streetNumber !== dbClickGeocoderResult?.streetNumber) {
+      dispatch(setIsAddressConfirm(false));
+      dispatch(createAddress({ streetNumber }));
+    }
   }, [dbClickGeocoderResult, dispatch])
 
   useEffect(() => {
@@ -61,27 +75,22 @@ export const OrderAddressCreate = () => {
       setValue('street', dbClickGeocoderResult.street || '')
       setValue('streetNumber', dbClickGeocoderResult.streetNumber || '')
     }
-  }, [dbClickGeocoderResult, setValue])
+    if (!dbClickGeocoderResult && !watch('street') && !watch('streetNumber') && currentIpAddress) {
+      setValue('street', currentIpAddress.street);
+      setValue('streetNumber', currentIpAddress.streetNumber);
+    }
+  }, [currentIpAddress, dbClickGeocoderResult, setValue, watch])
 
   useEffect(() => {
     DbClickCountry && dispatch(fetchGeo(Locality.REGION, DbClickCountry))
   }, [DbClickCountry, dispatch])
 
-  const getIsFieldDisabled = useCallback((dependField: string) => {
-    const isCountryDepend = dependField === 'country';
-    if (dbClickGeocoderResult) {
-      return isCountryDepend
-        ? !dbClickGeocoderResult?.country
-        : !dbClickGeocoderResult?.region;
-    } else {
-      return isCountryDepend
-        ? !currentCountry?.name
-        : !currentRegion?.name;
-    }
-  }, [currentCountry, currentRegion, dbClickGeocoderResult]);
+  const confirmAddressClick = () => {
+    dispatch(setIsAddressConfirm(true))
+  }
 
   return (
-    <div className='addressBody'>
+    <div className={ `addressBody ${!isLogIn && (dbClickGeocoderResult || currentCountry) && 'addressBodyExtended'}` }>
       <form onSubmit={()=>{}}>
         <SelectField
           name='country'
@@ -102,7 +111,6 @@ export const OrderAddressCreate = () => {
             : { value: currentRegion?.name, label: currentRegion?.name }
           }
           changeSelectHandler={(event: any) => handleChangeRegion(event)}
-          isDisabled={getIsFieldDisabled('country')}
         />
         <InputField
           label='Street'
@@ -111,7 +119,6 @@ export const OrderAddressCreate = () => {
           register={register}
           errors={errors.street}
           onBlur={(event: any) => handleBlurStreet(event)}
-          isDisabled={getIsFieldDisabled('region')}
         />
         <InputField
           label='Street number'
@@ -120,8 +127,12 @@ export const OrderAddressCreate = () => {
           register={register}
           errors={errors.streetNumber}
           onBlur={(event: any) => handleBlurStreetNumber(event)}
-          isDisabled={!watch('street')}
         />
+        <div className='confirmCreateAddressBlock'>
+          {
+            (!isLogIn && !isConfirmedAddress && (dbClickGeocoderResult || currentCountry)) && <button className="btn btn btn-outline-success btnConfirmCreatAddress" onClick={confirmAddressClick} disabled={!IsChooseExactAddress && !currentIpAddress?.exact}>confirm address</button>
+          }
+        </div>
       </form>
     </div>
   );

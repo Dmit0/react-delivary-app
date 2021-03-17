@@ -9,11 +9,12 @@ export const getRequiredValidation = (): ValidationRules => {
   };
 };
 
-export const getEmailValidation = (isNeedEmailToBeExist = false): ValidationRules => {
+export const getEmailValidation = (isNeedEmailToBeExist = false, isNeedAsyncValidation = true): ValidationRules => {
   return {
     required: { value: true, message: ErrorMessages.REQUIRED },
     pattern: { value: Patterns.mail, message: ErrorMessages.MAIL_PATTERN },
     validate: async (value: string) => {
+      if (!isNeedAsyncValidation) return
       if (!value) return ErrorMessages.REQUIRED;
       if (!value.match(Patterns.mail)) return ErrorMessages.MAIL_PATTERN;
       const isMailExist = await AuthenticationApi.verifyMail(value);
@@ -32,13 +33,14 @@ export const getPasswordValidation = (minLength: number, maxLength: number): Val
   };
 }
 
-export const getPhoneValidation = (minLength: number, maxLength: number, currentPhonePrefix = '375'): ValidationRules => {
+export const getPhoneValidation = (minLength: number, maxLength: number, currentPhonePrefix = '375', isNeedAsyncValidation = true): ValidationRules => {
   return {
     required: { value: true, message: ErrorMessages.REQUIRED },
     minLength: { value: minLength, message: ErrorMessages.PHONE_PATTERN },
     maxLength: { value: maxLength, message: ErrorMessages.PHONE_PATTERN },
     pattern: {value: Patterns.phone, message: ErrorMessages.PHONE_PATTERN},
     validate: async (value: string) => {
+      if (!isNeedAsyncValidation) return
       const isPhoneExist = await AuthenticationApi.verifyPhone({
         code: currentPhonePrefix,
         number: value,

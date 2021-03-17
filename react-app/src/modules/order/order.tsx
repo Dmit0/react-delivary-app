@@ -1,6 +1,7 @@
 import React from 'react';
 import './order.css'
 import { AddressSwitcher } from './components/addressSwitcher/addressSwitcher';
+import { OrderInfo } from './components/orderList/orderList';
 import { TimeSwitcher } from './components/timeSwitcher/timeSwitcher';
 
 export const OrderPage = () => {
@@ -14,9 +15,10 @@ export const OrderPage = () => {
         <div className='orderInfo'>
           <TimeSwitcher/>
           <AddressSwitcher/>
-          <div className='orderUserInfo'/>
         </div>
-        <div className='orderListItems'/>
+        <div className='orderListItems'>
+          <OrderInfo/>
+        </div>
       </div>
       <div className='orderPageFooter'/>
     </div>

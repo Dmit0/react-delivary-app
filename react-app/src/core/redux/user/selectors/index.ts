@@ -1,5 +1,5 @@
-import { fetchGeoModel, IHoleAddress } from '../../../types';
-import { getRegions } from '../../geo/selectors';
+import { IHoleAddress } from '../../../types';
+import { getAddressByIp } from '../../app/selectors';
 import { RootState } from '../../rootReducer';
 import { userState } from '../actions';
 
@@ -14,8 +14,10 @@ export const getAllUserAddresses = (state: RootState) => getUserState(state).use
 
 
 export const getSelectAddresses = (state: RootState) => {
-  const addresses = getAllUserAddresses(state)
-  return addresses.map((address: IHoleAddress) => {
+  const addresses = getAllUserAddresses(state);
+  const ipAddress = getAddressByIp(state);
+  const userAddresses =  addresses.map((address: IHoleAddress) => {
     return { value: address._id, label: `${address.country}, ${address.region}, ${address.street}, ${address.streetNumber}` };
   })
+  return [{ value: ipAddress?.ip || '', label: `${ipAddress?.country || ''}, ${ipAddress?.region || ''}, ${ipAddress?.street || ''}, ${ipAddress?.streetNumber || ''}`}, ...userAddresses]
 };

@@ -1,5 +1,7 @@
 import { dbClickedAddress } from '../../../types';
+import { getAddressByIp } from '../../app/selectors';
 import { RootState } from '../../rootReducer';
+import { getIsLogIn } from '../../user/selectors';
 import { OrderState } from '../actions';
 
 const getOrderState = (state: RootState): OrderState => state.order;
@@ -38,21 +40,32 @@ const getCurrentOrderStringAddress = (state: RootState) => {
   }
 }
 
+export const getCurrentOrderSelectAddress = (state: RootState) => {
+  const address = getOrderAddress(state);
+  // @ts-ignore
+  const returnedValue = (address?._id || address?.ip) || ''
+  return (address && {
+    value: returnedValue,
+    label: (address && `${address?.country}, ${address?.region}, ${address?.street}, ${address?.streetNumber}`) || ''
+  }) || ''
+}
+
 export const getStringAddress = (state: RootState) => {
   const isCreatedStep = getIsCreateStep(state);
   const currentAddressForParse = isCreatedStep ? getCreatedAddress(state) : getCurrentOrderStringAddress(state);
-  return currentAddressForParse && Object.values(currentAddressForParse).join(' ') || ''
+  const currentAddressArray = currentAddressForParse && Object.values(currentAddressForParse)
+  return (currentAddressArray && currentAddressArray.slice(0, currentAddressArray.length - 1).join(' ')) || ''
 }
 
 export const getZoomPosition = (state: RootState) => {
   const isCreatedStep = getIsCreateStep(state);
   const dbClickGeocoderClick = getCurrentDbClick(state)
-  const currentAddress = isCreatedStep
+  const currentAddress = isCreatedStep || !getIsLogIn(state)
     ? dbClickGeocoderClick
       ? dbClickGeocoderClick
       : getCreatedAddress(state)
     : getOrderAddress(state);
-  return currentAddress && Object.keys(currentAddress).reduce((acc, item) => {
+  return (currentAddress && Object.keys(currentAddress).reduce((acc, item) => {
     if (item === 'region') {
       return acc + 8;
     } else if (item === 'street') {
@@ -61,11 +74,13 @@ export const getZoomPosition = (state: RootState) => {
       return acc + 2;
     }
     return acc
-  }, 4) || 4;
+  }, 4)) || 4;
 }
 
 export const getIsChooseExactAddress = (state: RootState) => {
   const currentResult = getGeocoderResult(state);
-  const precision = currentResult?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.precision;
-  return precision === 'exact';
+  const currentIpAddress = getAddressByIp(state)
+  return currentResult
+    ? currentResult?.GeoObjectCollection?.featureMember[0]?.GeoObject?.metaDataProperty?.GeocoderMetaData?.precision === 'exact'
+    : currentIpAddress?.exact
 }

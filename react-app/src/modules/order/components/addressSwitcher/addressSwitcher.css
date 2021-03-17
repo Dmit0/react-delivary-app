@@ -3,7 +3,7 @@
     border:solid 1px #e0dede;
     padding: 5px;
     position: relative;
-    height: 60%;
+    height: 65%;
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
@@ -29,4 +29,18 @@
     top: -11px;
     left: 96%;
     z-index: 1000;
+}
+
+.addressBody {
+    padding-bottom: 20px;
+}
+
+.btnConfirmCreatAddress {
+    margin: 20px 0;
+}
+
+.confirmCreateAddressBlock {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row-reverse;
 }
