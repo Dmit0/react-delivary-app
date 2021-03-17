@@ -5,6 +5,7 @@ import { ThunkAction } from 'redux-thunk';
 import { cartApi } from '../../../api/apis/cart.api';
 import { OrderAPI } from '../../../api/apis/order.api';
 import { YandexGeocoder } from '../../../api/apis/yaGeocoder';
+import { Core } from '../../../enums/core.enum';
 import { currentIpAddress, IHoleAddress, IPrepareAddressForApi } from '../../../types';
 import { YandexGeocodeResultType } from '../../../types/yandex.types';
 import { getLocaleStorageItem } from '../../../utils/locale-storage.utils';
@@ -67,7 +68,7 @@ export const setOrderCart = (isLogIn: boolean): ThunkType => {
           const useCart = await cartApi.getUserCart()
           cart = useCart.meals
       } else {
-        cart = getLocaleStorageItem('Cart', '[]')
+        cart = getLocaleStorageItem(Core.Cart, '[]')
       }
       dispatch(set_meal_from_localestorage_to_cart(cart))
     } catch (e) {

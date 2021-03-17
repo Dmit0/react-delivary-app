@@ -105,7 +105,7 @@ const CartPage = () => {
   const orderItems = () => {
      if (getIsRestaurantBlockPricesCorrect && isLogIn) {
        dispatch(sendOrderRequest(orderErrorPermissionPopup))
-     } else if (getIsRestaurantBlockPricesCorrect) {
+     } else if (getIsRestaurantBlockPricesCorrect && cart?.length > 0) {
        dispatch(setIsNeedToRedirect(true))
     }
   }

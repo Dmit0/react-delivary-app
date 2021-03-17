@@ -7,6 +7,7 @@ import { getCurrentUserCountry } from '../../core/redux/countries/selectors';
 import { fetchGeo, setCurrentRegion } from '../../core/redux/geo/actions';
 import { getCurrentUserRegion } from '../../core/redux/geo/selectors';
 import { createAddress, setOrderCart } from '../../core/redux/order/actions';
+import { setIsNeedToRedirect } from '../../core/redux/user-page/page-module/actions/user-page.actions';
 import { getIsLogIn } from '../../core/redux/user/selectors';
 import { OrderPage } from '../../modules/order/order';
 
@@ -19,7 +20,7 @@ const Order = () => {
 
   useEffect(() => {
     dispatch(setOrderCart(isLogIn))
-
+    dispatch(setIsNeedToRedirect(false))
   }, [dispatch, isLogIn])
 
   useEffect(() => {
