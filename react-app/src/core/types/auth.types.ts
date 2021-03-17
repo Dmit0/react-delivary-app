@@ -16,7 +16,6 @@ export interface loginData {
 }
 
 export interface userToStore {
-  token?: string,
   email: string,
   firstName: string,
   firstAddress?: Address,

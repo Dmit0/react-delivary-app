@@ -27,7 +27,7 @@ export const set_countries = (countries: country[]) => {
   }
 }
 
-export const set_current_country = (country:country) => {
+export const set_current_country = (country:country | null) => {
   return {
     type: SET_CURRENT_COUNTRY,
     country

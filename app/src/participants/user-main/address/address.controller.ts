@@ -12,8 +12,14 @@ export class AddressController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('getPaginatedAddresses')
-  getPaginatedAddresses(@CurrentUser() user: IUser, @Body('paginatedData') paginatedData: paginatedDataDto): Observable<IGetPaginatedAddresses> {
-    return this.addressService.getPaginatedAddresses(user.id, { skip: paginatedData.offset, limit: paginatedData.size })
+  @Post('getPaginatedAddresses')
+  getPaginatedAddresses(@CurrentUser() user: any, @Body('paginatedData') paginatedData: paginatedDataDto): Observable<IGetPaginatedAddresses> {
+    return this.addressService.getPaginatedAddresses(user.id,user.addresses && user.addresses.length || 0, { skip: paginatedData?.offset, limit: paginatedData?.size })
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('getUserAddresses')
+  getUserAddresses(@CurrentUser() user: any) {
+    return this.addressService.getAddresses({userId: user._id})
   }
 }

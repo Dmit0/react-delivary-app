@@ -1,0 +1,46 @@
+.addressSwitcherBody {
+    border-radius: 8px;
+    border:solid 1px #e0dede;
+    padding: 5px;
+    position: relative;
+    height: 65%;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    margin-top: 10%;
+}
+
+.addressSelect {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.addressSelectFooter {
+    margin: 20px 0 100px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+}
+
+.addressMarker {
+    position: absolute;
+    top: -11px;
+    left: 96%;
+    z-index: 1000;
+}
+
+.addressBody {
+    padding-bottom: 20px;
+}
+
+.btnConfirmCreatAddress {
+    margin: 20px 0;
+}
+
+.confirmCreateAddressBlock {
+    display: flex;
+    align-items: flex-end;
+    flex-direction: row-reverse;
+}

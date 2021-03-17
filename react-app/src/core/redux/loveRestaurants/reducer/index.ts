@@ -8,7 +8,6 @@ import {
 
 const initialState: LovedState = {
   loved_restaurants: [],
-  //loved_meals:[]
 };
 
 export const lovedReducer = (state = initialState, action: lovedActionTypes): LovedState => {

@@ -1,0 +1,43 @@
+.page-arrow {
+    border: none;
+    color: #21313c;
+    padding: 2px 4px;
+    font-size: 22px;
+    user-select: none;
+}
+
+.page-arrow:hover {
+    background-color: white;
+    color: #21313c;
+    cursor: pointer;
+}
+.page-paging-item {
+    font-size: 18px;
+    border: none;
+    color: #21313c;
+    padding: 6px 4px;
+    user-select: none;
+}
+.page-paging-item:hover {
+    background-color: white;
+    color: #21313c;
+    cursor: pointer;
+}
+
+.activeItem {
+    color: #ffe000;
+}
+
+.activeItem:hover{
+    color: #ffe000;
+}
+
+.page-paging-disable-item {
+    color: #c5c5c5;
+    cursor: default;
+}
+
+.page-paging-disable-item:hover {
+    color: #c5c5c5;
+    cursor: default;
+}

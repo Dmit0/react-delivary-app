@@ -11,13 +11,12 @@ interface InputFieldProps {
   register: any,
   type?: string,
   value?: string,
-  currentValue?: string,
-  subExistErrors?: boolean,
   defaultValue?: string,
   placeHolder?: string,
   subComponentErrors?: any,
   subComponentStyles?: string
   onChange?(event: any): void
+  onBlur?(event: any): void
 }
 
 export const InputField = (
@@ -31,19 +30,17 @@ export const InputField = (
     type = 'text',
     value,
     onChange,
-    subExistErrors = false,
-    currentValue,
     placeHolder,
     defaultValue,
     subComponentErrors,
-    subComponentStyles
+    subComponentStyles,
+    onBlur
   }: InputFieldProps) => {
   return (
     <div className={ subComponentStyles ? subComponentStyles : `input_form_field`}>
         <div className="input__form_labels">
           <span className='input_label'>{label}</span>
           {errors?.message && <span className='input_label'>{ errors.message }</span>}
-          {subExistErrors && currentValue !== '' && !errors?.message && <span className="input_label">{name} exist</span>}
           {subComponentErrors && subComponentErrors}
         </div>
         <input
@@ -56,6 +53,7 @@ export const InputField = (
           placeholder={placeHolder}
           onChange={onChange && onChange}
           defaultValue={defaultValue}
+          onBlur={onBlur && onBlur}
         />
     </div>
   );

@@ -1,16 +1,17 @@
-import React, { useEffect, useMemo } from 'react';
-import { meals, restaurant } from '../../../core/types';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import { getBlockSumByRestaurantId } from '../../../core/redux/cart/selectors';
+import { RootState } from '../../../core/redux/rootReducer';
+import { Meal, restaurant } from '../../../core/types';
 import { rerender } from '../../../core/utils/rerender/cart.rerender';
-import { CartItem } from './cartItem';
 import './meal-block.style.css'
 
 interface RestaurantMealBlockProps {
   restaurant: restaurant
-  restaurantBlock: meals[]
-  onDeleteOneItem(meal: meals): void
-  onDeleteMeal(meal: meals): void
-  onAddMeal(meal: meals): void
-  setBlockSum(restaurant: string, sum: number): void
+  restaurantBlock: Meal[]
+  onDeleteOneItem(meal: Meal): void
+  onDeleteMeal(meal: Meal): void
+  onAddMeal(meal: Meal): void
 }
 
 export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
@@ -18,22 +19,8 @@ export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
      restaurantBlock,
      onDeleteOneItem,
      onDeleteMeal, onAddMeal,
-     setBlockSum
   }) => {
-
-  const countOrderRestaurantSum = (): number => {
-    return restaurantBlock.reduce((acc, el) => {
-      return acc += el.count * el.price
-    }, 0)
-  }
-
-  const blockSum = useMemo(() => {
-    return countOrderRestaurantSum()
-  },[countOrderRestaurantSum])
-
-  useEffect(() => {
-    setBlockSum(restaurant._id, blockSum)
-  }, [blockSum, restaurant._id, setBlockSum])
+  const currentBlockSum = useSelector((state: RootState) => getBlockSumByRestaurantId(state, restaurant._id));
 
   return (
       <div className='meal_block'>
@@ -48,7 +35,7 @@ export const RestaurantMealBlock: React.FC<RestaurantMealBlockProps> = ({
         }
         <div className='meal_block_sum'>
           <span className='meal_block_item'>
-            Order amount : <span className={ blockSum > restaurant.minSumOfDelivery ? "Enough" : "notEnough"}>{blockSum} bun</span>
+            Order amount : <span className={ currentBlockSum > restaurant.minSumOfDelivery ? "Enough" : "notEnough"}>{currentBlockSum} bun</span>
         </span>
         </div>
       </div>

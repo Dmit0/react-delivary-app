@@ -8,7 +8,6 @@ import { UpdateUserFrom } from './components/update.form';
 
 const UpdateUserPage: React.FC = () => {
   return (
-    <div className="app">
       <div className="container updatePage">
         <div className="row">
           <LeftSideBar/>
@@ -17,7 +16,6 @@ const UpdateUserPage: React.FC = () => {
           </UpdatePage>
         </div>
       </div>
-    </div>
   );
 };
 export default UpdateUserPage

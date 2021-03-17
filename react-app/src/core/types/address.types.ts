@@ -27,6 +27,14 @@ export interface IHoleAddress {
   _id: string
 }
 
+export interface IPrepareAddressForApi {
+  country?: string
+  region?: string
+  street?: string
+  streetNumber?: string
+  isFromIp?: boolean
+}
+
 export interface IUpdateAddress {
   addressId: string
   country: string;
@@ -35,4 +43,12 @@ export interface IUpdateAddress {
   regionId: string;
   street: string;
   streetNumber: string;
+}
+
+export interface dbClickedAddress {
+  country?: string;
+  countryCode?: string;
+  region?: string;
+  street?: string;
+  streetNumber?: string;
 }

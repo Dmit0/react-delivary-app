@@ -1,0 +1,51 @@
+.orderPage {
+    height: 100vh;
+    margin: 0 2%;
+}
+
+.orderTitle {
+    margin: 40px 0;
+}
+
+.orderTitleText {
+    font-size: 40px;
+    font-weight: 380;
+}
+
+.orderPriceEItemFee {
+    font-weight: 370;
+}
+
+.orderBody {
+    display: flex;
+    justify-content: space-between;
+}
+
+.orderInfo {
+    width: 45%;
+}
+
+.orderListItems {
+    height: 450px;
+    width: 400px;
+    border-radius: 15px;
+    border:solid 1px #e0dede;
+    position: relative;
+    margin-right: 10%;
+}
+
+.orderPriceElement {
+    margin-right: 10px;
+}
+
+.orderFormFooter {
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+    border-top: solid 1px #e0dede;
+}
+
+.orderPriceItem {
+    display: flex;
+    justify-content: space-between;
+}

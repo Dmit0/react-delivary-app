@@ -1,8 +1,13 @@
 import { MealsResponseType } from '../../types';
-import { http } from '../api';
+import { axiosHttp } from '../api';
 
 export const MealAPI = {
   async get(_id: string, isRequestFromMealsPage = false) {
-    return await http<MealsResponseType>(isRequestFromMealsPage ? `/meal/getMeals/${_id}` : `meal/getMeals/${_id}`);
+    return await axiosHttp<MealsResponseType>(
+      `/meal/getMeals`,
+      'GET',
+      null,
+      {},
+      { id: _id });
   },
 };

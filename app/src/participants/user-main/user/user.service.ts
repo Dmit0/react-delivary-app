@@ -104,11 +104,13 @@ export class UserService {
         mergeMap(([ user, verifyRole ]) => {
           if (user.role.equals(verifyRole._id)) {
             return this.updateUser({ _id: userId }, { addresses: [ ...user.addresses, address._id ] });
+          } else if (user.addresses?.length) {
+            return forkJoin([
+              this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
+              user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
+            ]);
           }
-          return forkJoin([
-            this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] }),
-            user.addresses && this.addressService.deleteAddress({ _id: user.addresses[0] }),
-          ])
+          return this.updateUser({ _id: userId }, { role: verifyRole._id, addresses: [ address._id ] });
         }),
       )),
     );
