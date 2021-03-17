@@ -6,4 +6,8 @@ export const OrderAPI = {
         'Content-Type': 'application/json;charset=utf-8',
       });
   },
+
+  async checkOrderPermission() {
+    return await axiosHttp<{ permission: boolean }>('order/checkOrderPermission');
+  },
 };

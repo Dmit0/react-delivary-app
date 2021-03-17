@@ -5,7 +5,8 @@ import { Redirect } from 'react-router-dom';
 import { InputField } from '../../../../../../core/components/form-fields/input-form-field/input';
 import { PhoneField } from '../../../../../../core/components/form-fields/input-phone-field/input.phone';
 import { Links } from '../../../../../../core/enums';
-import { getCountries } from '../../../../../../core/redux/countries/selectors';
+import { getSelectCountries } from '../../../../../../core/redux/countries/selectors';
+import { RootState } from '../../../../../../core/redux/rootReducer';
 import { getIsNeedToRedirect } from '../../../../../../core/redux/user-page/page-module/selectors';
 import { updateUser } from '../../../../../../core/redux/user/actions';
 import { getIsLogIn, getUser } from '../../../../../../core/redux/user/selectors';
@@ -22,9 +23,9 @@ export const UpdateUserFrom = () => {
 
   const dispatch = useDispatch()
   const isLogIn = useSelector(getIsLogIn);
-  const countries = useSelector(getCountries);
   const user = useSelector(getUser);
   const isNeedToRedirect = useSelector(getIsNeedToRedirect);
+  const dealCountriesSelectCodes = useSelector((state: RootState) => getSelectCountries(state, true));
 
   const [isDataChanged, setIsDataChanged] = useState<boolean>(false);
   const [isPasswordChanged, setIsPasswordChanged] = useState<boolean>(false);
@@ -83,10 +84,6 @@ export const UpdateUserFrom = () => {
       return 'custom_form_field_error'
     }
   }, [comparePassword, isPasswordChanged])
-
-  const dealCountriesSelectCodes = useMemo(() => {
-    return countries.map(item => ({value: item?.dial_code || '', label: item?.dial_code || ''}))
-  }, [countries])
 
   const changeSelectHandler = useCallback(({value}) => {
     setPhonePrefix(value)

@@ -1,11 +1,12 @@
 export enum Links {
   HOME = '/HomePage',
-  CART = '/cart',
+  CART = '/Cart',
   MEALS = '/MealsPage/:id',
   MEALS_LINK = '/MealsPage/',
-  USER = '/userPage',
-  USER_UPDATE = '/userUpdate',
-  ADDRESS_UPDATE_ROUTE = '/addressUpdate/:id',
-  ADDRESS_UPDATE_PATH = '/addressUpdate',
-  ADDRESS_ADD = '/addressAdd'
+  USER = '/User',
+  USER_UPDATE = '/Update',
+  ADDRESS_UPDATE_ROUTE = '/AddressUpdate/:id',
+  ADDRESS_UPDATE_PATH = '/AddressUpdate',
+  ADDRESS_ADD = '/AddressAdd',
+  ORDER = '/Order'
 }

@@ -3,5 +3,6 @@ export enum code {
 }
 
 export enum ErrorsCode {
-  'Unauthorized' = 401
+  Unauthorized = 401,
+  Forbidden = 403
 }

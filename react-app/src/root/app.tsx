@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootLayOut } from '../core/components/lay-outs/root-lay-out/root.layOut';
 import { Core } from '../core/enums/core.enum';
+import { getCurrentUserLocation } from '../core/redux/app/actions';
 import { rootTokenValidate, validateToken } from '../core/redux/auth/actions';
 import { getIsTokenValidate } from '../core/redux/auth/selectors';
 import { set_cart_length } from '../core/redux/cart/actions';
@@ -21,6 +22,7 @@ export const App = () => {
     const token = getLocaleStorageItem(Core.Token);
     token && dispatch(validateToken())
     dispatch(get_countries());
+    dispatch(getCurrentUserLocation())
     if (!token) {
       const cart = getLocaleStorageItem(Core.Cart, '[]');
       dispatch(set_cart_length(Sorts.getMealCount(cart)));

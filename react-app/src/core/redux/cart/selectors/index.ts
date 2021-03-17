@@ -15,6 +15,13 @@ export const getBlockSumByRestaurantId = (state: RootState, restaurant: string) 
   return currentBlock?.totalItemPrice ?? 0
 }
 
+export const getCurrentCartSum = (state: RootState) => {
+  const cart = getCart(state);
+  return cart?.reduce((acc, item) => {
+    return acc + (item.count * item.price)
+  }, 0)
+}
+
 export const getIsRestaurantPricesCorrect = (state: RootState) => {
   return !getRestaurantBlocks(state).some((restaurantToCheck: RestaurantBlock) => {
     const restaurant = getCartRestaurants(state).find(restaurant => restaurantToCheck.restaurant === restaurant._id);

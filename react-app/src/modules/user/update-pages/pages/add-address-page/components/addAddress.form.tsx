@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -10,11 +10,13 @@ import { set_current_country } from '../../../../../../core/redux/countries/acti
 import { getCountries, getCountry, getSelectCountries } from '../../../../../../core/redux/countries/selectors';
 import { fetchGeo, setCurrentRegion } from '../../../../../../core/redux/geo/actions';
 import { getCurrentRegion, getRegions, getSelectRegions } from '../../../../../../core/redux/geo/selectors';
-import './addAddress.form.css'
+import { getIsChangePermissionStart } from '../../../../../../core/redux/order/selectors';
 import { addAddress } from '../../../../../../core/redux/user-page/address-module/actions/address-module.actions';
 import { getIsNeedToRedirect } from '../../../../../../core/redux/user-page/page-module/selectors';
 import { getIsLogIn } from '../../../../../../core/redux/user/selectors';
 import { getRequiredValidation } from '../../../../../../core/utils/form-validation.utils';
+import './addAddress.form.css';
+
 interface formData {
   street: string,
   streetNumber: string
@@ -32,6 +34,9 @@ export const AddAddressFrom = () => {
   const selectRegions = useSelector(getSelectRegions);
   const countries = useSelector(getCountries);
   const isNeedToRedirect = useSelector(getIsNeedToRedirect);
+  const isChangePermissionStart = useSelector(getIsChangePermissionStart);
+
+  const [redirectPage, setRedirectPage] = useState<Links>(Links.USER)
 
   const { register, handleSubmit, errors } = useForm<formData>();
 
@@ -46,6 +51,13 @@ export const AddAddressFrom = () => {
     const region = regions.find((country) => country.name === value);
     region && dispatch(setCurrentRegion(region));
   }, [dispatch, regions]);
+
+  useEffect(() => {
+    setRedirectPage(isChangePermissionStart
+      ? Links.ORDER
+      : Links.USER
+    )
+  }, [isChangePermissionStart, isNeedToRedirect])
 
   const onSubmit = (data: formData) => {
       if (currentRegion &&  currentCountry) {
@@ -99,7 +111,7 @@ export const AddAddressFrom = () => {
           />
         </div>
         <div className="update_user_form_controllers">
-          { isNeedToRedirect && <Redirect to={ Links.USER }/> }
+          { isNeedToRedirect && <Redirect to={redirectPage}/> }
           <button
             disabled={!currentRegion}
             type="submit"

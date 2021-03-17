@@ -8,7 +8,6 @@ import { AddAddressFrom } from './components/addAddress.form';
 
 const AddAddressPage: React.FC = () => {
   return (
-    <div className="app">
       <div className="container updatePage">
         <div className="row">
           <LeftSideBar/>
@@ -17,7 +16,6 @@ const AddAddressPage: React.FC = () => {
           </UpdatePage>
         </div>
       </div>
-    </div>
   );
 };
 export default AddAddressPage

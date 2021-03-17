@@ -2,7 +2,7 @@ import axios, { Method } from 'axios'
 import { ErrorsCode } from '../enums';
 import { Core } from '../enums/core.enum';
 import { getLocaleStorageItem, setLocaleStorageItem } from '../utils/locale-storage.utils';
-import { checkHeadersForExceptionMatching } from '../utils/rerender/exceptions.utils';
+import { checkHeadersForExceptionMatching, checkUrlsForExcepting } from '../utils/rerender/exceptions.utils';
 import { AuthenticationApi } from './apis/authentication.api';
 
 export async function axiosHttp <T>(request: string, method: Method = 'GET', data?: any, headers: HeadersInit = {}, params?: any): Promise<T> {
@@ -22,7 +22,7 @@ export async function axiosHttp <T>(request: string, method: Method = 'GET', dat
 }
 
 axios.interceptors.request.use((request) => {
-    if (checkHeadersForExceptionMatching(request.headers)) return request
+    if (checkHeadersForExceptionMatching(request.headers) || checkUrlsForExcepting(request.url)) return request
     return {
         ...request,
         headers: {

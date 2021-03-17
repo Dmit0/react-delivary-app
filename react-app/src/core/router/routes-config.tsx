@@ -2,6 +2,7 @@ import React from 'react';
 import Cart from '../../pages/cart';
 import Home from '../../pages/home';
 import Meal from '../../pages/meal-page';
+import Order from '../../pages/oreder-page';
 import User from '../../pages/user-page';
 import AddAddress from '../../pages/user-page/update-user-pages/add-address-page';
 import UpdateAddress from '../../pages/user-page/update-user-pages/update-address-page';
@@ -52,6 +53,11 @@ export const routes: IRouterConfig[] = [
     path: `${ Links.USER }${ Links.USER_UPDATE }`,
     component: UpdateUser,
     private: true,
+    exact: false,
+  },
+  {
+    path:Links.ORDER ,
+    component: Order,
     exact: false,
   },
 ];

@@ -1,6 +1,7 @@
 .update_page_background {
+    position: absolute;
+    left: 0;
     background-image: linear-gradient(226deg, rgb(253 209 49) 48%, rgb(255 250 88) 100%);
-    padding-top: 90px;
     height: 100vh;
     border-right: 1px solid #cdc64e;
 }

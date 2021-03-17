@@ -1,0 +1,69 @@
+.currentTimeList {
+    top: 30px;
+    right: -250px;
+    position: absolute;
+    width:250px;
+    height:300px;
+    border-radius: 20px;
+    z-index: 1100;
+    background-color: white;
+    margin:10px 20px 65px 20px;
+    box-shadow: 5px -2px 16px 1px rgba(34, 60, 80, 0.2);
+}
+
+.currentTimeTitle {
+    padding:0 0 20px 20px;
+    margin: 20px 0 10px 0;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.timePickerBody {
+    display: flex;
+    justify-content: space-around;
+    height: 50%;
+    border-bottom: 1px solid #e4e4e4;
+}
+
+.currentTimeFooter {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.timePickerButton {
+    margin: 16px 16px 0 0;
+    padding: 8px 16px;
+}
+
+.datePicker {
+    user-select: none;
+    cursor: pointer;
+}
+.currentTimeColumn {
+    padding-right: 15px;
+    border-right: 1px solid #e4e4e4;
+}
+.TimeColumn {
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.TimeColumn::-webkit-scrollbar {
+    width: 0;
+    scroll-behavior: smooth;
+    background: transparent;
+}
+.colElem {
+    align-self: center;
+    padding: 15px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border: 1px solid #ffc107;
+    border-radius: 8px;
+}
+.colActiveElem {
+    background-color: #ffc107;
+    color: black;
+}
+.colElem:hover {
+    background-color: #ffc107;
+}

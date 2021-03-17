@@ -25,15 +25,11 @@ const MealsPage: React.FC = () => {
   }, [dispatch, isLogIn]);
 
   return (
-    <>
-      <div className="App">
-        <div className="App__meals-container">
-          <div className="App__content-main">
-            {rerender.meals(meals, addHandler)}
-          </div>
-        </div>
+    <div className="App__meals-container">
+      <div className="App__content-main">
+        { rerender.meals(meals, addHandler) }
       </div>
-    </>
+    </div>
   );
 };
 

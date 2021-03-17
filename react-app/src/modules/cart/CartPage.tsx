@@ -1,20 +1,28 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { Popup } from '../../core/components/basic-popup/popup';
 import { TrashIcon, CartIcon } from '../../core/components/icons';
 import { Core } from '../../core/enums/core.enum';
+import { PopupMessages } from '../../core/enums/popup-messages.enum';
+import { sendOrderRequest, startToChangePermission } from '../../core/redux/order/actions';
 import { remove_all_cart_restaurants, remove_cart_restaurant } from '../../core/redux/restaurant/actions';
 import { getCartRestaurants } from '../../core/redux/restaurant/selectors';
 import '../../core/css/cart.css';
 import { Action, Links } from '../../core/enums';
 import {
   cartAction,
-  clean_cart, cleanUserCart, deleteItemFromCartAction, getMealsForCart, order,
+  clean_cart,
+  cleanUserCart,
+  deleteItemFromCartAction,
+  getMealsForCart,
   remove_item_from_cart,
   remove_one_meal_from_cart,
   set_meal_to_cart, setCartValues,
 } from '../../core/redux/cart/actions';
 import { getCart, getCartLength, getCartPrice, getIsRestaurantPricesCorrect } from '../../core/redux/cart/selectors';
+import { setIsNeedToRedirect } from '../../core/redux/user-page/page-module/actions/user-page.actions';
+import { getIsNeedToRedirect } from '../../core/redux/user-page/page-module/selectors';
 import { getIsLogIn } from '../../core/redux/user/selectors';
 import { Meal } from '../../core/types';
 import { setLocaleStorageItem } from '../../core/utils/locale-storage.utils';
@@ -28,6 +36,7 @@ const CartPage = () => {
   const cartPrice = useSelector(getCartPrice);
   const cartLength = useSelector(getCartLength);
   const getIsRestaurantBlockPricesCorrect = useSelector(getIsRestaurantPricesCorrect);
+  const isNeedToRedirect = useSelector(getIsNeedToRedirect);
 
   useEffect(() => {
     dispatch(getMealsForCart(isLogIn))
@@ -74,8 +83,31 @@ const CartPage = () => {
       : dispatch(clean_cart())
   }, [ isLogIn, dispatch ]);
 
+  const orderErrorPermissionPopup = useMemo(() => {
+    return <Popup
+      title={ PopupMessages.OrderPermissionTitle }
+      subTitle={ PopupMessages.OrderPermissionSubTitle }
+      buttons={ [ {
+        name: 'Yes',
+        link: `${ Links.USER }${ Links.ADDRESS_ADD }`,
+        action: () => {
+          dispatch(startToChangePermission(true));
+        },
+      },
+        {
+          name: 'No',
+          link: Links.ORDER,
+        },
+      ] }
+    />;
+  }, []);
+
   const orderItems = () => {
-     if(getIsRestaurantBlockPricesCorrect && isLogIn) dispatch(order())
+     if (getIsRestaurantBlockPricesCorrect && isLogIn) {
+       dispatch(sendOrderRequest(orderErrorPermissionPopup))
+     } else if (getIsRestaurantBlockPricesCorrect && cart?.length > 0) {
+       dispatch(setIsNeedToRedirect(true))
+    }
   }
 
   return (
@@ -110,6 +142,7 @@ const CartPage = () => {
               <Link to={ Links.HOME }>
                 <button type="button" className="btn btn-outline-warning return_button">Return</button>
               </Link>
+              { isNeedToRedirect && <Redirect to={ Links.ORDER }/> }
               <button onClick={orderItems} type="button" className="btn btn-outline-warning pay_button">Pay now</button>
             </div>
           </div>

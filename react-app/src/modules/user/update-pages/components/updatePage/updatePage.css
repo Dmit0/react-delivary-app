@@ -1,5 +1,7 @@
 .update_page_content {
-    padding-top: 90px;
+    position: absolute;
+    top: 8%;
+    left: 33%;
 }
 .update_page_form {
     margin: 50px 30px
